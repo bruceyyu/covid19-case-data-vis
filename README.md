@@ -1,6 +1,7 @@
 # comp3111_proj_T03
 
 ## Members’ Personal Particulars
+
 ### 1. YU Yue (Bruce)
 > email: yyubv@connect.ust.hk  
 > github: [Bruceshark](https://github.com/Bruceshark)  
