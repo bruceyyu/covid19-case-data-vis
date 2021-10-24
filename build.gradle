@@ -1,0 +1,54 @@
+plugins {
+	id 'application'
+	id 'org.openjfx.javafxplugin' version '0.0.8'
+	id 'java'
+	id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+task debug(type:JavaExec) {
+	group 'application'
+	description 'debug'
+   jvmArgs '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9099'
+   main = 'comp3111.covid.MyApplication'
+   classpath = sourceSets.main.runtimeClasspath
+} 
+
+dependencies {
+	// https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit
+	compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.31'
+
+	// https://mvnrepository.com/artifact/junit/junit
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+	
+	// testFX - https://github.com/TestFX/TestFX
+	testCompile  group: 'org.testfx', name: 'testfx-junit', version : '4.0.15-alpha'
+	
+    testImplementation 'junit:junit:4.12'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.destination file("${buildDir}/jacocoHTML")
+	}
+}
+
+javafx {
+	version = "13.0.2"
+	modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+run {
+	if (javafx.platform.classifier == 'win') {
+		// Temporal fix for Eclipse with JDK 1.8 and Windows
+		systemProperty "java.library.path", "C:\tmp"
+		}
+}
+
+mainClassName = 'comp3111.covid.MyApplication'
