@@ -18,4 +18,4 @@
 > email: mxuax@connect.ust.hk
 > github: [XU Mingshi](https://github.com/mxuax)  
 > task: Task C
-> branch: [mxuax](https://github.com/Bruceshark/comp3111_proj_T03/tree/mxuax)
+> branch: [xms](https://github.com/Bruceshark/comp3111_proj_T03/tree/mxuax)
