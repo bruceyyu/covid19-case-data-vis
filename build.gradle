@@ -20,7 +20,8 @@ task debug(type:JavaExec) {
 dependencies {
 	// https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit
 	compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.31'
-
+	compile 'org.apache.commons:commons-csv:1.9.0'
+	implementation group: 'com.opencsv', name: 'opencsv', version: '4.6'
 	// https://mvnrepository.com/artifact/junit/junit
 	testCompile group: 'junit', name: 'junit', version: '4.12'
 	
