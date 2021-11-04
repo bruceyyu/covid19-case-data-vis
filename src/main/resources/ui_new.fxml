@@ -91,6 +91,7 @@
                                   <NumberAxis fx:id="chartBY" label="Deaths Per Million" side="LEFT" />
                                 </yAxis>
                               </LineChart>
+                              <Button fx:id="chartBButton" layoutX="14.0" layoutY="403.0" mnemonicParsing="false" onAction="#chartBGo" text="Go" />
                            </children>
                         </AnchorPane>
                     </content>
