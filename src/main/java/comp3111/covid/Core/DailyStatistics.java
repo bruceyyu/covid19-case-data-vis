@@ -29,7 +29,7 @@ public class DailyStatistics {
     @CsvBindByName(column = "total_cases")
     private int cumulativeInfected;
 
-    @CsvBindByName(column = "total_vaccinations_per_hundred")
+    @CsvBindByName(column = "people_fully_vaccinated_per_hundred\n")
     private double vaccinationRate;
 
     @CsvBindByName(column = "people_fully_vaccinated")
