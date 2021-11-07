@@ -169,6 +169,15 @@ public class CSVFileOperator {
         return false;
     }
 
+    public List<String> getAllCountries() {
+        HashSet<String> result = new HashSet<>();
+        for (DailyStatistics ds:
+             dailyStatisticsList) {
+            result.add(ds.getCountry());
+        }
+        return result.stream().sorted().collect(Collectors.toList());
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         CSVFileOperator fileOperator = new CSVFileOperator("COVID_Dataset_v1.0.csv");
         List<DailyStatistics> countryTrend = fileOperator.getCountryTrend("United States");

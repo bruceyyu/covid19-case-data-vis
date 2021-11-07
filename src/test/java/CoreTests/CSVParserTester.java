@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class CSVParserTester {
     CSVFileOperator csvFileOperator;
@@ -84,6 +85,14 @@ public class CSVParserTester {
         assertEquals(9.4, day.getVaccinationRate(), 0.1);
     }
 
+    @Test
+    public void getCountries() {
+        List<String> a = csvFileOperator.getAllCountries();
+        for (String s:
+             a) {
+            System.out.println(s);
+        }
+    }
 
 }
 
