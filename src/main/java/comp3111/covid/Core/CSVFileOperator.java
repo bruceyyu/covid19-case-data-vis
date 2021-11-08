@@ -5,10 +5,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import javax.sound.sampled.DataLine;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CSVFileOperator {
@@ -72,8 +69,8 @@ public class CSVFileOperator {
      * @param countryNames list of name of countries
      * @return set of dailyStatistics
      */
-    public Set<DailyStatistics> getCountryDataSetOn(Date date, List<String> countryNames) {
-        Set<DailyStatistics> resultSet = new HashSet<>();
+    public ArrayList<DailyStatistics> getCountryDataSetOn(Date date, List<String> countryNames) {
+        ArrayList<DailyStatistics> resultSet = new ArrayList();
         for (String name: countryNames) {
             DailyStatistics ds = getCountryDataOn(date, name);
             if (ds != null) {
