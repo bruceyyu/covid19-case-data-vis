@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -54,13 +53,13 @@
                                     <TableColumn id="tableATotalCasesPerM" fx:id="tableATotalCasesPerM" prefWidth="75.0" text="Total Cases (per 1M)" />
                                  </columns>
                               </TableView>
-                              <DatePicker id="datePickerA" layoutX="14.0" layoutY="19.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
-                              <Label id="tableATitle" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="23.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
+                              <DatePicker id="tableADatePicker" fx:id="tableADatePicker" layoutX="14.0" layoutY="19.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <Label fx:id="tableATitle" id="tableATitle" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="23.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
                               <Button id="doConfirmTableA" layoutX="14.0" layoutY="671.0" mnemonicParsing="false" onAction="#doConfirmTableA" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
-                              <CheckListView layoutX="15.0" layoutY="131.0" prefHeight="530.0" prefWidth="240.0" />
                               <TextField layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to add a country" />
                               <ChoiceBox layoutX="72.0" layoutY="95.0" prefHeight="26.0" prefWidth="172.0" />
                               <Label layoutX="25.0" layoutY="100.0" text="sort by" />
+                              <CheckListView fx:id="tableACountryList" layoutX="11.0" layoutY="133.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -130,7 +129,5 @@
             </TabPane>
       </children>
     </AnchorPane>
-      <ListView prefHeight="200.0" prefWidth="200.0" />
-      <CheckListView />
   </children>
 </VBox>
