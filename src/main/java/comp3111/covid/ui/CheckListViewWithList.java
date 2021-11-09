@@ -38,14 +38,7 @@ public class CheckListViewWithList<String> extends CheckListView<String> {
             return;
         }
 
-        for (String countryName: getItems()
-             ) { // save checked state of old items
-            if (getItemBooleanProperty(countryName).get()) {
-                countryNamesMap.put(countryName, true);
-            } else {
-                countryNamesMap.put(countryName, false);
-            }
-        }
+        saveState();
         // set new items
         setItems(FXCollections.observableArrayList(newCountryNames));
         for (String countryName: getItems()

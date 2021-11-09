@@ -177,7 +177,7 @@ public class CSVFileOperator {
 
     public List<String> searchCountry(String countryName) {
         List<String> allCountries = getAllCountries();
-        return allCountries.stream().filter(name -> name.contains(countryName)).collect(Collectors.toList());
+        return allCountries.stream().filter(name -> name.toLowerCase().startsWith(countryName.toLowerCase().trim())).collect(Collectors.toList());
     }
 
     public static void main(String[] args) throws FileNotFoundException {

@@ -5,6 +5,8 @@ import comp3111.covid.Core.DailyStatistics;
 import comp3111.covid.Core.TableSetter;
 import comp3111.covid.Core.utils;
 import comp3111.covid.ui.CheckListViewWithList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 
 import java.io.File;
@@ -118,6 +122,12 @@ public class Controller {
         tableADatePicker.getEditor().setDisable(true);
         tableADatePicker.getEditor().setOpacity(1);
 
+        tableAText.textProperty().addListener((observable, oldValue, newValue) -> {
+            //String countryName = tableAText.getText();
+            List<String> countryNames = fileOperator.searchCountry(newValue);
+            tableACountryList.update(countryNames);
+            tableAText.requestFocus();
+        });
         List<String> countryNames = fileOperator.getAllCountries();
         tableACountryList.update(countryNames);
     }
@@ -140,12 +150,15 @@ public class Controller {
         }
     }
 
+    /*
     @FXML
     void tableAFilter(ActionEvent event) {
         String countryName = tableAText.getText();
         List<String> countryNames = fileOperator.searchCountry(countryName);
         tableACountryList.update(countryNames);
-    }
+    }*/
+
+
 
     @FXML
     void doConfirmTableA(ActionEvent event) {
