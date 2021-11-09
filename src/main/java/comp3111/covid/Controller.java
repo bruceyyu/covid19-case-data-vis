@@ -4,6 +4,7 @@ import comp3111.covid.Core.CSVFileOperator;
 import comp3111.covid.Core.DailyStatistics;
 import comp3111.covid.Core.TableSetter;
 import comp3111.covid.Core.utils;
+import comp3111.covid.ui.CheckListViewWithList;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,9 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
-import org.controlsfx.control.CheckListView;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -94,7 +93,7 @@ public class Controller {
     private TableColumn<DailyStatistics, Double> tableATotalCasesPerM;
 
     @FXML
-    private CheckListView<String> tableACountryList;
+    private CheckListViewWithList<String> tableACountryList;
 
     @FXML
     private Button doConfirmTableA;
@@ -111,13 +110,16 @@ public class Controller {
     @FXML
     private Button chartBButton;
 
+    @FXML
+    private TextField tableAText;
+
     public void initialize() {
 //        disable the text input of the date picker, but not make it gray
         tableADatePicker.getEditor().setDisable(true);
         tableADatePicker.getEditor().setOpacity(1);
 
         List<String> countryNames = fileOperator.getAllCountries();
-        tableACountryList.setItems(FXCollections.observableArrayList(countryNames));
+        tableACountryList.update(countryNames);
     }
 
     static {
@@ -139,11 +141,18 @@ public class Controller {
     }
 
     @FXML
+    void tableAFilter(ActionEvent event) {
+        String countryName = tableAText.getText();
+        List<String> countryNames = fileOperator.searchCountry(countryName);
+        tableACountryList.update(countryNames);
+    }
+
+    @FXML
     void doConfirmTableA(ActionEvent event) {
         tableACountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
         tableATotalCases.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeInfected"));
         tableATotalCasesPerM.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("infectedPerMillion"));
-        Boolean setterRes = TableSetter.setter(fileOperator, tableADatePicker, tableACountryList, tableA);
+        Boolean setterRes = TableSetter.update(fileOperator, tableADatePicker, tableACountryList, tableA);
         if (!setterRes) return;
         String dateString = utils.localDateToString(tableADatePicker.getValue(), "MMMM dd, uuuu");
         tableATitle.setText("Number of Confirmed COVID-19 Cases as of " + dateString);

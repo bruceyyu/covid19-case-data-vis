@@ -1,5 +1,6 @@
 package comp3111.covid.Core;
 
+import comp3111.covid.ui.CheckListViewWithList;
 import javafx.collections.FXCollections;
 import org.controlsfx.control.CheckListView;
 
@@ -29,6 +30,21 @@ public class TableSetter {
                 pickedCountryList.add(countryNames.get(i));
             }
         }
+        if (!legalCountryListChecker(pickedCountryList)) return false;
+
+        ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
+        table.setItems(FXCollections.observableArrayList(countryData));
+
+        return true;
+    }
+
+    static public Boolean update(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
+
+        Date pickedDate = utils.localDateToDate(datePicker.getValue());
+        if (!legalDateChecker(fileOperator, pickedDate)) return false;
+        countryList.saveState();
+
+        List<String> pickedCountryList = countryList.getCheckedItems();
         if (!legalCountryListChecker(pickedCountryList)) return false;
 
         ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
