@@ -40,10 +40,20 @@ public class CheckListViewWithList<String> extends CheckListView<String> {
 
         saveState();
         // set new items
-        setItems(FXCollections.observableArrayList(newCountryNames));
+        if (newCountryNames.size() == 0) {
+            List<String> a = new ArrayList<>();
+            a.add((String) "No Results");
+            setItems(FXCollections.observableArrayList(a));
+            setDisabled(true);
+        } else {
+            setDisabled(false);
+            setItems(FXCollections.observableArrayList(newCountryNames));
+        }
+
         for (String countryName: getItems()
         ) { // set property of new items
-           getItemBooleanProperty(countryName).set(countryNamesMap.get(countryName));
+            if (!countryName.equals("No Results"))
+                getItemBooleanProperty(countryName).set(countryNamesMap.get(countryName));
         }
     }
 
@@ -51,6 +61,9 @@ public class CheckListViewWithList<String> extends CheckListView<String> {
      * save the current state of the list
      */
     public void saveState() {
+        if (getItems() == null) {
+            return;
+        }
         for (String countryName: getItems()
         ) { // save checked state of old items
             if (getItemBooleanProperty(countryName).get()) {
