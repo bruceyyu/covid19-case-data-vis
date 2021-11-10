@@ -2,8 +2,8 @@ package CoreTests;
 
 import static org.junit.Assert.*;
 
-import comp3111.covid.Core.CSVFileOperator;
-import comp3111.covid.Core.DailyStatistics;
+import comp3111.covid.core.CSVFileOperator;
+import comp3111.covid.core.DailyStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class CSVParserTester {
     CSVFileOperator csvFileOperator;

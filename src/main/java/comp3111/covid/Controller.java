@@ -1,13 +1,7 @@
 package comp3111.covid;
 
-import comp3111.covid.Core.CSVFileOperator;
-import comp3111.covid.Core.DailyStatistics;
-import comp3111.covid.Core.TableSetter;
-import comp3111.covid.Core.utils;
+import comp3111.covid.core.*;
 import comp3111.covid.ui.CheckListViewWithList;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -19,8 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.io.File;
@@ -29,6 +22,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -103,7 +97,7 @@ public class Controller {
     private Button doConfirmTableA;
 
     @FXML
-    private LineChart chartB;
+    private LineChart<Number, Number> chartB;
 
     @FXML
     private NumberAxis chartBX;
@@ -112,7 +106,19 @@ public class Controller {
     private NumberAxis chartBY;
 
     @FXML
+    private TextField chartBText;
+
+    @FXML
+    private CheckListViewWithList<String> chartBCountryList;
+
+    @FXML
     private Button chartBButton;
+
+    @FXML
+    private DatePicker chartBStartDatePicker;
+
+    @FXML
+    private DatePicker chartBEndDatePicker;
 
     @FXML
     private TextField tableAText;
@@ -122,19 +128,64 @@ public class Controller {
         tableADatePicker.getEditor().setDisable(true);
         tableADatePicker.getEditor().setOpacity(1);
 
+        chartBStartDatePicker.getEditor().setDisable(true);
+        chartBStartDatePicker.getEditor().setOpacity(1);
+        chartBStartDatePicker.setValue(utils.dateToLocalDate(fileOperator.getMinimumDate()));
+        chartBEndDatePicker.getEditor().setDisable(true);
+        chartBEndDatePicker.getEditor().setOpacity(1);
+        chartBEndDatePicker.setValue(chartBStartDatePicker.getValue().plusDays(1));
+
+        final Callback<DatePicker, DateCell> dayCellFactory =
+                new Callback<DatePicker, DateCell>() {
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+                        return new DateCell() {
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                if (item.isBefore(
+                                        chartBStartDatePicker.getValue().plusDays(1))
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
+                                    setDisable((true));
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                            }
+                        };
+                    }
+                };
+        chartBEndDatePicker.setDayCellFactory(dayCellFactory);
+        chartBStartDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue.isAfter(chartBEndDatePicker.getValue()))
+                chartBEndDatePicker.setValue(chartBStartDatePicker.getValue().plusDays(1));
+        }));
+
         tableAText.textProperty().addListener((observable, oldValue, newValue) -> {
             //String countryName = tableAText.getText();
             List<String> countryNames = fileOperator.searchCountry(newValue);
             tableACountryList.update(countryNames);
             tableAText.requestFocus();
         });
+
+        chartBText.textProperty().addListener((observable, oldValue, newValue) -> {
+            //String countryName = tableAText.getText();
+            List<String> countryNames = fileOperator.searchCountry(newValue);
+            chartBCountryList.update(countryNames);
+            chartBText.requestFocus();
+        });
+
         List<String> countryNames = fileOperator.getAllCountries();
         tableACountryList.update(countryNames);
+        chartBCountryList.update(countryNames);
     }
 
     static {
         try {
-            fileOperator = new CSVFileOperator("src"+File.separator+"main"+File.separator+"resources"+File.separator+"COVID_Dataset_v1.0.csv");
+            fileOperator = new CSVFileOperator("src" + File.separator + "main" + File.separator + "resources" + File.separator + "COVID_Dataset_v1.0.csv");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             String currentPath = null;
@@ -159,7 +210,6 @@ public class Controller {
     }*/
 
 
-
     @FXML
     void doConfirmTableA(ActionEvent event) {
         tableACountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
@@ -169,6 +219,41 @@ public class Controller {
         if (!setterRes) return;
         String dateString = utils.localDateToString(tableADatePicker.getValue(), "MMMM dd, uuuu");
         tableATitle.setText("Number of Confirmed COVID-19 Cases as of " + dateString);
+    }
+
+    @FXML
+    void doConfirmTableB(ActionEvent event) {
+
+    }
+
+    @FXML
+    void doConfirmChartB(ActionEvent event) {
+        ChartSetter.setGraphPropeties(chartB, chartBStartDatePicker, chartBEndDatePicker);
+
+        // save state of checked
+        chartBCountryList.saveState();
+        List<String> countryNames = chartBCountryList.getCheckedItems();
+        Map<String, List<DailyStatistics>> countryTrendMap = fileOperator.getCountryTrendMap(countryNames,
+                utils.localDateToDate(chartBStartDatePicker.getValue()), utils.localDateToDate(chartBEndDatePicker.getValue()));
+        if (countryTrendMap.size() <= 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please select at least one country", ButtonType.YES);
+            alert.show();
+            return;
+        }
+        ChartSetter.updateGraph(chartB, countryTrendMap);
+        /*
+        for (List<DailyStatistics> countryTrend : countryTrendSet) {
+            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+            series1.setName(countryTrend.get(0).getCountry());
+
+            for (DailyStatistics dailyStatistics : countryTrend) {
+                series1.getData().add(new XYChart.Data(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));
+            }
+
+
+            chartB.getData().add(series1);
+        }*/
+
     }
 
     private static Calendar start;
@@ -236,7 +321,6 @@ public class Controller {
                 chartB.getData().add(series1);
             }
         }
-
 
 
         Date date = start.getTime();

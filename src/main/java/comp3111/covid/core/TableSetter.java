@@ -1,4 +1,4 @@
-package comp3111.covid.Core;
+package comp3111.covid.core;
 
 import comp3111.covid.ui.CheckListViewWithList;
 import javafx.collections.FXCollections;
