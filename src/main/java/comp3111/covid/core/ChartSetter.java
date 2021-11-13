@@ -15,6 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ChartSetter {
+    /**
+     * Update a chart
+     * @param chart chart
+     * @param newCountryTrendMap new data map
+     */
     public static void updateGraph(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
         ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
         Map<String, Boolean> existMap = new HashMap<>();
@@ -29,11 +34,14 @@ public class ChartSetter {
             if (existMap.getOrDefault(series.getName(), false)) {
                 // exist, update data
                 series.getData().clear();
-                for (DailyStatistics ds : newCountryTrendMap.get(series.getName())
-                        ) {
-                    series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getDeathPerMillion()));
-                }
-                existMap.put(series.getName(), false); // mark as processed
+
+                    for (DailyStatistics ds : newCountryTrendMap.get(series.getName())
+                    ) {
+                        series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getDeathPerMillion()));
+                    }
+                    existMap.put(series.getName(), false); // mark as processed
+
+
             } else {
                 toRemoveList.add(series);
 
@@ -52,6 +60,12 @@ public class ChartSetter {
         }
     }
 
+    /**
+     * Set some default properties of a line chart
+     * @param chart line chart
+     * @param chartStartDatePicker start date
+     * @param chartEndDatePicker end date
+     */
     public static void setGraphPropeties(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
         NumberAxis chartX = (NumberAxis) chart.getXAxis();
         NumberAxis chartY = (NumberAxis) chart.getYAxis();
@@ -78,7 +92,7 @@ public class ChartSetter {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        chart.setCreateSymbols(false); // do not show the symbols
+        chart.setCreateSymbols(true); // show the symbols
     }
 
 

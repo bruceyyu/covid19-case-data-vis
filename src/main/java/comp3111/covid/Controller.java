@@ -2,6 +2,7 @@ package comp3111.covid;
 
 import comp3111.covid.core.*;
 import comp3111.covid.ui.CheckListViewWithList;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -127,15 +128,39 @@ public class Controller {
 //        disable the text input of the date picker, but not make it gray
         tableADatePicker.getEditor().setDisable(true);
         tableADatePicker.getEditor().setOpacity(1);
+        final Callback<DatePicker, DateCell> tableACellFactory =
+                new Callback<DatePicker, DateCell>() {
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+                        return new DateCell() {
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+                                super.updateItem(item, empty);
 
+                                if (item.isBefore(
+                                        utils.dateToLocalDate(fileOperator.getMinimumDate()))
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
+                                    setDisable((true));
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                            }
+                        };
+                    }
+                };
+        tableADatePicker.setDayCellFactory(tableACellFactory);
+        //chartB.setAnimated(false);
         chartBStartDatePicker.getEditor().setDisable(true);
         chartBStartDatePicker.getEditor().setOpacity(1);
         chartBStartDatePicker.setValue(utils.dateToLocalDate(fileOperator.getMinimumDate()));
         chartBEndDatePicker.getEditor().setDisable(true);
         chartBEndDatePicker.getEditor().setOpacity(1);
-        chartBEndDatePicker.setValue(chartBStartDatePicker.getValue().plusDays(1));
+        chartBEndDatePicker.setValue(utils.dateToLocalDate(fileOperator.getMaximumDate()));
 
-        final Callback<DatePicker, DateCell> dayCellFactory =
+        final Callback<DatePicker, DateCell> tableBCellFactoryEnd =
                 new Callback<DatePicker, DateCell>() {
                     @Override
                     public DateCell call(final DatePicker datePicker) {
@@ -158,9 +183,34 @@ public class Controller {
                         };
                     }
                 };
-        chartBEndDatePicker.setDayCellFactory(dayCellFactory);
+        final Callback<DatePicker, DateCell> tableBCellFactoryStart =
+                new Callback<DatePicker, DateCell>() {
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+                        return new DateCell() {
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                if (item.isBefore(
+                                        utils.dateToLocalDate(fileOperator.getMinimumDate()))
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()).minusDays(1))) {
+                                    setDisable((true));
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                            }
+                        };
+                    }
+                };
+        chartBStartDatePicker.setDayCellFactory(tableBCellFactoryStart);
+        chartBEndDatePicker.setDayCellFactory(tableBCellFactoryEnd);
+
         chartBStartDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue.isAfter(chartBEndDatePicker.getValue()))
+            if (newValue.isAfter(chartBEndDatePicker.getValue()) || newValue.isEqual(chartBEndDatePicker.getValue()))
                 chartBEndDatePicker.setValue(chartBStartDatePicker.getValue().plusDays(1));
         }));
 
@@ -236,7 +286,7 @@ public class Controller {
         Map<String, List<DailyStatistics>> countryTrendMap = fileOperator.getCountryTrendMap(countryNames,
                 utils.localDateToDate(chartBStartDatePicker.getValue()), utils.localDateToDate(chartBEndDatePicker.getValue()));
         if (countryTrendMap.size() <= 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Please select at least one country", ButtonType.YES);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Please select at least one country", ButtonType.YES);
             alert.show();
             return;
         }
@@ -276,75 +326,10 @@ public class Controller {
 
     @FXML
     void chartBGo(ActionEvent event) throws InterruptedException, ParseException {
-        chartBX.setTickLabelFormatter(
-                new StringConverter<Number>() {
-                    @Override
-                    public String toString(Number object) {
-                        SimpleDateFormat a = new SimpleDateFormat("yy/MM/dd");
-                        return a.format(new Date(object.longValue()));
-                    }
-
-                    @Override
-                    public Number fromString(String string) {
-                        return 0;
-                    }
-                }
-        );
-        chartBX.setAutoRanging(false); // manually set X-axis range and tick width
-        SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
-        try {
-            chartBX.setLowerBound(a.parse("2020/01/01").getTime());
-            chartBX.setUpperBound(start.getTime().getTime());
-            chartBX.setTickUnit(a.parse("1970/02/01").getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
+        ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chartB.getData();
+        for (XYChart.Series<Number, Number> series : chartDataSeriesList) {
+            series.getData().clear();
         }
-        chartB.setCreateSymbols(false); // do not show the symbols
-
-        //chartB.getData().clear();
-        List<String> countryNames = new ArrayList<>();
-        countryNames.add("United Kingdom");
-        countryNames.add("United States");
-        countryNames.add("Hong Kong");
-        countryNames.add("Israel");
-        countryNames.add("World");
-        countryNames.add("India");
-        countryNames.add("Japan");
-        countryNames.add("Singapore");
-        HashSet<List<DailyStatistics>> countryTrendSet = fileOperator.getCountryTrendSet(countryNames);
-        List<XYChart.Series<Number, Number>> seriesList = new ArrayList<>();
-        if (chartB.getData().size() == 0) {
-            for (List<DailyStatistics> countryTrend : countryTrendSet) {
-                XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-                series1.setName(countryTrend.get(0).getCountry());
-                seriesList.add(series1);
-                chartB.getData().add(series1);
-            }
-        }
-
-
-        Date date = start.getTime();
-        int i = 0;
-        for (List<DailyStatistics> countryTrend : countryTrendSet) {
-            XYChart.Series<Number, Number> series1 = (XYChart.Series<Number, Number>) chartB.getData().get(i);
-            for (DailyStatistics dailyStatistics : countryTrend) {
-                if (dailyStatistics.getDate().equals(date)) {
-                    series1.getData().add(new XYChart.Data(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));
-                }
-
-            }
-            i++;
-        }
-
-        start.add(Calendar.DATE, 1);
-
-        /*
-        for (DailyStatistics dailyStatistics : countryTrend) {
-            series1.getData().add(new XYChart.Data(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));
-        }*/
-        // customize tickLabelFormatter for showing dates
-
-
     }
 
 

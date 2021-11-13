@@ -143,6 +143,13 @@ public class CSVFileOperator {
         return result;
     }
 
+    /**
+     * Get a map of country list
+     * @param countryList String list of countries
+     * @param start start date
+     * @param end end date
+     * @return map of country trend list
+     */
     public Map<String, List<DailyStatistics>> getCountryTrendMap(List<String> countryList, Date start, Date end) {
         HashMap<String, List<DailyStatistics>> result = new HashMap<>();
         for (String countryName: countryList) {
