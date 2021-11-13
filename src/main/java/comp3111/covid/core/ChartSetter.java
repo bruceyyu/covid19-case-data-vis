@@ -55,7 +55,22 @@ public class ChartSetter {
                 for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {
                     series1.getData().add(new XYChart.Data<>(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));
                 }
-                chartDataSeriesList.add(series1);
+                if (chartDataSeriesList.size() == 0) {
+                    chartDataSeriesList.add(series1);
+                } else {
+                    for (int i = 0; i <= chartDataSeriesList.size(); i++) {
+                        if (i == chartDataSeriesList.size()) {
+                            chartDataSeriesList.add(i, series1);
+                            break;
+                        }
+                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) < 0) {
+                            chartDataSeriesList.add(i, series1);
+                            break;
+                        }
+
+                    }
+                }
+
             }
         }
     }
