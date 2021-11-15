@@ -46,6 +46,7 @@ public class MyApplication extends Application {
     	loader.setLocation(getClass().getResource(UI_FILE));
    		VBox root = (VBox) loader.load();
    		Scene scene =  new Scene(root);
+   		scene.getStylesheets().add("chartStyle.css");
    		stage.setScene(scene);
    		stage.setTitle("COMP3111 Team-T03");
    		stage.show();
