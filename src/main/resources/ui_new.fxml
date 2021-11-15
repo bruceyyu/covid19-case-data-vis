@@ -118,9 +118,22 @@
                   </Tab>
                   <Tab fx:id="tabApp1" text="Chart A">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="719.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="798.0">
                            <children>
-                              <TextArea layoutX="14.0" layoutY="14.0" prefHeight="294.0" prefWidth="694.0" text="Task A2: Generate data charts showing the cumulative confirmed COVID-19 cases (per 1M) by country&#10;&#10;Input&#10;•&#9;Specify the period of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data chart with a proper title: &quot;Cumulative Confirmed COVID-19 Cases (per 1M)&quot;&#10;•&#9;Label the x-axis and y-axis with proper scales&#10;•&#9;Present data in coloured cumulative curves labelled with corresponding countries&#10;&#10;" wrapText="true" />
+                              <LineChart fx:id="chartA" layoutX="267.0" layoutY="40.0" prefHeight="518.0" prefWidth="572.0" title="Cumulative Confirmed COVID-19 Cases (per 1M)">
+                                <xAxis>
+                                  <NumberAxis fx:id="chartAX" label="Date" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis fx:id="chartAY" label="Deaths Per Million" side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <Button fx:id="chartAButton" layoutX="309.0" layoutY="600.0" mnemonicParsing="false" onAction="#chartBGo" prefHeight="25.0" prefWidth="55.0" text="Go" />
+                              <DatePicker id="tableADatePicker" fx:id="chartAStartDatePicker" layoutX="16.0" layoutY="14.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <DatePicker id="tableADatePicker" fx:id="chartAEndDatePicker" layoutX="16.0" layoutY="50.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <Button id="doConfirmTableA" layoutX="16.0" layoutY="653.0" mnemonicParsing="false" onAction="#doConfirmChartA" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <TextField fx:id="chartAText" layoutX="15.0" layoutY="87.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
+                              <CheckListViewWithList fx:id="chartACountryList" layoutX="14.0" layoutY="118.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -149,9 +162,22 @@
                   </Tab>
                   <Tab fx:id="tabApp3" text="Chart C">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="798.0">
                            <children>
-                              <TextArea layoutX="18.0" layoutY="7.0" prefHeight="298.0" prefWidth="682.0" text="Task C2: Generate data charts showing the cumulative rate of vaccination against COVID-19 by country&#10;&#10;Input&#10;•&#9;Specify the period of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data chart with a proper title: &quot;Cumulative Rate of Vaccination against COVID-19 &quot;&#10;•&#9;Label the x-axis and y-axis with proper scales&#10;•&#9;Present data in coloured cumulative curves labelled with corresponding countries&#10;&#10;" wrapText="true" />
+                              <LineChart fx:id="chartC" layoutX="267.0" layoutY="40.0" prefHeight="518.0" prefWidth="572.0" title="Rate of Vaccination against COVID-19">
+                                <xAxis>
+                                  <NumberAxis fx:id="chartCX" label="Date" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis fx:id="chartCY" label="Deaths Per Million" side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <Button fx:id="chartCButton" layoutX="309.0" layoutY="600.0" mnemonicParsing="false" onAction="#chartBGo" prefHeight="25.0" prefWidth="55.0" text="Go" />
+                              <DatePicker id="tableADatePicker" fx:id="chartCStartDatePicker" layoutX="16.0" layoutY="14.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <DatePicker id="tableADatePicker" fx:id="chartCEndDatePicker" layoutX="16.0" layoutY="50.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <Button id="doConfirmTableA" layoutX="16.0" layoutY="653.0" mnemonicParsing="false" onAction="#doConfirmChartC" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <TextField fx:id="chartCText" layoutX="15.0" layoutY="87.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
+                              <CheckListViewWithList fx:id="chartCCountryList" layoutX="14.0" layoutY="118.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                     </content>
