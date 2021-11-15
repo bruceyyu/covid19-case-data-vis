@@ -96,6 +96,54 @@ public class Controller {
 
     @FXML
     private Button doConfirmTableA;
+    
+    @FXML
+    private DatePicker tableBDatePicker;
+
+    @FXML
+    private Label tableBTitle;
+
+    @FXML
+    private TableView<DailyStatistics> tableB;
+
+    @FXML
+    private TableColumn<DailyStatistics, String> tableBCountry;
+
+    @FXML
+    private TableColumn<DailyStatistics, Integer> tableBTotalDeaths;
+
+    @FXML
+    private TableColumn<DailyStatistics, Double> tableBTotalDeathsPerM;
+
+    @FXML
+    private CheckListViewWithList<String> tableBCountryList;
+
+    @FXML
+    private Button doConfirmTableB;
+    
+    @FXML
+    private DatePicker tableCDatePicker;
+
+    @FXML
+    private Label tableCTitle;
+
+    @FXML
+    private TableView<DailyStatistics> tableC;
+
+    @FXML
+    private TableColumn<DailyStatistics, String> tableCCountry;
+
+    @FXML
+    private TableColumn<DailyStatistics, Integer> tableCTotalVaccinated;
+
+    @FXML
+    private TableColumn<DailyStatistics, Double> tableCVaccinationRate;
+
+    @FXML
+    private CheckListViewWithList<String> tableCCountryList;
+
+    @FXML
+    private Button doConfirmTableC;
 
     @FXML
     private LineChart<Number, Number> chartB;
@@ -123,35 +171,119 @@ public class Controller {
 
     @FXML
     private TextField tableAText;
+    
+    @FXML
+    private TextField tableBText; 
+    
+    @FXML
+    private TextField tableCText; 
 
     public void initialize() {
 //        disable the text input of the date picker, but not make it gray
         tableADatePicker.getEditor().setDisable(true);
         tableADatePicker.getEditor().setOpacity(1);
+        tableBDatePicker.getEditor().setDisable(true);
+        tableBDatePicker.getEditor().setOpacity(1);
+        tableCDatePicker.getEditor().setDisable(true);
+        tableCDatePicker.getEditor().setOpacity(1);
         final Callback<DatePicker, DateCell> tableACellFactory =
                 new Callback<DatePicker, DateCell>() {
                     @Override
                     public DateCell call(final DatePicker datePicker) {
                         return new DateCell() {
-                            @Override
-                            public void updateItem(LocalDate item, boolean empty) {
-                                super.updateItem(item, empty);
+                        @Override
+                        public void updateItem(LocalDate item, boolean empty) {
+                        	super.updateItem(item, empty);
 
-                                if (item.isBefore(
-                                        utils.dateToLocalDate(fileOperator.getMinimumDate()))
-                                ) {
-                                    setDisable(true);
-                                    setStyle("-fx-background-color: #ffc0cb;");
-                                }
-                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
-                                    setDisable((true));
-                                    setStyle("-fx-background-color: #ffc0cb;");
-                                }
+                            if (item.isBefore(
+                                    utils.dateToLocalDate(fileOperator.getMinimumDate()))
+                            ) {
+                                setDisable(true);
+                                setStyle("-fx-background-color: #ffc0cb;");
                             }
-                        };
+                            if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
+                                setDisable((true));
+                                setStyle("-fx-background-color: #ffc0cb;");
+                            }
+                        }
+                    };
+                }
+        };
+       final Callback<DatePicker, DateCell> tableBCellFactory =
+    		    new Callback<DatePicker, DateCell>() {
+             	@Override
+             	public DateCell call(final DatePicker datePicker) {
+             		return new DateCell() {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                	super.updateItem(item, empty);
+
+                    if (item.isBefore(
+                            utils.dateToLocalDate(fileOperator.getMinimumDate()))
+                    ) {
+                        setDisable(true);
+                        setStyle("-fx-background-color: #ffc0cb;");
                     }
-                };
+                    if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
+                        setDisable((true));
+                        setStyle("-fx-background-color: #ffc0cb;");
+                    }
+                }
+            };
+        }
+       };    
+       final Callback<DatePicker, DateCell> tableCCellFactory =
+   		    new Callback<DatePicker, DateCell>() {
+            	@Override
+            	public DateCell call(final DatePicker datePicker) {
+            		return new DateCell() {
+               @Override
+               public void updateItem(LocalDate item, boolean empty) {
+               	super.updateItem(item, empty);
+
+                   if (item.isBefore(
+                           utils.dateToLocalDate(fileOperator.getMinimumDate()))
+                   ) {
+                       setDisable(true);
+                       setStyle("-fx-background-color: #ffc0cb;");
+                   }
+                   if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
+                       setDisable((true));
+                       setStyle("-fx-background-color: #ffc0cb;");
+                   }
+               }
+           };
+       }
+      }; 
+        
         tableADatePicker.setDayCellFactory(tableACellFactory);
+        tableBDatePicker.setDayCellFactory(tableBCellFactory);
+        tableCDatePicker.setDayCellFactory(tableCCellFactory);
+        
+        tableAText.textProperty().addListener((observable, oldValue, newValue) -> {
+            //String countryName = tableAText.getText();
+            List<String> countryNames = fileOperator.searchCountry(newValue);
+            tableACountryList.update(countryNames);
+            tableAText.requestFocus();
+        });
+        tableBText.textProperty().addListener((observable, oldValue, newValue) -> {
+            //String countryName = tableAText.getText();
+            List<String> countryNames = fileOperator.searchCountry(newValue);
+            tableBCountryList.update(countryNames);
+            tableBText.requestFocus();
+        });
+        tableCText.textProperty().addListener((observable, oldValue, newValue) -> {
+            //String countryName = tableAText.getText();
+            List<String> countryNames = fileOperator.searchCountry(newValue);
+            tableCCountryList.update(countryNames);
+            tableCText.requestFocus();
+        });
+        
+        List<String> countryNames = fileOperator.getAllCountries();
+        tableACountryList.update(countryNames);
+        tableBCountryList.update(countryNames);
+        tableCCountryList.update(countryNames);
+        
         //chartB.setAnimated(false);
         chartBStartDatePicker.getEditor().setDisable(true);
         chartBStartDatePicker.getEditor().setOpacity(1);
@@ -214,22 +346,15 @@ public class Controller {
                 chartBEndDatePicker.setValue(chartBStartDatePicker.getValue().plusDays(1));
         }));
 
-        tableAText.textProperty().addListener((observable, oldValue, newValue) -> {
-            //String countryName = tableAText.getText();
-            List<String> countryNames = fileOperator.searchCountry(newValue);
-            tableACountryList.update(countryNames);
-            tableAText.requestFocus();
-        });
-
+        
         chartBText.textProperty().addListener((observable, oldValue, newValue) -> {
             //String countryName = tableAText.getText();
-            List<String> countryNames = fileOperator.searchCountry(newValue);
-            chartBCountryList.update(countryNames);
+            List<String> countryNamesAdd = fileOperator.searchCountry(newValue);
+            chartBCountryList.update(countryNamesAdd);
             chartBText.requestFocus();
         });
 
-        List<String> countryNames = fileOperator.getAllCountries();
-        tableACountryList.update(countryNames);
+        
         chartBCountryList.update(countryNames);
     }
 
@@ -273,7 +398,39 @@ public class Controller {
 
     @FXML
     void doConfirmTableB(ActionEvent event) {
-
+    	tableBCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
+        tableBTotalDeaths.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeDeath"));
+        tableBTotalDeathsPerM.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("deathPerMillion"));
+        Boolean setterRes = TableSetter.update(fileOperator, tableBDatePicker, tableBCountryList, tableB);
+        if (!setterRes) return;
+        String dateString = utils.localDateToString(tableBDatePicker.getValue(), "MMMM dd, uuuu");
+        tableBTitle.setText("Number of Confirmed COVID-19 Deaths as of " + dateString);
+//    	tableACountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
+//        tableATotalCases.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeDeath"));
+//        tableATotalCasesPerM.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("deathPerMillion"));
+//        Boolean setterRes = TableSetter.update(fileOperator, tableADatePicker, tableACountryList, tableA);
+//        if (!setterRes) return;
+//        String dateString = utils.localDateToString(tableADatePicker.getValue(), "MMMM dd, uuuu");
+//        tableATitle.setText("Number of Confirmed COVID-19 Cases as of " + dateString);
+//    
+        }
+    
+    @FXML
+    void doConfirmTableC(ActionEvent event) {
+    	tableCCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
+    	tableCTotalVaccinated.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeVaccinated"));
+        tableCVaccinationRate.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("vaccinationRate"));
+        Boolean setterRes = TableSetter.update(fileOperator, tableCDatePicker, tableCCountryList, tableC);
+        if (!setterRes) return;
+        String dateString = utils.localDateToString(tableCDatePicker.getValue(), "MMMM dd, uuuu");
+        tableCTitle.setText("Rate of Vaccination against COVID-19 as of " + dateString);
+//    	tableACountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
+//        tableATotalCases.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeInfected"));
+//        tableATotalCasesPerM.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("infectedPerMillion"));
+//        Boolean setterRes = TableSetter.update(fileOperator, tableADatePicker, tableACountryList, tableA);
+//        if (!setterRes) return;
+//        String dateString = utils.localDateToString(tableADatePicker.getValue(), "MMMM dd, uuuu");
+//        tableATitle.setText("Number of Confirmed COVID-19 Cases as of " + dateString);
     }
 
     @FXML

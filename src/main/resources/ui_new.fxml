@@ -55,7 +55,7 @@
                               </TableView>
                               <DatePicker id="tableADatePicker" fx:id="tableADatePicker" layoutX="14.0" layoutY="19.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
                               <Label id="tableATitle" fx:id="tableATitle" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="23.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
-                              <Button id="doConfirmTableA" layoutX="14.0" layoutY="671.0" mnemonicParsing="false" onAction="#doConfirmTableA" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <Button id="doConfirmTableA" fx:id="doConfirmTableA" layoutX="14.0" layoutY="671.0" mnemonicParsing="false" onAction="#doConfirmTableA" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
                               <TextField fx:id="tableAText" layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
                               <ChoiceBox layoutX="72.0" layoutY="95.0" prefHeight="26.0" prefWidth="172.0" />
                               <Label layoutX="25.0" layoutY="100.0" text="sort by" />
@@ -66,42 +66,55 @@
                   </Tab>
                 <Tab fx:id="tabReport2" text="Table B">
                   <content>
-                        <AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
                            <children>
-                              <Label />
-                              <TableView id="tableA" fx:id="tableB" accessibleText="dd" layoutX="259.0" layoutY="30.0" prefHeight="651.0" prefWidth="573.0">
+                              <Label layoutX="79.0" layoutY="44.0"/>
+                              <TableView id="tableA" fx:id="tableB" accessibleText="dd" layoutX="263.0" layoutY="46.0" prefHeight="651.0" prefWidth="573.0">
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <columns>
-                                    <TableColumn id="tableACountry" fx:id="tableACountry1" prefWidth="75.0" text="Country" />
-                                    <TableColumn id="tableATotalCases" fx:id="tableATotalCases1" prefWidth="75.0" text="Total Cases" />
-                                    <TableColumn id="tableATotalCasesPerM" fx:id="tableATotalCasesPerM1" prefWidth="75.0" text="Total Cases (per 1M)" />
+                                    <TableColumn id="tableACountry" fx:id="tableBCountry" prefWidth="75.0" text="Country" />
+                                    <TableColumn id="tableATotalCases" fx:id="tableBTotalDeaths" prefWidth="75.0" text="Total Deaths" />
+                                    <TableColumn id="tableATotalCasesPerM" fx:id="tableBTotalDeathsPerM" prefWidth="75.0" text="Total Deaths (per 1M)" />
                                  </columns>
                               </TableView>
-                              <DatePicker id="tableADatePicker" fx:id="tableBDatePicker" layoutX="9.0" layoutY="17.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <DatePicker id="tableADatePicker" fx:id="tableBDatePicker" layoutX="14.0" layoutY="19.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
                               <Label id="tableATitle" fx:id="tableBTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="262.0" layoutY="5.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
-                              <Button id="doConfirmTableA" layoutX="9.0" layoutY="664.0" mnemonicParsing="false" onAction="#doConfirmTableB" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
-                              <TextField fx:id="tableBText" layoutX="8.0" layoutY="55.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
-                              <ChoiceBox layoutX="77.0" layoutY="102.0" prefHeight="26.0" prefWidth="172.0" />
-                              <Label layoutX="18.0" layoutY="106.0" text="sort by" />
-                              <CheckListViewWithList fx:id="tableBCountryList" layoutX="7.0" layoutY="136.0" prefHeight="527.0" prefWidth="244.0" />
+                              <Button id="doConfirmTableA" fx:id="doConfirmTableB" layoutX="14.0" layoutY="671.0" mnemonicParsing="false" onAction="#doConfirmTableB" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <TextField fx:id="tableBText" layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
+                              <ChoiceBox layoutX="72.0" layoutY="95.0" prefHeight="26.0" prefWidth="172.0" />
+                              <Label layoutX="25.0" layoutY="100.0" text="sort by" />
+                              <CheckListViewWithList fx:id="tableBCountryList" layoutX="11.0" layoutY="133.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
                   <Tab fx:id="tabReport3" text="Table C">
                     <content>
-                        <AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
                            <children>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="719.0">
-                                 <children>
-                                    <TextArea layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="694.0" text="Task C1: Generate data tables showing the rate of vaccination against COVID-19 by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Rate of Vaccination against COVID-19 as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Fully Vaccinated&quot;, and &quot;Rate of Vaccination&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;&#10;" wrapText="true" />
-                                 </children>
-                              </AnchorPane>
+                              <Label layoutX="79.0" layoutY="44.0"/>
+                              <TableView id="tableA" fx:id="tableB" accessibleText="dd" layoutX="263.0" layoutY="46.0" prefHeight="651.0" prefWidth="573.0">
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                                 <columns>
+                                    <TableColumn id="tableACountry" fx:id="tableCCountry" prefWidth="75.0" text="Country" />
+                                    <TableColumn id="tableATotalCases" fx:id="tableCTotalVaccinated" prefWidth="75.0" text="Fully Vaccinated" />
+                                    <TableColumn id="tableATotalCasesPerM" fx:id="tableCVaccinationRate" prefWidth="75.0" text="Rate of Vaccination" />
+                                 </columns>
+                              </TableView>
+                              <DatePicker id="tableADatePicker" fx:id="tableCDatePicker" layoutX="14.0" layoutY="19.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <Label id="tableATitle" fx:id="tableCTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="262.0" layoutY="5.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
+                              <Button id="doConfirmTableA" fx:id="doConfirmTableC" layoutX="14.0" layoutY="671.0" mnemonicParsing="false" onAction="#doConfirmTableC" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <TextField fx:id="tableCText" layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
+                              <ChoiceBox layoutX="72.0" layoutY="95.0" prefHeight="26.0" prefWidth="172.0" />
+                              <Label layoutX="25.0" layoutY="100.0" text="sort by" />
+                              <CheckListViewWithList fx:id="tableCCountryList" layoutX="11.0" layoutY="133.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
-                    </content>
+                  </content>
                   </Tab>
                   <Tab fx:id="tabApp1" text="Chart A">
                     <content>
