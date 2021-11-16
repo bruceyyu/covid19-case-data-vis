@@ -137,8 +137,11 @@ public class ChartSetter {
         for (String countryName: newCountryTrendMap.keySet()) {
             existMap.put(countryName, true);
         }
-        
-        int graphInternalSize = chartDataSeriesList.size();
+        int graphInternalSize = 0;
+        int new_graphInternalSize = chartDataSeriesList.size();
+        if(new_graphInternalSize > graphInternalSize) {
+        	graphInternalSize = new_graphInternalSize;
+        }
         List<XYChart.Series<Number, Number>> toRemoveList = new ArrayList<>();
         for (int i = 0; i < graphInternalSize; i++) {
             XYChart.Series<Number, Number> series = chartDataSeriesList.get(i);
@@ -148,8 +151,10 @@ public class ChartSetter {
 
                     for (DailyStatistics ds : newCountryTrendMap.get(series.getName())
                     ) {
+                    	if( ds.getVaccinationRate() > 0) {
                         series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getVaccinationRate()));
-                    }
+                    	}
+                    }                   	
                     existMap.put(series.getName(), false); // mark as processed
 
 
@@ -164,7 +169,9 @@ public class ChartSetter {
                 XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
                 series1.setName(countryName);
                 for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {
+                	if( dailyStatistics.getVaccinationRate() > 0) {
                     series1.getData().add(new XYChart.Data<>(dailyStatistics.getDate().getTime(), dailyStatistics.getVaccinationRate()));
+                	}
                 }
                 if (chartDataSeriesList.size() == 0) {
                     chartDataSeriesList.add(series1);
@@ -211,7 +218,46 @@ public class ChartSetter {
         chartX.setAutoRanging(false); // manually set X-axis range and tick width
         SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
         try {
-            chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());
+        	Calendar c1 = Calendar.getInstance();
+            c1.set(2020, 12 - 1, 30);
+            Date date = c1.getTime();
+        	chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());
+            chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());
+            chartX.setTickUnit(a.parse("1970/02/01").getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        chart.setCreateSymbols(true); // show the symbols
+    }
+    public static void setGraphPropeties_C(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
+        NumberAxis chartX = (NumberAxis) chart.getXAxis();
+        NumberAxis chartY = (NumberAxis) chart.getYAxis();
+        chartX.setTickLabelFormatter(
+                new StringConverter<Number>() {
+                    @Override
+                    public String toString(Number object) {
+                        SimpleDateFormat a = new SimpleDateFormat("yy/MM/dd");
+                        return a.format(new Date(object.longValue()));
+                    }
+
+                    @Override
+                    public Number fromString(String string) {
+                        return 0;
+                    }
+                }
+        );
+        chartX.setAutoRanging(false); // manually set X-axis range and tick width
+        SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+        	Calendar c1 = Calendar.getInstance();
+            c1.set(2020, 12 - 1, 12);
+            Date date = c1.getTime();
+        	if(date.before(utils.localDateToDate(chartStartDatePicker.getValue()))) {
+        		chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());
+        	}
+        	else {
+        		chartX.setLowerBound(date.getTime());
+        	}
             chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());
             chartX.setTickUnit(a.parse("1970/02/01").getTime());
         } catch (ParseException e) {
@@ -222,3 +268,4 @@ public class ChartSetter {
 
 
 }
+
