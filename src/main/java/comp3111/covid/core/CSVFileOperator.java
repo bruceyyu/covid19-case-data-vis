@@ -1,8 +1,7 @@
-package comp3111.covid.Core;
+package comp3111.covid.core;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
-import javax.sound.sampled.DataLine;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
@@ -144,6 +143,21 @@ public class CSVFileOperator {
         return result;
     }
 
+    /**
+     * Get a map of country list
+     * @param countryList String list of countries
+     * @param start start date
+     * @param end end date
+     * @return map of country trend list
+     */
+    public Map<String, List<DailyStatistics>> getCountryTrendMap(List<String> countryList, Date start, Date end) {
+        HashMap<String, List<DailyStatistics>> result = new HashMap<>();
+        for (String countryName: countryList) {
+            result.put(countryName, getCountryTrend(countryName, start, end));
+        }
+        return result;
+    }
+
 
 
 
@@ -173,6 +187,11 @@ public class CSVFileOperator {
             result.add(ds.getCountry());
         }
         return result.stream().sorted().collect(Collectors.toList());
+    }
+
+    public List<String> searchCountry(String countryName) {
+        List<String> allCountries = getAllCountries();
+        return allCountries.stream().filter(name -> name.toLowerCase().startsWith(countryName.toLowerCase().trim())).collect(Collectors.toList());
     }
 
     public static void main(String[] args) throws FileNotFoundException {

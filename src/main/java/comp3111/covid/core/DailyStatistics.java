@@ -1,9 +1,8 @@
-package comp3111.covid.Core;
+package comp3111.covid.core;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 
-import javax.sound.sampled.DataLine;
 import java.util.Date;
 
 /**

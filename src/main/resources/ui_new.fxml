@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import comp3111.covid.ui.CheckListViewWithList?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -14,7 +15,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.control.CheckListView?>
 
 <VBox prefHeight="742.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
@@ -54,12 +54,12 @@
                                  </columns>
                               </TableView>
                               <DatePicker id="tableADatePicker" fx:id="tableADatePicker" layoutX="14.0" layoutY="19.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
-                              <Label fx:id="tableATitle" id="tableATitle" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="23.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
+                              <Label id="tableATitle" fx:id="tableATitle" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="23.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
                               <Button id="doConfirmTableA" layoutX="14.0" layoutY="671.0" mnemonicParsing="false" onAction="#doConfirmTableA" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
-                              <TextField layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to add a country" />
+                              <TextField fx:id="tableAText" layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
                               <ChoiceBox layoutX="72.0" layoutY="95.0" prefHeight="26.0" prefWidth="172.0" />
                               <Label layoutX="25.0" layoutY="100.0" text="sort by" />
-                              <CheckListView fx:id="tableACountryList" layoutX="11.0" layoutY="133.0" prefHeight="527.0" prefWidth="244.0" />
+                              <CheckListViewWithList fx:id="tableACountryList" layoutX="11.0" layoutY="133.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -68,11 +68,24 @@
                   <content>
                         <AnchorPane>
                            <children>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="722.0">
-                                 <children>
-                                    <TextArea layoutX="14.0" layoutY="14.0" prefHeight="315.0" prefWidth="695.0" text="Task B1: Generate data tables showing the number of confirmed COVID-19 deaths by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Number of Confirmed COVID-19 Deaths as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Total Deaths&quot;, and &quot;Total Deaths (per 1M)&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;" wrapText="true" />
-                                 </children>
-                              </AnchorPane>
+                              <Label />
+                              <TableView id="tableA" fx:id="tableB" accessibleText="dd" layoutX="259.0" layoutY="30.0" prefHeight="651.0" prefWidth="573.0">
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                                 <columns>
+                                    <TableColumn id="tableACountry" fx:id="tableACountry1" prefWidth="75.0" text="Country" />
+                                    <TableColumn id="tableATotalCases" fx:id="tableATotalCases1" prefWidth="75.0" text="Total Cases" />
+                                    <TableColumn id="tableATotalCasesPerM" fx:id="tableATotalCasesPerM1" prefWidth="75.0" text="Total Cases (per 1M)" />
+                                 </columns>
+                              </TableView>
+                              <DatePicker id="tableADatePicker" fx:id="tableBDatePicker" layoutX="9.0" layoutY="17.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <Label id="tableATitle" fx:id="tableBTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="262.0" layoutY="5.0" prefHeight="17.0" prefWidth="568.0" textAlignment="CENTER" />
+                              <Button id="doConfirmTableA" layoutX="9.0" layoutY="664.0" mnemonicParsing="false" onAction="#doConfirmTableB" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <TextField fx:id="tableBText" layoutX="8.0" layoutY="55.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
+                              <ChoiceBox layoutX="77.0" layoutY="102.0" prefHeight="26.0" prefWidth="172.0" />
+                              <Label layoutX="18.0" layoutY="106.0" text="sort by" />
+                              <CheckListViewWithList fx:id="tableBCountryList" layoutX="7.0" layoutY="136.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -103,7 +116,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="798.0">
                            <children>
-                              <LineChart fx:id="chartB" layoutX="53.0" layoutY="14.0" prefHeight="421.0" prefWidth="744.0" title="Cumulative Confirmed COVID-19 Deaths (per 1M)">
+                              <LineChart fx:id="chartB" layoutX="267.0" layoutY="40.0" prefHeight="518.0" prefWidth="572.0" title="Cumulative Confirmed COVID-19 Deaths (per 1M)">
                                 <xAxis>
                                   <NumberAxis fx:id="chartBX" label="Date" side="BOTTOM" />
                                 </xAxis>
@@ -111,7 +124,12 @@
                                   <NumberAxis fx:id="chartBY" label="Deaths Per Million" side="LEFT" />
                                 </yAxis>
                               </LineChart>
-                              <Button fx:id="chartBButton" layoutX="14.0" layoutY="403.0" mnemonicParsing="false" onAction="#chartBGo" text="Go" />
+                              <Button fx:id="chartBButton" layoutX="309.0" layoutY="600.0" mnemonicParsing="false" onAction="#chartBGo" prefHeight="25.0" prefWidth="55.0" text="Go" />
+                              <DatePicker id="tableADatePicker" fx:id="chartBStartDatePicker" layoutX="16.0" layoutY="14.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <DatePicker id="tableADatePicker" fx:id="chartBEndDatePicker" layoutX="16.0" layoutY="50.0" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                              <Button id="doConfirmTableA" layoutX="16.0" layoutY="653.0" mnemonicParsing="false" onAction="#doConfirmChartB" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                              <TextField fx:id="chartBText" layoutX="15.0" layoutY="87.0" prefHeight="26.0" prefWidth="241.0" promptText="Type to search for a country" />
+                              <CheckListViewWithList fx:id="chartBCountryList" layoutX="14.0" layoutY="118.0" prefHeight="527.0" prefWidth="244.0" />
                            </children>
                         </AnchorPane>
                     </content>

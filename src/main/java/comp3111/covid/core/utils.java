@@ -1,4 +1,4 @@
-package comp3111.covid.Core;
+package comp3111.covid.core;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,6 +18,11 @@ public class utils {
         Instant instant = Instant.from(raw.atStartOfDay(ZoneId.systemDefault()));
         Date date = Date.from(instant);
         return date;
+    }
+
+    public static LocalDate dateToLocalDate(Date raw) {
+        if (raw == null) return null;
+        return raw.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
     /**
      * convert LocalDate type (used by JavaFx's datepicker) to a date string
