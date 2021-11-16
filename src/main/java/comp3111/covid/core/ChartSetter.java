@@ -218,9 +218,6 @@ public class ChartSetter {
         chartX.setAutoRanging(false); // manually set X-axis range and tick width
         SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
         try {
-        	Calendar c1 = Calendar.getInstance();
-            c1.set(2020, 12 - 1, 30);
-            Date date = c1.getTime();
         	chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());
             chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());
             chartX.setTickUnit(a.parse("1970/02/01").getTime());
@@ -250,7 +247,7 @@ public class ChartSetter {
         SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
         try {
         	Calendar c1 = Calendar.getInstance();
-            c1.set(2020, 12 - 1, 12);
+            c1.set(2020, 12 - 1, 30);
             Date date = c1.getTime();
         	if(date.before(utils.localDateToDate(chartStartDatePicker.getValue()))) {
         		chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());
