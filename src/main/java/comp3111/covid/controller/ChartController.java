@@ -99,11 +99,11 @@ public class ChartController {
                                         startDatePicker.getValue().plusDays(1))
                                 ) {
                                     setDisable(true);
-                                    setStyle("-fx-background-color: #ffc0cb;");
+                                    getStyleClass().add("disabled-date");
                                 }
                                 if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
                                     setDisable((true));
-                                    setStyle("-fx-background-color: #ffc0cb;");
+                                    getStyleClass().add("disabled-date");
                                 }
                             }
                         };
@@ -122,11 +122,11 @@ public class ChartController {
                                         utils.dateToLocalDate(fileOperator.getMinimumDate()))
                                 ) {
                                     setDisable(true);
-                                    setStyle("-fx-background-color: #ffc0cb;");
+                                    getStyleClass().add("disabled-date");
                                 }
                                 if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()).minusDays(1))) {
                                     setDisable((true));
-                                    setStyle("-fx-background-color: #ffc0cb;");
+                                    getStyleClass().add("disabled-date");
                                 }
                             }
                         };
