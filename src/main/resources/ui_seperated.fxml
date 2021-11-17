@@ -37,7 +37,7 @@
                            <children>
                               <Label layoutX="114.0" layoutY="36.0" text="Dataset" />
                               <TextField fx:id="textfieldDataset" editable="false" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="COVID_Dataset_v1.0.csv" />
-                              <Button fx:id="loadButton" layoutX="366.0" layoutY="32.0" mnemonicParsing="false" onAction="#loadNewFile" text="Open File" />
+                              <Button styleClass="confirm-btn" fx:id="loadButton" layoutX="366.0" layoutY="32.0" mnemonicParsing="false" onAction="#loadNewFile" text="Open..." />
                            </children>
                         </AnchorPane>
                   </content>
