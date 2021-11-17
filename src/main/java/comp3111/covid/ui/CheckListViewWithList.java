@@ -1,6 +1,7 @@
 package comp3111.covid.ui;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.controlsfx.control.CheckListView;
 
 import java.util.ArrayList;
@@ -22,6 +23,11 @@ public class CheckListViewWithList<String> extends CheckListView<String> {
     public CheckListViewWithList() {
         super();
         countryNamesMap = new HashMap<>();
+    }
+
+    public void init(List<String> countryNames) {
+        this.countryNamesMap.clear();
+        this.update(countryNames);
     }
 
     /**

@@ -1,5 +1,6 @@
 package comp3111.covid;
 
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import comp3111.covid.controller.ChartController;
 import comp3111.covid.controller.TableController;
 import comp3111.covid.core.*;
@@ -45,47 +46,7 @@ public class Controller {
     private Tab tabTaskZero;
 
     @FXML
-    private TextField textfieldISO;
-
-    @FXML
-    private Button buttonConfirmedDeaths;
-
-    @FXML
     private TextField textfieldDataset;
-
-    @FXML
-    private Button buttonRateOfVaccination;
-
-    @FXML
-    private Button buttonConfirmedCases;
-
-    @FXML
-    private Tab tabReport1;
-
-    @FXML
-    private Tab tabReport2;
-
-    @FXML
-    private Tab tabReport3;
-
-    @FXML
-    private Tab tabApp1;
-
-    @FXML
-    private Tab tabApp2;
-
-    @FXML
-    private Tab tabApp3;
-
-    @FXML
-    private TextArea textAreaConsole;
-
-    @FXML
-    private Button doConfirmTableA;
-
-
-
-
 
     @FXML
     TabPane mainTabPane;
@@ -153,43 +114,41 @@ public class Controller {
         }
     }
 
-    /**
-     * Task Zero
-     * To be triggered by the "Confirmed Cases" button on the Task Zero Tab
-     */
     @FXML
-    void doConfirmedCases(ActionEvent event) {
-        String iDataset = textfieldDataset.getText();
-        String iISO = textfieldISO.getText();
-        String oReport = DataAnalysis.getConfirmedCases(iDataset, iISO);
-        textAreaConsole.setText(oReport);
+    void loadNewFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Data Set");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV file (*.csv)", "*.csv"));
+        File file = fileChooser.showOpenDialog(mainTabPane.getScene().getWindow());
+
+        if (file != null) {
+            System.out.println(file.toString());
+            textfieldDataset.setText(file.getName());
+            try {
+                CSVFileOperator fileOperator = new CSVFileOperator(file.getAbsolutePath());
+                tableAController.init(TableType.A, fileOperator);
+                tableBController.init(TableType.B, fileOperator);
+                tableCController.init(TableType.C, fileOperator);
+                chartAController.initData(ChartType.A, fileOperator);
+                chartBController.initData(ChartType.B, fileOperator);
+                chartCController.initData(ChartType.C, fileOperator);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Successfully loaded \"" + file.getName() + "\".", ButtonType.YES);
+                alert.show();
+                return;
+            } catch (FileNotFoundException fileNotFoundException) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Cannot find file.", ButtonType.YES);
+                alert.show();
+                return;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Corrupted file.", ButtonType.YES);
+                alert.show();
+                return;
+            }
+
+        }
     }
 
-
-    /**
-     * Task Zero
-     * To be triggered by the "Confirmed Deaths" button on the Task Zero Tab
-     */
-    @FXML
-    void doConfirmedDeaths(ActionEvent event) {
-        String iDataset = textfieldDataset.getText();
-        String iISO = textfieldISO.getText();
-        String oReport = DataAnalysis.getConfirmedDeaths(iDataset, iISO);
-        textAreaConsole.setText(oReport);
-    }
-
-
-    /**
-     * Task Zero
-     * To be triggered by the "Rate of Vaccination" button on the Task Zero Tab
-     */
-    @FXML
-    void doRateOfVaccination(ActionEvent event) {
-        String iDataset = textfieldDataset.getText();
-        String iISO = textfieldISO.getText();
-        String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);
-        textAreaConsole.setText(oReport);
-    }
 
 
 }
