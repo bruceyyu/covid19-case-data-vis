@@ -695,13 +695,7 @@ public class Controller {
         start.setTime(startDate);
 
     }
-    @FXML
-    void chartAGo(ActionEvent event) throws InterruptedException, ParseException {
-        ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chartB.getData();
-        for (XYChart.Series<Number, Number> series : chartDataSeriesList) {
-            series.getData().clear();
-        }
-    }
+
 
     @FXML
     void chartBGo(ActionEvent event) throws InterruptedException, ParseException {
