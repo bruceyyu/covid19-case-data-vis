@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import comp3111.covid.ui.CheckListViewWithList?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="712.8" prefWidth="850.0">
+         <center>
+            <LineChart fx:id="chart" prefHeight="518.0" prefWidth="572.0" title="Chart Title" BorderPane.alignment="CENTER">
+               <xAxis>
+                  <NumberAxis fx:id="chartX" label="Date" side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis fx:id="chartY" label="Chart Y" side="LEFT" />
+               </yAxis>
+            </LineChart>
+         </center>
+         <left>
+            <VBox prefHeight="690.0" prefWidth="240.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <DatePicker id="tableADatePicker" fx:id="startDatePicker" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                  <DatePicker id="tableADatePicker" fx:id="endDatePicker" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
+                  <TextField fx:id="chartText" prefHeight="26.0" prefWidth="240.0" promptText="Type to search for a country" />
+                  <HBox prefHeight="32.0" prefWidth="240.0" spacing="10.0">
+                     <children>
+                        <Label text="sort by" />
+                        <ChoiceBox prefHeight="26.0" prefWidth="172.0" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <CheckListViewWithList fx:id="chartCountryList" prefHeight="527.0" prefWidth="240.0" />
+                  <Button id="doConfirmTableA" mnemonicParsing="false" onAction="#doConfirmChart" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+            </VBox>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>

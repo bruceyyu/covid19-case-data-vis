@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
@@ -41,6 +42,9 @@ public class ChartController {
     @FXML
     private DatePicker endDatePicker;
 
+    @FXML
+    private Tab pane;
+
     public ChartController() {
 
     }
@@ -48,6 +52,25 @@ public class ChartController {
     public void initData(ChartType type, CSVFileOperator fileOperator) {
         this.type = type;
         this.fileOperator = fileOperator;
+
+        switch (type) {
+            case A:
+                chart.setTitle("Cumulative Confirmed COVID-19 Cases (per 1M)");
+                chartY.setLabel("Confirmed Cases Per Million");
+                pane.setText("Cases Chart");
+                break;
+            case B:
+                chart.setTitle("Cumulative Confirmed COVID-19 Deaths (per 1M)");
+                chartY.setLabel("Confirmed Deaths Per Million");
+                pane.setText("Death Chart");
+                break;
+            case C:
+                chart.setTitle("Vaccination Rate on Certain Day");
+                chartY.setLabel("Vaccination Rate");
+                pane.setText("Vaccination Rate Chart");
+                break;
+        }
+
         startDatePicker.getEditor().setDisable(true);
         startDatePicker.getEditor().setOpacity(1);
         startDatePicker.setValue(utils.dateToLocalDate(fileOperator.getMinimumDate()));
@@ -139,7 +162,14 @@ public class ChartController {
             alert.show();
             return;
         }
-        ChartSetter.updateGraph_A(chart, countryTrendMap);
+        if (type == ChartType.A) {
+            ChartSetter.updateGraph_A(chart, countryTrendMap);
+        } else if (type == ChartType.B) {
+            ChartSetter.updateGraph_B(chart, countryTrendMap);
+        } else if (type == ChartType.C) {
+            ChartSetter.updateGraph_C(chart, countryTrendMap);
+        }
+
     }
 
 

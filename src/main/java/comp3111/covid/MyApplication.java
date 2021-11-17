@@ -1,8 +1,10 @@
 package comp3111.covid;
 
 import comp3111.covid.controller.ChartController;
+import comp3111.covid.controller.TableController;
 import comp3111.covid.core.CSVFileOperator;
 import comp3111.covid.core.ChartType;
+import comp3111.covid.core.TableType;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -71,8 +73,19 @@ public class MyApplication extends Application {
 
 
    		VBox root = (VBox) loader.load();
-		ChartController chartController = loader.<Controller>getController().chartAController;
-		chartController.initData(ChartType.A, fileOperator);
+		ChartController chartAController = loader.<Controller>getController().chartAController;
+		ChartController chartBController = loader.<Controller>getController().chartBController;
+		ChartController chartCController = loader.<Controller>getController().chartCController;
+		chartAController.initData(ChartType.A, fileOperator);
+		chartBController.initData(ChartType.B, fileOperator);
+		chartCController.initData(ChartType.C, fileOperator);
+
+		TableController tableAController = loader.<Controller>getController().tableAController;
+		TableController tableBController = loader.<Controller>getController().tableBController;
+		TableController tableCController = loader.<Controller>getController().tableCController;
+		tableAController.init(TableType.A, fileOperator);
+		tableBController.init(TableType.B, fileOperator);
+		tableCController.init(TableType.C, fileOperator);
    		Scene scene =  new Scene(root);
    		scene.getStylesheets().add("chartStyle.css");
    		stage.setScene(scene);

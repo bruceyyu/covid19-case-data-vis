@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<Tab fx:id="tabApp1" text="Chart A" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.controller.ChartController">
+<Tab fx:id="pane" text="Chart A" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.controller.ChartController">
    <content>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="798.0">
          <children>
