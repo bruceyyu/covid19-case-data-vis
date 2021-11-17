@@ -3,8 +3,10 @@ package comp3111.covid;
 import comp3111.covid.core.*;
 import comp3111.covid.ui.CheckListViewWithList;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -14,9 +16,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.WritableImage;
+import javafx.scene.transform.Transform;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -226,7 +232,9 @@ public class Controller {
     private TextField tableBText; 
     
     @FXML
-    private TextField tableCText; 
+    private TextField tableCText;
+
+    @FXML TabPane mainTabPane;
 
     public void initialize() {
 //        disable the text input of the date picker, but not make it gray
@@ -712,6 +720,42 @@ public class Controller {
         }
     }
 
+    @FXML
+    public void saveAsPng() {
+        int tabID = mainTabPane.getSelectionModel().getSelectedIndex();
+        WritableImage image;
+        SnapshotParameters snapshotParameters = new SnapshotParameters();
+        snapshotParameters.setTransform(Transform.scale(2, 2));
+        if (tabID == 4) {
+            image = new WritableImage((int)Math.rint(2 * chartA.getWidth()), (int)Math.rint(2 * chartA.getHeight()));
+            chartA.snapshot(snapshotParameters, image);
+        } else if (tabID == 5) {
+            image = new WritableImage((int)Math.rint(2 * chartB.getWidth()), (int)Math.rint(2 * chartA.getHeight()));
+            chartB.snapshot(snapshotParameters, image);
+        } else if (tabID == 6) {
+            image = new WritableImage((int)Math.rint(2 * chartC.getWidth()), (int)Math.rint(2 * chartA.getHeight()));
+            chartC.snapshot(snapshotParameters, image);
+        } else { // error case
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Cannot generate image.", ButtonType.YES);
+            alert.show();
+            return;
+        }
+
+
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.png)", "*.png"));
+        File file = fileChooser.showSaveDialog(chartA.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
 
     /**
      * Task Zero
