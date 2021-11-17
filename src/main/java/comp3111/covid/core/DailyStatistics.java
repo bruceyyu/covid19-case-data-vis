@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvDate;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -20,19 +21,19 @@ public class DailyStatistics {
     private double deathPerMillion;
 
     @CsvBindByName(column = "total_deaths")
-    private int cumulativeDeath;
+    private BigInteger cumulativeDeath;
 
     @CsvBindByName(column = "total_cases_per_million")
     private double infectedPerMillion;
 
     @CsvBindByName(column = "total_cases")
-    private int cumulativeInfected;
+    private BigInteger cumulativeInfected;
 
     @CsvBindByName(column = "people_fully_vaccinated_per_hundred\n")
     private double vaccinationRate;
 
     @CsvBindByName(column = "people_fully_vaccinated")
-    private int cumulativeVaccinated;
+    private BigInteger cumulativeVaccinated;
 
 
     public DailyStatistics() {
@@ -50,9 +51,9 @@ public class DailyStatistics {
      * @param vaccinationRate      vaccination rate
      * @param cumulativeVaccinated cumulative vaccinated
      */
-    public DailyStatistics(String country, Date date, double deathPerMillion, int cumulativeDeath,
-                           double infectedPerMillion, int cumulativeInfected, double vaccinationRate,
-                           int cumulativeVaccinated) {
+    public DailyStatistics(String country, Date date, double deathPerMillion, BigInteger cumulativeDeath,
+                           double infectedPerMillion, BigInteger cumulativeInfected, double vaccinationRate,
+                           BigInteger cumulativeVaccinated) {
         this.country = country;
         this.date = date;
         this.deathPerMillion = deathPerMillion;
@@ -79,15 +80,15 @@ public class DailyStatistics {
         return vaccinationRate;
     }
 
-    public int getCumulativeDeath() {
+    public BigInteger getCumulativeDeath() {
         return cumulativeDeath;
     }
 
-    public int getCumulativeInfected() {
+    public BigInteger getCumulativeInfected() {
         return cumulativeInfected;
     }
 
-    public int getCumulativeVaccinated() {
+    public BigInteger getCumulativeVaccinated() {
         return cumulativeVaccinated;
     }
 

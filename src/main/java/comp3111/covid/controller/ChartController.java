@@ -149,7 +149,7 @@ public class ChartController {
         });
 
         List<String> countryNames = fileOperator.getAllCountries();
-        chartCountryList.update(countryNames);
+        chartCountryList.init(countryNames);
     }
 
     public void initialize() {

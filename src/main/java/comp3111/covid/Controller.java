@@ -140,6 +140,7 @@ public class Controller {
                 alert.show();
                 return;
             } catch (Exception ex) {
+                ex.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Corrupted file.", ButtonType.YES);
                 alert.show();
                 return;

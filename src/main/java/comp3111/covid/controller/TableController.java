@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class TableController {
     private TableColumn<DailyStatistics, String> tableCountry;
 
     @FXML
-    private TableColumn<DailyStatistics, Integer> tableStat1;
+    private TableColumn<DailyStatistics, BigInteger> tableStat1;
 
     @FXML
     private TableColumn<DailyStatistics, Double> tableStat2;
@@ -112,7 +113,7 @@ public class TableController {
             text.requestFocus();
         });
         List<String> countryNames = fileOperator.getAllCountries();
-        tableCountryList.update(countryNames);
+        tableCountryList.init(countryNames);
 
     }
 
@@ -121,17 +122,17 @@ public class TableController {
         switch (type) {
             case A:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
-                tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeInfected"));
+                tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeInfected"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("infectedPerMillion"));
                 break;
             case B:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
-                tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeDeath"));
+                tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeDeath"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("deathPerMillion"));
                 break;
             case C:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
-                tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Integer>("cumulativeVaccinated"));
+                tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeVaccinated"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("vaccinationRate"));
                 break;
         }
