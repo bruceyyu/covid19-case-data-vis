@@ -11,6 +11,9 @@ import javafx.util.Callback;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Table Controller class for Table Tabs
+ */
 public class TableController {
 
     private TableType tableType;
@@ -49,6 +52,11 @@ public class TableController {
     @FXML
     private Tab pane;
 
+    /**
+     * Initialize the table
+     * @param type Table Type
+     * @param fileOperator fileOperator
+     */
     public void init(TableType type, CSVFileOperator fileOperator) {
         this.fileOperator = fileOperator;
         this.type = type;

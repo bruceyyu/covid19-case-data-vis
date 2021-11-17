@@ -31,7 +31,7 @@
       <children>
             <TabPane fx:id="mainTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="717.2" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
-                <Tab fx:id="tabTaskZero" text="Task Zero">
+                <Tab fx:id="tab0" text="Task Zero">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>

@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Chart Controller Class for a Chart tab
+ */
 public class ChartController {
 
     private ChartType type;
@@ -49,6 +52,11 @@ public class ChartController {
 
     }
 
+    /**
+     * Initialize some properties of a chart tab
+     * @param type Chart Type
+     * @param fileOperator csv file operator
+     */
     public void initData(ChartType type, CSVFileOperator fileOperator) {
         this.type = type;
         this.fileOperator = fileOperator;
