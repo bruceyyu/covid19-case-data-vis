@@ -1,10 +1,19 @@
 package comp3111.covid;
 
+import comp3111.covid.controller.ChartController;
+import comp3111.covid.controller.TableController;
+import comp3111.covid.core.CSVFileOperator;
+import comp3111.covid.core.ChartType;
+import comp3111.covid.core.TableType;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 /**
@@ -33,8 +42,25 @@ import javafx.scene.Scene;
  */
 public class MyApplication extends Application {
 
-    private static final String UI_FILE = "/ui_new.fxml";  //file in the folder of src/main/resources/
-	
+    private static final String UI_FILE = "/ui_seperated.fxml";  //file in the folder of src/main/resources/
+	private static CSVFileOperator fileOperator;
+	static {
+		try {
+			fileOperator = new CSVFileOperator("src" + File.separator + "main" + File.separator + "resources" + File.separator + "COVID_Dataset_v1.0.csv");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			String currentPath = null;
+			try {
+				currentPath = new java.io.File(".").getCanonicalPath();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("Current dir:" + currentPath);
+
+			String currentDir = System.getProperty("user.dir");
+			System.out.println("Current dir using System:" + currentDir);
+		}
+	}
 	/** 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 * 
@@ -44,8 +70,24 @@ public class MyApplication extends Application {
 	public void start(Stage stage) throws Exception {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource(UI_FILE));
+
+
    		VBox root = (VBox) loader.load();
+		ChartController chartAController = loader.<Controller>getController().chartAController;
+		ChartController chartBController = loader.<Controller>getController().chartBController;
+		ChartController chartCController = loader.<Controller>getController().chartCController;
+		chartAController.initData(ChartType.A, fileOperator);
+		chartBController.initData(ChartType.B, fileOperator);
+		chartCController.initData(ChartType.C, fileOperator);
+
+		TableController tableAController = loader.<Controller>getController().tableAController;
+		TableController tableBController = loader.<Controller>getController().tableBController;
+		TableController tableCController = loader.<Controller>getController().tableCController;
+		tableAController.init(TableType.A, fileOperator);
+		tableBController.init(TableType.B, fileOperator);
+		tableCController.init(TableType.C, fileOperator);
    		Scene scene =  new Scene(root);
+   		scene.getStylesheets().add("chartStyle.css");
    		stage.setScene(scene);
    		stage.setTitle("COMP3111 Team-T03");
    		stage.show();

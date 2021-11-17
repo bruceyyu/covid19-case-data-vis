@@ -157,6 +157,19 @@ public class CSVFileOperator {
         }
         return result;
     }
+    public Map<String, List<DailyStatistics>> getCountryTrendMap_chartC(List<String> countryList, Date start, Date end) {
+        HashMap<String, List<DailyStatistics>> result = new HashMap<>();
+        Calendar c1 = Calendar.getInstance();
+        c1.set(2020, 12 - 1, 30);
+        Date date = c1.getTime();
+        if(start.before(date)) {
+        	start = date;
+        }
+        for (String countryName: countryList) {
+            result.put(countryName, getCountryTrend(countryName, start, end));
+        }
+        return result;
+    }
 
 
 
