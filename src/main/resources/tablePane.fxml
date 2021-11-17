@@ -42,7 +42,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </CheckListViewWithList>
-                        <Button styleClass="confirm-btn" fx:id="doConfirmTable" mnemonicParsing="false" onAction="#doConfirmTable" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                        <Button id="doConfirmTableA" fx:id="doConfirmTable" mnemonicParsing="false" onAction="#doConfirmTable" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

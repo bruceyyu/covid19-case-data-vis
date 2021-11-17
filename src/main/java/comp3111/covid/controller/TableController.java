@@ -81,7 +81,6 @@ public class TableController {
 
         datePicker.getEditor().setDisable(true);
         datePicker.getEditor().setOpacity(1);
-        datePicker.setValue(utils.dateToLocalDate(fileOperator.getMinimumDate()));
 
         final Callback<DatePicker, DateCell> tableCellFactory =
                 new Callback<DatePicker, DateCell>() {
@@ -96,11 +95,11 @@ public class TableController {
                                         utils.dateToLocalDate(fileOperator.getMinimumDate()))
                                 ) {
                                     setDisable(true);
-                                    getStyleClass().add("disabled-date");
+                                    setStyle("-fx-background-color: #ffc0cb;");
                                 }
                                 if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {
                                     setDisable((true));
-                                    getStyleClass().add("disabled-date");
+                                    setStyle("-fx-background-color: #ffc0cb;");
                                 }
                             }
                         };
