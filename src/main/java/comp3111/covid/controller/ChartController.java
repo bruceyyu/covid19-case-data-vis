@@ -181,4 +181,7 @@ public class ChartController {
     }
 
 
+    public void setFileOperator(CSVFileOperator fileOperator) {
+        this.fileOperator = fileOperator;
+    }
 }

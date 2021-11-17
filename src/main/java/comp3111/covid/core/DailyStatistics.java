@@ -1,6 +1,7 @@
 package comp3111.covid.core;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvDate;
 
 import java.util.Date;
@@ -12,8 +13,7 @@ public class DailyStatistics {
     @CsvBindByName(column = "location", required = true)
     private String country;
 
-    @CsvBindByName(column = "date", required = true)
-    @CsvDate("MM/dd/yyyy")
+    @CsvCustomBindByName(column = "date", required = true, converter=CustomDateConverter.class)
     private Date date;
 
     @CsvBindByName(column = "total_deaths_per_million")

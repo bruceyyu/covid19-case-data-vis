@@ -154,4 +154,7 @@ public class TableController {
 
     }
 
+    public void setFileOperator(CSVFileOperator fileOperator) {
+        this.fileOperator = fileOperator;
+    }
 }
