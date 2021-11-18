@@ -10,6 +10,8 @@
 /*** The menu bar itself ***/
 .menu-bar {
     -fx-background-color: -fx-my-menu-color;
+    -fx-border-width: 0px 0px 2px 0px;
+    -fx-border-color: #990000ff;
 }
 
 /*** Top-level menu itself (not selected / hovered) ***/
