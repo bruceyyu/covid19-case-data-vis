@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="742.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<VBox prefHeight="742.0" prefWidth="850.0" stylesheets="@../css/chartStyle.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-      <MenuBar>
+      <MenuBar stylesheets="@../css/menubar.css">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>

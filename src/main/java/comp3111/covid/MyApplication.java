@@ -87,7 +87,6 @@ public class MyApplication extends Application {
 		tableBController.init(TableType.B, fileOperator);
 		tableCController.init(TableType.C, fileOperator);
    		Scene scene =  new Scene(root);
-   		scene.getStylesheets().add("css/chartStyle.css");
    		stage.setScene(scene);
    		stage.setTitle("COMP3111 Team-T03");
    		stage.show();
