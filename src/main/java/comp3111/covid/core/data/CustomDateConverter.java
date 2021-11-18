@@ -1,4 +1,4 @@
-package comp3111.covid.core;
+package comp3111.covid.core.data;
 
 import com.opencsv.bean.AbstractBeanField;
 import com.opencsv.exceptions.CsvConstraintViolationException;

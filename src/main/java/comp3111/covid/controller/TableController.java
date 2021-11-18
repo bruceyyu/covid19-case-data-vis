@@ -1,6 +1,10 @@
 package comp3111.covid.controller;
 
 import comp3111.covid.core.*;
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.tabtype.TableType;
+import comp3111.covid.core.uisetters.TableSetter;
 import comp3111.covid.ui.CheckListViewWithList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -81,7 +85,7 @@ public class TableController {
 
         datePicker.getEditor().setDisable(true);
         datePicker.getEditor().setOpacity(1);
-        datePicker.setValue(utils.dateToLocalDate(fileOperator.getMinimumDate()));
+
 
         final Callback<DatePicker, DateCell> tableCellFactory =
                 new Callback<DatePicker, DateCell>() {

@@ -1,19 +1,21 @@
 package comp3111.covid.controller;
 
 import comp3111.covid.core.*;
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.tabtype.ChartType;
+import comp3111.covid.core.uisetters.ChartSetter;
 import comp3111.covid.ui.CheckListViewWithList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Chart Controller Class for a Chart tab
