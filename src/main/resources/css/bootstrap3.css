@@ -836,7 +836,7 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-background-radius: 3;
     /*-fx-padding: 0.166667em 0.166667em 0.25em 0.25em; !* 2 2 3 3 *!*/
     -fx-padding:0;
-    -fx-border-color: #56c0e0;
+    -fx-border-color: #b6b6b6;
     -fx-border-radius: 3;
     -fx-background-color: white;
 }
@@ -854,8 +854,11 @@ VBox > .split-menu-button.last > .arrow-button {
 .check-box:indeterminate > .box {
     -fx-padding: 0;
 }
+.check-box:hover > .box > {
+    -fx-border-color: #1437AD;
+}
 .check-box:selected > .box > .mark {
-    -fx-background-color: linear-gradient(to bottom, #56c0e0, #40b8dc);
+    -fx-background-color: linear-gradient(to bottom, #1e3da8, #1437AD);
 }
 
 /*******************************************************************************
