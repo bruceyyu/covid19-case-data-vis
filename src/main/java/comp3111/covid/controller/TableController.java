@@ -119,6 +119,7 @@ public class TableController {
         });
         List<String> countryNames = fileOperator.getAllCountries();
         tableCountryList.init(countryNames);
+        table.getItems().clear();
 
     }
 

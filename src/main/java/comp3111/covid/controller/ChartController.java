@@ -152,6 +152,7 @@ public class ChartController {
 
         List<String> countryNames = fileOperator.getAllCountries();
         chartCountryList.init(countryNames);
+        chart.getData().clear();
     }
 
     public void initialize() {
