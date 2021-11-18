@@ -2,9 +2,9 @@ package comp3111.covid;
 
 import comp3111.covid.controller.ChartController;
 import comp3111.covid.controller.TableController;
-import comp3111.covid.core.CSVFileOperator;
-import comp3111.covid.core.ChartType;
-import comp3111.covid.core.TableType;
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.tabtype.ChartType;
+import comp3111.covid.core.tabtype.TableType;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -42,7 +42,7 @@ import java.io.IOException;
  */
 public class MyApplication extends Application {
 
-    private static final String UI_FILE = "/ui_seperated.fxml";  //file in the folder of src/main/resources/
+    private static final String UI_FILE = "/fxmls/ui_seperated.fxml";  //file in the folder of src/main/resources/
 	private static CSVFileOperator fileOperator;
 	static {
 		try {
@@ -87,7 +87,7 @@ public class MyApplication extends Application {
 		tableBController.init(TableType.B, fileOperator);
 		tableCController.init(TableType.C, fileOperator);
    		Scene scene =  new Scene(root);
-   		scene.getStylesheets().add("chartStyle.css");
+   		scene.getStylesheets().add("css/chartStyle.css");
    		stage.setScene(scene);
    		stage.setTitle("COMP3111 Team-T03");
    		stage.show();

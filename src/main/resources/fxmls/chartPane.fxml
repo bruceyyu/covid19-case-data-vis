@@ -48,8 +48,8 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
-                        <CheckListViewWithList fx:id="chartCountryList" prefHeight="527.0" prefWidth="240.0" />
-                        <Button styleClass="confirm-btn" mnemonicParsing="false" onAction="#doConfirmChart" prefHeight="26.0" prefWidth="240.0" text="Confirm" />
+                        <CheckListViewWithList fx:id="chartCountryList" prefHeight="527.0" prefWidth="240.0" stylesheets="@../css/bootstrap3.css" />
+                        <Button mnemonicParsing="false" onAction="#doConfirmChart" prefHeight="26.0" prefWidth="240.0" styleClass="confirm-btn" text="Confirm" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

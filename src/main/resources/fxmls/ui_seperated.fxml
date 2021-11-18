@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="742.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
@@ -31,13 +32,18 @@
       <children>
             <TabPane fx:id="mainTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="717.2" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
-                <Tab fx:id="tab0" text="Task Zero">
+                <Tab fx:id="tab0" text="Welcome Page">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>
-                              <Label layoutX="114.0" layoutY="36.0" text="Dataset" />
-                              <TextField fx:id="textfieldDataset" editable="false" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="COVID_Dataset_v1.0.csv" />
-                              <Button styleClass="confirm-btn" fx:id="loadButton" layoutX="366.0" layoutY="32.0" mnemonicParsing="false" onAction="#loadNewFile" text="Open..." />
+                              <Label layoutX="272.0" layoutY="322.0" text="Dataset" />
+                              <TextField fx:id="textfieldDataset" editable="false" layoutX="343.0" layoutY="318.0" prefHeight="26.0" prefWidth="149.0" text="COVID_Dataset_v1.0.csv" />
+                              <Button fx:id="loadButton" layoutX="524.0" layoutY="318.0" mnemonicParsing="false" onAction="#loadNewFile" styleClass="confirm-btn" text="Open..." />
+                              <Label layoutX="317.0" layoutY="280.0" text="Choose a dataset to begin:">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                   </content>

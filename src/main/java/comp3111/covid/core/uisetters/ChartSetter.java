@@ -1,15 +1,13 @@
-package comp3111.covid.core;
+package comp3111.covid.core.uisetters;
 
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.utils;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.util.StringConverter;
-import org.apache.xpath.operations.Bool;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

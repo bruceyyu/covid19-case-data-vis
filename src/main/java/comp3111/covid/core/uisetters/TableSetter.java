@@ -1,5 +1,8 @@
-package comp3111.covid.core;
+package comp3111.covid.core.uisetters;
 
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.utils;
 import comp3111.covid.ui.CheckListViewWithList;
 import javafx.collections.FXCollections;
 import org.controlsfx.control.CheckListView;

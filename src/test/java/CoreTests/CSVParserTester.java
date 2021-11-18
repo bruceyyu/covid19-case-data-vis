@@ -2,8 +2,8 @@ package CoreTests;
 
 import static org.junit.Assert.*;
 
-import comp3111.covid.core.CSVFileOperator;
-import comp3111.covid.core.DailyStatistics;
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
