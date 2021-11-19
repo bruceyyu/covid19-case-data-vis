@@ -33,20 +33,27 @@
                <left>
                   <VBox prefHeight="690.0" prefWidth="240.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <DatePicker id="tableADatePicker" fx:id="startDatePicker" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
-                        <DatePicker id="tableADatePicker" fx:id="endDatePicker" prefHeight="26.0" prefWidth="240.0" promptText="Date of Interest" />
-                        <TextField fx:id="chartText" prefHeight="26.0" prefWidth="240.0" promptText="Type to search for a country" />
-                        <HBox prefHeight="32.0" prefWidth="240.0" spacing="10.0">
+                        <HBox alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="240.0" spacing="10.0">
                            <children>
-                              <Label text="sort by" />
-                              <ChoiceBox prefHeight="26.0" prefWidth="172.0" />
+                              <Label prefWidth="28.0" text="From" />
+                              <DatePicker id="tableADatePicker" fx:id="startDatePicker" prefHeight="26.0" prefWidth="202.0" promptText="Date of Interest" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Label prefWidth="28.0" text="To" />
+                              <DatePicker id="tableADatePicker" fx:id="endDatePicker" prefHeight="26.0" prefWidth="202.0" promptText="Date of Interest" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="chartText" prefHeight="26.0" prefWidth="240.0" promptText="Type to search for a country" />
+                        <HBox alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="240.0" spacing="10.0">
+                           <children>
+                              <Label prefWidth="40.0" text="Sort by" />
+                              <ChoiceBox fx:id="choiceBox" prefHeight="26.0" prefWidth="190.0" />
                            </children>
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
                         </HBox>
                         <CheckListViewWithList fx:id="chartCountryList" prefHeight="527.0" prefWidth="240.0" stylesheets="@../css/bootstrap3.css" />
                         <Button mnemonicParsing="false" onAction="#doConfirmChart" prefHeight="26.0" prefWidth="240.0" styleClass="confirm-btn" text="Confirm" />

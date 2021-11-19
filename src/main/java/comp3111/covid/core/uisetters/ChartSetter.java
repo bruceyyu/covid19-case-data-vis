@@ -20,6 +20,7 @@ public class ChartSetter {
      * @param newCountryTrendMap new data map
      */
 	public static void updateGraph_A(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
+        chart.setAnimated(true);
         ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
         Map<String, Boolean> existMap = new HashMap<>();
         for (String countryName: newCountryTrendMap.keySet()) {
@@ -72,9 +73,11 @@ public class ChartSetter {
 
             }
         }
+        chart.setAnimated(false);
     }
 
     public static void updateGraph_B(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
+        chart.setAnimated(true);
         ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
         Map<String, Boolean> existMap = new HashMap<>();
         for (String countryName: newCountryTrendMap.keySet()) {
@@ -127,9 +130,11 @@ public class ChartSetter {
 
             }
         }
+        chart.setAnimated(false);
     }
     
     public static void updateGraph_C(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
+        chart.setAnimated(true);
         ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
         Map<String, Boolean> existMap = new HashMap<>();
         for (String countryName: newCountryTrendMap.keySet()) {
@@ -189,7 +194,9 @@ public class ChartSetter {
 
             }
         }
+        chart.setAnimated(false);
     }
+
     /**
      * Set some default properties of a line chart
      * @param chart line chart
@@ -199,6 +206,7 @@ public class ChartSetter {
     public static void setGraphPropeties(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
         NumberAxis chartX = (NumberAxis) chart.getXAxis();
         NumberAxis chartY = (NumberAxis) chart.getYAxis();
+        chartY.setAutoRanging(true);
         chartX.setTickLabelFormatter(
                 new StringConverter<Number>() {
                     @Override
@@ -224,6 +232,7 @@ public class ChartSetter {
         }
         chart.setCreateSymbols(true); // show the symbols
     }
+
     public static void setGraphPropeties_C(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
         NumberAxis chartX = (NumberAxis) chart.getXAxis();
         NumberAxis chartY = (NumberAxis) chart.getYAxis();

@@ -1,5 +1,6 @@
 package comp3111.covid;
 
+import javafx.application.Platform;
 import comp3111.covid.controller.ChartController;
 import comp3111.covid.controller.TableController;
 import comp3111.covid.core.data.CSVFileOperator;
@@ -8,11 +9,13 @@ import comp3111.covid.core.tabtype.TableType;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.VBox;
 import javafx.scene.transform.Transform;
 import javafx.stage.FileChooser;
 
@@ -54,6 +57,9 @@ public class Controller {
 
     @FXML
     TableController tableCController;
+
+    @FXML
+    VBox masterVB;
 
     public void initialize() {
 

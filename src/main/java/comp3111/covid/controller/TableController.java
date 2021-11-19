@@ -57,6 +57,9 @@ public class TableController {
     @FXML
     private Tab pane;
 
+    @FXML
+    private ChoiceBox<SortPolicy> choiceBox;
+
     /**
      * Initialize the table
      * @param type Table Type
@@ -86,6 +89,7 @@ public class TableController {
         datePicker.getEditor().setDisable(true);
         datePicker.getEditor().setOpacity(1);
 
+        tableTitle.setText("");
 
         final Callback<DatePicker, DateCell> tableCellFactory =
                 new Callback<DatePicker, DateCell>() {
@@ -111,14 +115,36 @@ public class TableController {
                     }
                 };
         datePicker.setDayCellFactory(tableCellFactory);
+
+        choiceBox.getItems().clear();
+        choiceBox.getItems().add(new SortPolicy("Country name", SortPolicyE.NAME));
+        choiceBox.getItems().add(new SortPolicy("Population", SortPolicyE.POP));
+        choiceBox.getItems().add(new SortPolicy("Population density", SortPolicyE.POP_D));
+        choiceBox.getItems().add(new SortPolicy("Median age", SortPolicyE.MED));
+        choiceBox.getItems().add(new SortPolicy("GDP per capita", SortPolicyE.GDP));
+        choiceBox.getSelectionModel().select(0);
+        choiceBox.setOnAction((event) -> {
+            SortPolicy selectedItem = choiceBox.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                    List<String> countryNames = fileOperator.searchCountry(text.getText(), selectedItem.policyE);
+                    tableCountryList.update(countryNames);}
+
+
+        });
+
+        text.setText("");
         text.textProperty().addListener((observable, oldValue, newValue) -> {
             //String countryName = tableAText.getText();
-            List<String> countryNames = fileOperator.searchCountry(newValue);
+            List<String> countryNames = fileOperator.searchCountry(newValue, choiceBox.getSelectionModel().getSelectedItem().policyE);
             tableCountryList.update(countryNames);
             text.requestFocus();
         });
+
         List<String> countryNames = fileOperator.getAllCountries();
         tableCountryList.init(countryNames);
+        table.getItems().clear();
+
+
 
     }
 
