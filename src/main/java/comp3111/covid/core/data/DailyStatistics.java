@@ -40,6 +40,11 @@ public class DailyStatistics {
     @CsvBindByName(column = "population_density")
     private Double populationDensity;
 
+    @CsvBindByName(column = "median_age")
+    private Double medianAge;
+
+    @CsvBindByName(column = "gdp_per_capita")
+    private Double gdp;
 
     public DailyStatistics() {
     }
@@ -111,6 +116,14 @@ public class DailyStatistics {
         return populationDensity;
     }
 
+    public Double getMedianAge() {
+        return medianAge;
+    }
+
+    public Double getGdp() {
+        return gdp;
+    }
+
     @Override
     public String toString() {
         return "DailyStatistics{" +
@@ -124,6 +137,8 @@ public class DailyStatistics {
                 ", cumulativeVaccinated=" + cumulativeVaccinated +
                 ", population=" + population +
                 ", populationDensity=" + populationDensity +
+                ", medianAge=" + medianAge +
+                ", gdp=" + gdp +
                 '}';
     }
 }
