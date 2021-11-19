@@ -50,6 +50,9 @@ public class ChartController {
     @FXML
     private Tab pane;
 
+    @FXML
+    private ChoiceBox<SortPolicy> choiceBox;
+
     public ChartController() {
 
     }
@@ -142,10 +145,28 @@ public class ChartController {
             if (newValue.isAfter(endDatePicker.getValue()) || newValue.isEqual(endDatePicker.getValue()))
                 endDatePicker.setValue(startDatePicker.getValue().plusDays(1));
         }));
+
+        choiceBox.getItems().clear();
+        choiceBox.getItems().add(new SortPolicy("Country name", SortPolicyE.NAME));
+        choiceBox.getItems().add(new SortPolicy("Population", SortPolicyE.POP));
+        choiceBox.getItems().add(new SortPolicy("Population density", SortPolicyE.POP_D));
+        choiceBox.getItems().add(new SortPolicy("Median age", SortPolicyE.MED));
+        choiceBox.getItems().add(new SortPolicy("GDP per capita", SortPolicyE.GDP));
+        choiceBox.getSelectionModel().select(0);
+        choiceBox.setOnAction((event) -> {
+            SortPolicy selectedItem = choiceBox.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                List<String> countryNames = fileOperator.searchCountry(chartText.getText(), selectedItem.policyE);
+                chartCountryList.update(countryNames);}
+
+
+        });
+
         chartText.setText("");
         chartText.textProperty().addListener((observable, oldValue, newValue) -> {
             //String countryName = tableAText.getText();
-            List<String> countryNamesAdd = fileOperator.searchCountry(newValue);
+            List<String> countryNamesAdd = fileOperator.searchCountry(newValue,
+                    choiceBox.getSelectionModel().getSelectedItem().policyE);
             chartCountryList.update(countryNamesAdd);
             chartText.requestFocus();
         });
