@@ -2,8 +2,11 @@ package CoreTests;
 
 import static org.junit.Assert.*;
 
+import comp3111.covid.core.SortPolicy;
+import comp3111.covid.core.SortPolicyE;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -112,18 +115,18 @@ public class CSVParserTester {
         countryTrendMap =  csvFileOperator.getCountryTrendMap_chartC(list, start, end);
         assertTrue(countryTrendMap.size() > 0);
     }
-    @Test 
-    public void getCountries_Set() throws ParseException {
-    	SimpleDateFormat a = new SimpleDateFormat("MM/dd/yyyy");
-        Date start = a.parse("5/11/2020");
-        Date end = a.parse("5/13/2020");
-        List<String> list = new ArrayList<String>();
-        list.add("Hong Kong");
-        HashSet<List<DailyStatistics>> countryTrendSet = csvFileOperator.getCountryTrendSet(list, start, end);
-        assertTrue(countryTrendSet.size() > 0);
-        countryTrendSet = csvFileOperator.getCountryTrendSet(list);
-        assertTrue(countryTrendSet.size() > 0);
-    }
+//    @Test 
+//    public void getCountries_Set() throws ParseException {
+//    	SimpleDateFormat a = new SimpleDateFormat("MM/dd/yyyy");
+//        Date start = a.parse("5/11/2020");
+//        Date end = a.parse("5/13/2020");
+//        List<String> list = new ArrayList<String>();
+//        list.add("Hong Kong");
+//        HashSet<List<DailyStatistics>> countryTrendSet = csvFileOperator.getCountryTrendSet(list, start, end);
+//        assertTrue(countryTrendSet.size() > 0);
+//        countryTrendSet = csvFileOperator.getCountryTrendSet(list);
+//        assertTrue(countryTrendSet.size() > 0);
+//    }
     @Test
     public void getDate_Mim() throws ParseException, IOException {
     	Date date = csvFileOperator.getMinimumDate();
@@ -146,6 +149,24 @@ public class CSVParserTester {
         List<DailyStatistics>  lastDayDataSet = csvFileOperator.getCountryDataSetOn(csvFileOperator.getMaximumDate(),
                 csvFileOperator.getAllCountries());
         lastDayDataSet.forEach(System.out::println);
+    }
+    @Test 
+    public void searchCountry() {
+    	List<String> countryNames = csvFileOperator.searchCountry("China",SortPolicyE.NAME);
+    	assertEquals("China",countryNames.get(0));
+    	
+//    	assertEquals("China", countryNames);
+//    	countryNames =  csvFileOperator.searchCountry("sdf",SortPolicyE.POP);
+//    	assertEquals(0, countryNames);
+    	countryNames = csvFileOperator.searchCountry("",SortPolicyE.POP);
+    	assertEquals("Vatican",countryNames.get(0));
+    	countryNames = csvFileOperator.searchCountry("",SortPolicyE.POP_D);
+    	assertEquals("Greenland",countryNames.get(0));
+    	countryNames = csvFileOperator.searchCountry("",SortPolicyE.MED);
+    	assertEquals("Niger",countryNames.get(0));
+    	countryNames = csvFileOperator.searchCountry("",SortPolicyE.GDP);
+    	assertEquals("Togo",countryNames.get(10));
+    	
     }
 
 }
