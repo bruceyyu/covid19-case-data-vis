@@ -28,7 +28,7 @@
                         <HBox prefHeight="32.0" prefWidth="240.0" spacing="10.0">
                            <children>
                               <Label text="sort by" />
-                              <ChoiceBox prefHeight="26.0" prefWidth="172.0" />
+                              <ChoiceBox fx:id="choiceBox" prefHeight="26.0" prefWidth="172.0" />
                            </children>
                            <opaqueInsets>
                               <Insets />

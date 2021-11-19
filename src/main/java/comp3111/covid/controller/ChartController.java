@@ -142,7 +142,7 @@ public class ChartController {
             if (newValue.isAfter(endDatePicker.getValue()) || newValue.isEqual(endDatePicker.getValue()))
                 endDatePicker.setValue(startDatePicker.getValue().plusDays(1));
         }));
-
+        chartText.setText("");
         chartText.textProperty().addListener((observable, oldValue, newValue) -> {
             //String countryName = tableAText.getText();
             List<String> countryNamesAdd = fileOperator.searchCountry(newValue);
@@ -151,6 +151,7 @@ public class ChartController {
         });
 
         List<String> countryNames = fileOperator.getAllCountries();
+
         chartCountryList.init(countryNames);
         chart.getData().clear();
     }

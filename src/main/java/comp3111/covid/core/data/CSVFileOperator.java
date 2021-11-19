@@ -1,6 +1,7 @@
 package comp3111.covid.core.data;
 
 import com.opencsv.bean.CsvToBeanBuilder;
+import comp3111.covid.core.SortPolicyE;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,6 +10,11 @@ import java.util.stream.Collectors;
 
 public class CSVFileOperator {
     List<DailyStatistics> dailyStatisticsList;
+    List<String> allCountryList;
+    List<DailyStatistics>  lastDayDataSet;
+    private Map<Date, Map<String, DailyStatistics>> dateNameMapMap;
+    private Date maximumDate;
+    private Date minimumDate;
 
     /**
      * Constructor, specify file name
@@ -18,6 +24,21 @@ public class CSVFileOperator {
     public CSVFileOperator(String fileName) throws FileNotFoundException {
         dailyStatisticsList = new CsvToBeanBuilder(new FileReader(fileName))
                 .withType(DailyStatistics.class).build().parse();
+        dateNameMapMap = new HashMap<>();
+        maximumDate = new Date(0);
+        minimumDate = new Date();
+        dailyStatisticsList.forEach(dailyStatistics -> {
+            dateNameMapMap.putIfAbsent(dailyStatistics.getDate(), new HashMap<>());
+            dateNameMapMap.get(dailyStatistics.getDate()).putIfAbsent(dailyStatistics.getCountry(), dailyStatistics);
+            Date current = dailyStatistics.getDate();
+            if (current.before(minimumDate))
+                minimumDate = current;
+            if (current.after(maximumDate))
+                maximumDate = current;
+
+        });
+        getAllCountries();
+        lastDayDataSet = new ArrayList<>(this.dateNameMapMap.get(getMaximumDate()).values());
     }
 
     /**
@@ -25,7 +46,7 @@ public class CSVFileOperator {
      * @param countryName country name
      * @return List of DailyStatistics of that country
      */
-    public List<DailyStatistics> getCountryTrend(String countryName) {
+    private List<DailyStatistics> getCountryTrend(String countryName) {
         return dailyStatisticsList.stream().filter(dailyStatistics -> dailyStatistics.getCountry().equals(countryName))
                 .sorted((o1, o2) -> o1.getDate().compareTo(o2.getDate())).collect(Collectors.toList());
     }
@@ -38,9 +59,16 @@ public class CSVFileOperator {
      * @return list of DailyStatistics within a specific period
      */
     public List<DailyStatistics> getCountryTrend(String countryName, Date start, Date end) {
-        return dailyStatisticsList.stream().filter(dailyStatistics -> dailyStatistics.getCountry().equals(countryName))
-                .filter(dailyStatistics -> (dailyStatistics.getDate().compareTo(start) >= 0) && dailyStatistics.getDate().before(end))
-                .sorted((o1, o2) -> o1.getDate().compareTo(o2.getDate())).collect(Collectors.toList());
+        List<DailyStatistics> result = new ArrayList<>();
+        return dateNameMapMap.keySet().stream()
+                .filter(date -> (date.compareTo(start) >= 0) && date.before(end))
+                .sorted()
+                .map(date -> dateNameMapMap.get(date).get(countryName))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        //        return dailyStatisticsList.stream().filter(dailyStatistics -> dailyStatistics.getCountry().equals(countryName))
+//                .filter(dailyStatistics -> )
+//                .sorted((o1, o2) -> o1.getDate().compareTo(o2.getDate())).collect(Collectors.toList());
     }
 
     /**
@@ -50,16 +78,7 @@ public class CSVFileOperator {
      * @return DailyStatistics of a country on that day
      */
     public DailyStatistics getCountryDataOn(Date date, String countryName) {
-        List<DailyStatistics> countryTrend = getCountryTrend(countryName);
-        if (countryTrend.size() == 0) {
-            return null;
-        }
-        for (DailyStatistics ds: countryTrend
-             ) {
-            if (ds.getDate().equals(date))
-                return ds;
-        }
-        return null;
+        return dateNameMapMap.get(date).getOrDefault(countryName, null);
     }
 
     /**
@@ -69,7 +88,7 @@ public class CSVFileOperator {
      * @return set of dailyStatistics
      */
     public ArrayList<DailyStatistics> getCountryDataSetOn(Date date, List<String> countryNames) {
-        ArrayList<DailyStatistics> resultSet = new ArrayList();
+        ArrayList<DailyStatistics> resultSet = new ArrayList<>();
         for (String name: countryNames) {
             DailyStatistics ds = getCountryDataOn(date, name);
             if (ds != null) {
@@ -84,17 +103,7 @@ public class CSVFileOperator {
      * @return the minimum date
      */
     public Date getMinimumDate() {
-        if (dailyStatisticsList.size() == 0) { // list not initialized
-            return null;
-        }
-
-        Date earliest = dailyStatisticsList.get(0).getDate();
-        for (DailyStatistics dailyStat: dailyStatisticsList
-             ) {
-            if (dailyStat.getDate().before(earliest))
-                earliest = dailyStat.getDate();
-        }
-        return earliest;
+        return minimumDate;
     }
 
     /**
@@ -102,46 +111,34 @@ public class CSVFileOperator {
      * @return the maximum date
      */
     public Date getMaximumDate() {
-        if (dailyStatisticsList.size() == 0) { // list not initialized
-            return null;
-        }
-
-        Date latest = dailyStatisticsList.get(0).getDate();
-        for (DailyStatistics dailyStat: dailyStatisticsList
-        ) {
-            if (dailyStat.getDate().after(latest)) {
-                latest = dailyStat.getDate();
-            }
-
-        }
-        return latest;
+        return maximumDate;
     }
 
-    /**
-     * get multiple countries' trend
-     * @param countryList List of string of country names
-     * @return a set of country trends
-     */
-    public HashSet<List<DailyStatistics>> getCountryTrendSet(List<String> countryList) {
-        HashSet<List<DailyStatistics>> result = new HashSet<>();
-        for (String countryName: countryList) {
-            result.add(getCountryTrend(countryName));
-        }
-        return result;
-    }
-
-    /**
-     * get multiple countries' trend in a specific period
-     * @param countryList List of string of country names
-     * @return a set of country trends
-     */
-    public HashSet<List<DailyStatistics>> getCountryTrendSet(List<String> countryList, Date start, Date end) {
-        HashSet<List<DailyStatistics>> result = new HashSet<>();
-        for (String countryName: countryList) {
-            result.add(getCountryTrend(countryName, start, end));
-        }
-        return result;
-    }
+//    /**
+//     * get multiple countries' trend
+//     * @param countryList List of string of country names
+//     * @return a set of country trends
+//     */
+//    public HashSet<List<DailyStatistics>> getCountryTrendSet(List<String> countryList) {
+//        HashSet<List<DailyStatistics>> result = new HashSet<>();
+//        for (String countryName: countryList) {
+//            result.add(getCountryTrend(countryName));
+//        }
+//        return result;
+//    }
+//
+//    /**
+//     * get multiple countries' trend in a specific period
+//     * @param countryList List of string of country names
+//     * @return a set of country trends
+//     */
+//    public HashSet<List<DailyStatistics>> getCountryTrendSet(List<String> countryList, Date start, Date end) {
+//        HashSet<List<DailyStatistics>> result = new HashSet<>();
+//        for (String countryName: countryList) {
+//            result.add(getCountryTrend(countryName, start, end));
+//        }
+//        return result;
+//    }
 
     /**
      * Get a map of country list
@@ -157,6 +154,7 @@ public class CSVFileOperator {
         }
         return result;
     }
+
     public Map<String, List<DailyStatistics>> getCountryTrendMap_chartC(List<String> countryList, Date start, Date end) {
         HashMap<String, List<DailyStatistics>> result = new HashMap<>();
         Calendar c1 = Calendar.getInstance();
@@ -172,39 +170,58 @@ public class CSVFileOperator {
     }
 
 
-
-
-
-
-    /**
-     * check whether a date is valid for a specific country
-     * @param date date
-     * @param countryName country name
-     * @return if the date is valid or not
-     */
-    public boolean checkValidDate(Date date, String countryName) {
-        List<DailyStatistics> countryTrend = getCountryTrend(countryName);
-        for (DailyStatistics d: countryTrend
-             ) {
-            if (d.getDate().equals(date)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public List<String> getAllCountries() {
-        HashSet<String> result = new HashSet<>();
-        for (DailyStatistics ds:
-             dailyStatisticsList) {
-            result.add(ds.getCountry());
+        if (allCountryList == null) {
+            HashSet<String> result = new HashSet<>();
+            for (DailyStatistics ds:
+                    dailyStatisticsList) {
+                result.add(ds.getCountry());
+            }
+            allCountryList = result.stream().sorted().collect(Collectors.toList());
         }
-        return result.stream().sorted().collect(Collectors.toList());
+        return allCountryList;
+
     }
 
     public List<String> searchCountry(String countryName) {
         List<String> allCountries = getAllCountries();
         return allCountries.stream().filter(name -> name.toLowerCase().startsWith(countryName.toLowerCase().trim())).collect(Collectors.toList());
+    }
+
+    public List<String> searchCountry(String countryName, SortPolicyE policyE) {
+        switch (policyE) {
+            case NAME:
+                return searchCountry(countryName);
+            case POP:
+                return lastDayDataSet.stream()
+                        .filter(ds -> ds.getCountry().toLowerCase().startsWith(countryName.toLowerCase().trim()))
+                        .sorted(Comparator.comparing(DailyStatistics::getCountry))
+                        .sorted((o1, o2) -> {
+                            if (o1.getPopulation() != null && o2.getPopulation() != null)
+                                return o1.getPopulation().compareTo(o2.getPopulation());
+                            else if (o1.getPopulation() == null)
+                                return -1;
+                            else
+                                return 1;
+                        }).map(DailyStatistics::getCountry)
+                        .collect(Collectors.toList());
+            case POP_D:
+                return lastDayDataSet.stream()
+                        .filter(ds -> ds.getCountry().toLowerCase().startsWith(countryName.toLowerCase().trim()))
+                        .sorted(Comparator.comparing(DailyStatistics::getCountry))
+                        .sorted((o1, o2) -> {
+                            if (o1.getPopulationDensity() != null && o2.getPopulationDensity() != null)
+                                return o1.getPopulationDensity().compareTo(o2.getPopulationDensity());
+                            else if (o1.getPopulationDensity() == null && o2.getPopulationDensity() == null)
+                                return 0;
+                            else if (o1.getPopulationDensity() == null)
+                                return 1;
+                            else
+                                return -1;
+                        }).map(DailyStatistics::getCountry)
+                        .collect(Collectors.toList());
+        }
+        return null;
     }
 
     public static void main(String[] args) throws FileNotFoundException {

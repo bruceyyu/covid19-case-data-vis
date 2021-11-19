@@ -34,22 +34,6 @@ public class CSVParserTester {
     }
 
     @Test
-    public void getTrendValidCountryName() throws ParseException {
-        List<DailyStatistics> countryTrendChina = csvFileOperator.getCountryTrend("China");
-        assertEquals(countryTrendChina.size(), 546);
-        SimpleDateFormat a = new SimpleDateFormat("MM/dd/yyyy");
-        Date firstDate = a.parse("1/22/2020");
-        assertEquals(countryTrendChina.get(0).getDate(), firstDate);
-        assertEquals(countryTrendChina.get(0).getCountry(), "China");
-    }
-
-    @Test
-    public void getTrendInvalidCountryName() {
-        List<DailyStatistics> countryTrend = csvFileOperator.getCountryTrend("AAA");
-        assertEquals(countryTrend.size(), 0);
-    }
-
-    @Test
     public void getCountryTrendByPeriod() throws ParseException {
         SimpleDateFormat a = new SimpleDateFormat("MM/dd/yyyy");
         Date start = a.parse("5/11/2020");
@@ -91,6 +75,13 @@ public class CSVParserTester {
              a) {
             System.out.println(s);
         }
+    }
+
+    @Test
+    public void countryListTest() {
+        List<DailyStatistics>  lastDayDataSet = csvFileOperator.getCountryDataSetOn(csvFileOperator.getMaximumDate(),
+                csvFileOperator.getAllCountries());
+        lastDayDataSet.forEach(System.out::println);
     }
 
 }

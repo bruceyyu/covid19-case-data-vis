@@ -34,6 +34,12 @@ public class DailyStatistics {
     @CsvBindByName(column = "people_fully_vaccinated")
     private BigInteger cumulativeVaccinated;
 
+    @CsvBindByName(column = "population")
+    private BigInteger population;
+
+    @CsvBindByName(column = "population_density")
+    private Double populationDensity;
+
 
     public DailyStatistics() {
     }
@@ -52,7 +58,7 @@ public class DailyStatistics {
      */
     public DailyStatistics(String country, Date date, double deathPerMillion, BigInteger cumulativeDeath,
                            double infectedPerMillion, BigInteger cumulativeInfected, double vaccinationRate,
-                           BigInteger cumulativeVaccinated) {
+                           BigInteger cumulativeVaccinated, BigInteger population, Double populationDensity) {
         this.country = country;
         this.date = date;
         this.deathPerMillion = deathPerMillion;
@@ -61,6 +67,8 @@ public class DailyStatistics {
         this.cumulativeInfected = cumulativeInfected;
         this.vaccinationRate = vaccinationRate;
         this.cumulativeVaccinated = cumulativeVaccinated;
+        this.population = population;
+        this.populationDensity = populationDensity;
     }
 
     public Date getDate() {
@@ -95,6 +103,14 @@ public class DailyStatistics {
         return country;
     }
 
+    public BigInteger getPopulation() {
+        return population;
+    }
+
+    public Double getPopulationDensity() {
+        return populationDensity;
+    }
+
     @Override
     public String toString() {
         return "DailyStatistics{" +
@@ -106,6 +122,8 @@ public class DailyStatistics {
                 ", cumulativeInfected=" + cumulativeInfected +
                 ", vaccinationRate=" + vaccinationRate +
                 ", cumulativeVaccinated=" + cumulativeVaccinated +
+                ", population=" + population +
+                ", populationDensity=" + populationDensity +
                 '}';
     }
 }
