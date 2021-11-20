@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class TableSetter {
     /**
@@ -38,6 +39,41 @@ public class TableSetter {
         }
 
         ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
+        table.setItems(FXCollections.observableArrayList(countryData));
+
+        return "success";
+    }
+
+    static public String updateTableC(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
+
+        Date pickedDate = utils.localDateToDate(datePicker.getValue());
+        String legalDateCheckerRes = legalDateChecker(fileOperator, pickedDate);
+        if (legalDateCheckerRes != "success") {
+            return legalDateCheckerRes;
+        }
+        countryList.saveState();
+
+        List<String> pickedCountryList = countryList.getCheckedItems();
+        String legalCountryListCheckerRes = legalCountryListChecker(pickedCountryList);
+        if (legalCountryListCheckerRes != "success") {
+            return legalCountryListCheckerRes;
+        }
+
+        ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
+        Map<String, List<DailyStatistics>> countryDataTrend = fileOperator.getCountryTrendMap(pickedCountryList, fileOperator.getMinimumDate(), pickedDate);
+//        if the data on that day is empty, need to backtrace the day with valid data
+        for (int i = 0; i < countryData.size(); i ++) {
+            System.out.println(countryData.get(i).getCumulativeVaccinated());
+            if (countryData.get(i).getCumulativeVaccinated() == null) {
+                List<DailyStatistics> historyTrend = countryDataTrend.get(countryData.get(i).getCountry());
+                for (int j = historyTrend.size() - 1; j >= 0; j--) {
+                    if (historyTrend.get(j).getCumulativeVaccinated() != null) {
+                        countryData.set(i, historyTrend.get(j));
+                        break;
+                    }
+                }
+            }
+        }
         table.setItems(FXCollections.observableArrayList(countryData));
 
         return "success";

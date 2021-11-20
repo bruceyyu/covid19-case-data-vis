@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -150,25 +151,43 @@ public class TableController {
 
     @FXML
     void doConfirmTable(ActionEvent event) {
+        String setterRes = "";
         switch (type) {
             case A:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
                 tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeInfected"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("infectedPerMillion"));
+                setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
                 break;
             case B:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
                 tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeDeath"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("deathPerMillion"));
+                setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
                 break;
             case C:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
                 tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeVaccinated"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("vaccinationRate"));
+                setterRes = TableSetter.updateTableC(fileOperator, datePicker, tableCountryList, table);
+//                override: double to percentage
+                tableStat2.setCellFactory((tableColumn) -> {
+                    TableCell<DailyStatistics, Double> tableCell = new TableCell<>() {
+                        @Override
+                        protected void updateItem(Double item, boolean empty) {
+                            System.out.println(item);
+                            super.updateItem(item, empty);
+                            if(!empty){
+                                this.setText(item.toString() + "%");
+                            }
+                        }
+                    };
+
+                    return tableCell;
+                });
                 break;
         }
 
-        String setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
         if (setterRes != "success") {
             Alert alert = new Alert(Alert.AlertType.ERROR, setterRes, ButtonType.YES);
             alert.show();
