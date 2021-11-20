@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CSVFileOperator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.Core</a> &gt; <span class="el_source">CSVFileOperator.java</span></div><h1>CSVFileOperator.java</h1><pre class="source lang-java linenums">package comp3111.covid.Core;
+
+import com.opencsv.bean.CsvToBeanBuilder;
+
+import javax.sound.sampled.DataLine;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CSVFileOperator {
+    List&lt;DailyStatistics&gt; dailyStatisticsList;
+
+    /**
+     * Constructor, specify file name
+     * @param fileName fileName
+     * @throws FileNotFoundException if the file cannot be found
+     */
+<span class="fc" id="L19">    public CSVFileOperator(String fileName) throws FileNotFoundException {</span>
+<span class="fc" id="L20">        dailyStatisticsList = new CsvToBeanBuilder(new FileReader(fileName))</span>
+<span class="fc" id="L21">                .withType(DailyStatistics.class).build().parse();</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * Extract all data of a specific country in a List sorted by Date
+     * @param countryName country name
+     * @return List of DailyStatistics of that country
+     */
+    public List&lt;DailyStatistics&gt; getCountryTrend(String countryName) {
+<span class="fc" id="L30">        return dailyStatisticsList.stream().filter(dailyStatistics -&gt; dailyStatistics.getCountry().equals(countryName))</span>
+<span class="fc" id="L31">                .sorted((o1, o2) -&gt; o1.getDate().compareTo(o2.getDate())).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * get country trend of a country within a specific period
+     * @param countryName string country name
+     * @param start start date, inclusive
+     * @param end end date, not inclusive
+     * @return list of DailyStatistics within a specific period
+     */
+    public List&lt;DailyStatistics&gt; getCountryTrend(String countryName, Date start, Date end) {
+<span class="fc" id="L42">        return dailyStatisticsList.stream().filter(dailyStatistics -&gt; dailyStatistics.getCountry().equals(countryName))</span>
+<span class="fc bfc" id="L43" title="All 4 branches covered.">                .filter(dailyStatistics -&gt; (dailyStatistics.getDate().compareTo(start) &gt;= 0) &amp;&amp; dailyStatistics.getDate().before(end))</span>
+<span class="fc" id="L44">                .sorted((o1, o2) -&gt; o1.getDate().compareTo(o2.getDate())).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Get country data on a specific day
+     * @param date Date
+     * @param countryName countryName
+     * @return DailyStatistics of a country on that day
+     */
+    public DailyStatistics getCountryDataOn(Date date, String countryName) {
+<span class="fc" id="L54">        List&lt;DailyStatistics&gt; countryTrend = getCountryTrend(countryName);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (countryTrend.size() == 0) {</span>
+<span class="nc" id="L56">            return null;</span>
+        }
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        for (DailyStatistics ds: countryTrend</span>
+             ) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (ds.getDate().equals(date))</span>
+<span class="fc" id="L61">                return ds;</span>
+<span class="fc" id="L62">        }</span>
+<span class="nc" id="L63">        return null;</span>
+    }
+
+    /**
+     * get set of country data on a specific day
+     * @param date date
+     * @param countryNames list of name of countries
+     * @return set of dailyStatistics
+     */
+    public ArrayList&lt;DailyStatistics&gt; getCountryDataSetOn(Date date, List&lt;String&gt; countryNames) {
+<span class="nc" id="L73">        ArrayList&lt;DailyStatistics&gt; resultSet = new ArrayList();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for (String name: countryNames) {</span>
+<span class="nc" id="L75">            DailyStatistics ds = getCountryDataOn(date, name);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (ds != null) {</span>
+<span class="nc" id="L77">                resultSet.add(ds);</span>
+            }
+<span class="nc" id="L79">        }</span>
+<span class="nc" id="L80">        return resultSet;</span>
+    }
+
+    /**
+     * Get the minimum date within the file
+     * @return the minimum date
+     */
+    public Date getMinimumDate() {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (dailyStatisticsList.size() == 0) { // list not initialized</span>
+<span class="nc" id="L89">            return null;</span>
+        }
+
+<span class="fc" id="L92">        Date earliest = dailyStatisticsList.get(0).getDate();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (DailyStatistics dailyStat: dailyStatisticsList</span>
+             ) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (dailyStat.getDate().before(earliest))</span>
+<span class="fc" id="L96">                earliest = dailyStat.getDate();</span>
+<span class="fc" id="L97">        }</span>
+<span class="fc" id="L98">        return earliest;</span>
+    }
+
+    /**
+     * Get the latest date within the file
+     * @return the maximum date
+     */
+    public Date getMaximumDate() {
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (dailyStatisticsList.size() == 0) { // list not initialized</span>
+<span class="nc" id="L107">            return null;</span>
+        }
+
+<span class="fc" id="L110">        Date latest = dailyStatisticsList.get(0).getDate();</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for (DailyStatistics dailyStat: dailyStatisticsList</span>
+        ) {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (dailyStat.getDate().after(latest)) {</span>
+<span class="fc" id="L114">                latest = dailyStat.getDate();</span>
+            }
+
+<span class="fc" id="L117">        }</span>
+<span class="fc" id="L118">        return latest;</span>
+    }
+
+    /**
+     * get multiple countries' trend
+     * @param countryList List of string of country names
+     * @return a set of country trends
+     */
+    public HashSet&lt;List&lt;DailyStatistics&gt;&gt; getCountryTrendSet(List&lt;String&gt; countryList) {
+<span class="nc" id="L127">        HashSet&lt;List&lt;DailyStatistics&gt;&gt; result = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (String countryName: countryList) {</span>
+<span class="nc" id="L129">            result.add(getCountryTrend(countryName));</span>
+<span class="nc" id="L130">        }</span>
+<span class="nc" id="L131">        return result;</span>
+    }
+
+    /**
+     * get multiple countries' trend in a specific period
+     * @param countryList List of string of country names
+     * @return a set of country trends
+     */
+    public HashSet&lt;List&lt;DailyStatistics&gt;&gt; getCountryTrendSet(List&lt;String&gt; countryList, Date start, Date end) {
+<span class="nc" id="L140">        HashSet&lt;List&lt;DailyStatistics&gt;&gt; result = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        for (String countryName: countryList) {</span>
+<span class="nc" id="L142">            result.add(getCountryTrend(countryName, start, end));</span>
+<span class="nc" id="L143">        }</span>
+<span class="nc" id="L144">        return result;</span>
+    }
+
+
+
+
+
+
+    /**
+     * check whether a date is valid for a specific country
+     * @param date date
+     * @param countryName country name
+     * @return if the date is valid or not
+     */
+    public boolean checkValidDate(Date date, String countryName) {
+<span class="nc" id="L159">        List&lt;DailyStatistics&gt; countryTrend = getCountryTrend(countryName);</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        for (DailyStatistics d: countryTrend</span>
+             ) {
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            if (d.getDate().equals(date)) {</span>
+<span class="nc" id="L163">                return true;</span>
+            }
+<span class="nc" id="L165">        }</span>
+<span class="nc" id="L166">        return false;</span>
+    }
+
+    public List&lt;String&gt; getAllCountries() {
+<span class="fc" id="L170">        HashSet&lt;String&gt; result = new HashSet&lt;&gt;();</span>
+        for (DailyStatistics ds:
+<span class="fc bfc" id="L172" title="All 2 branches covered.">             dailyStatisticsList) {</span>
+<span class="fc" id="L173">            result.add(ds.getCountry());</span>
+<span class="fc" id="L174">        }</span>
+<span class="fc" id="L175">        return result.stream().sorted().collect(Collectors.toList());</span>
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+<span class="nc" id="L179">        CSVFileOperator fileOperator = new CSVFileOperator(&quot;dataset/COVID_Dataset_v1.0.csv&quot;);</span>
+<span class="nc" id="L180">        List&lt;DailyStatistics&gt; countryTrend = fileOperator.getCountryTrend(&quot;United States&quot;);</span>
+<span class="nc" id="L181">        countryTrend.forEach(System.out::println);</span>
+<span class="nc" id="L182">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

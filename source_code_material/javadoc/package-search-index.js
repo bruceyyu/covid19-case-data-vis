@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"comp3111.covid"},{"l":"comp3111.covid.controller"},{"l":"comp3111.covid.core"},{"l":"comp3111.covid.core.data"},{"l":"comp3111.covid.core.tabtype"},{"l":"comp3111.covid.core.uisetters"},{"l":"comp3111.covid.ui"}];updateSearchResults();

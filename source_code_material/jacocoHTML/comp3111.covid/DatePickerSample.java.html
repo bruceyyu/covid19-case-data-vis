@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatePickerSample.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">DatePickerSample.java</span></div><h1>DatePickerSample.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.time.LocalDate;
+import java.util.Locale;
+import javafx.application.Application;
+import javafx.geometry.HPos;
+import javafx.scene.Scene;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+
+<span class="nc" id="L16">public class DatePickerSample extends Application {</span>
+
+    private Stage stage;
+    private DatePicker checkInDatePicker;
+    private DatePicker checkOutDatePicker;
+
+    public static void main(String[] args) {
+<span class="nc" id="L23">        Locale.setDefault(Locale.US);</span>
+<span class="nc" id="L24">        launch(args);</span>
+<span class="nc" id="L25">    }</span>
+
+    @Override
+    public void start(Stage stage) {
+<span class="nc" id="L29">        this.stage = stage;</span>
+<span class="nc" id="L30">        stage.setTitle(&quot;DatePickerSample &quot;);</span>
+<span class="nc" id="L31">        initUI();</span>
+<span class="nc" id="L32">        stage.show();</span>
+<span class="nc" id="L33">    }</span>
+
+    private void initUI() {
+<span class="nc" id="L36">        VBox vbox = new VBox(20);</span>
+<span class="nc" id="L37">        vbox.setStyle(&quot;-fx-padding: 10;&quot;);</span>
+<span class="nc" id="L38">        Scene scene = new Scene(vbox, 400, 400);</span>
+<span class="nc" id="L39">        stage.setScene(scene);</span>
+<span class="nc" id="L40">        checkInDatePicker = new DatePicker();</span>
+<span class="nc" id="L41">        checkOutDatePicker = new DatePicker();</span>
+<span class="nc" id="L42">        checkInDatePicker.setValue(LocalDate.now());</span>
+<span class="nc" id="L43">        final Callback&lt;DatePicker, DateCell&gt; dayCellFactory =</span>
+<span class="nc" id="L44">                new Callback&lt;DatePicker, DateCell&gt;() {</span>
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+<span class="nc" id="L47">                        return new DateCell() {</span>
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+<span class="nc" id="L50">                                super.updateItem(item, empty);</span>
+
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                                if (item.isBefore(</span>
+<span class="nc" id="L53">                                        checkInDatePicker.getValue().plusDays(1))</span>
+                                ) {
+<span class="nc" id="L55">                                    setDisable(true);</span>
+<span class="nc" id="L56">                                    setStyle(&quot;-fx-background-color: #ffc0cb;&quot;);</span>
+                                }
+<span class="nc" id="L58">                            }</span>
+                        };
+                    }
+                };
+<span class="nc" id="L62">        checkOutDatePicker.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L63">        checkOutDatePicker.setValue(checkInDatePicker.getValue().plusDays(1));</span>
+<span class="nc" id="L64">        GridPane gridPane = new GridPane();</span>
+<span class="nc" id="L65">        gridPane.setHgap(10);</span>
+<span class="nc" id="L66">        gridPane.setVgap(10);</span>
+<span class="nc" id="L67">        Label checkInlabel = new Label(&quot;Check-In Date:&quot;);</span>
+<span class="nc" id="L68">        gridPane.add(checkInlabel, 0, 0);</span>
+<span class="nc" id="L69">        GridPane.setHalignment(checkInlabel, HPos.LEFT);</span>
+<span class="nc" id="L70">        gridPane.add(checkInDatePicker, 0, 1);</span>
+<span class="nc" id="L71">        Label checkOutlabel = new Label(&quot;Check-Out Date:&quot;);</span>
+<span class="nc" id="L72">        gridPane.add(checkOutlabel, 0, 2);</span>
+<span class="nc" id="L73">        GridPane.setHalignment(checkOutlabel, HPos.LEFT);</span>
+<span class="nc" id="L74">        gridPane.add(checkOutDatePicker, 0, 3);</span>
+<span class="nc" id="L75">        vbox.getChildren().add(gridPane);</span>
+<span class="nc" id="L76">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

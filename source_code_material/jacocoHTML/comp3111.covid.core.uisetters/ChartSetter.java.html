@@ -1,4 +1,4 @@
-package comp3111.covid.core.uisetters;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChartSetter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.core.uisetters</a> &gt; <span class="el_source">ChartSetter.java</span></div><h1>ChartSetter.java</h1><pre class="source lang-java linenums">package comp3111.covid.core.uisetters;
 
 import comp3111.covid.core.data.DailyStatistics;
 import comp3111.covid.core.utils;
@@ -12,27 +12,25 @@ import javafx.util.StringConverter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-/**
- * set the charts for Task A2, B2, C2
- */
+
 public class ChartSetter {
     /**
      * Update a chart
      * @param chart chart
      * @param newCountryTrendMap new data map
      */
-	public static void updateGraph_A(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
+	public static void updateGraph_A(LineChart&lt;Number, Number&gt; chart, Map&lt;String, List&lt;DailyStatistics&gt;&gt; newCountryTrendMap) {
         chart.setAnimated(true);
-        ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
-        Map<String, Boolean> existMap = new HashMap<>();
+        ObservableList&lt;XYChart.Series&lt;Number, Number&gt;&gt; chartDataSeriesList = chart.getData();
+        Map&lt;String, Boolean&gt; existMap = new HashMap&lt;&gt;();
         for (String countryName: newCountryTrendMap.keySet()) {
             existMap.put(countryName, true);
         }
         
         int graphInternalSize = chartDataSeriesList.size();
-        List<XYChart.Series<Number, Number>> toRemoveList = new ArrayList<>();
-        for (int i = 0; i < graphInternalSize; i++) {
-            XYChart.Series<Number, Number> series = chartDataSeriesList.get(i);
+        List&lt;XYChart.Series&lt;Number, Number&gt;&gt; toRemoveList = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; graphInternalSize; i++) {
+            XYChart.Series&lt;Number, Number&gt; series = chartDataSeriesList.get(i);
             if (existMap.getOrDefault(series.getName(), false)) {
                 // exist, update data
                 series.getData().clear();
@@ -52,20 +50,20 @@ public class ChartSetter {
         chartDataSeriesList.removeAll(toRemoveList);
         for (String countryName: existMap.keySet()) {
             if (existMap.get(countryName)) {
-                XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+                XYChart.Series&lt;Number, Number&gt; series1 = new XYChart.Series&lt;&gt;();
                 series1.setName(countryName);
                 for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {
-                    series1.getData().add(new XYChart.Data<>(dailyStatistics.getDate().getTime(), dailyStatistics.getInfectedPerMillion()));
+                    series1.getData().add(new XYChart.Data&lt;&gt;(dailyStatistics.getDate().getTime(), dailyStatistics.getInfectedPerMillion()));
                 }
                 if (chartDataSeriesList.size() == 0) {
                     chartDataSeriesList.add(series1);
                 } else {
-                    for (int i = 0; i <= chartDataSeriesList.size(); i++) {
+                    for (int i = 0; i &lt;= chartDataSeriesList.size(); i++) {
                         if (i == chartDataSeriesList.size()) {
                             chartDataSeriesList.add(i, series1);
                             break;
                         }
-                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) < 0) {
+                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) &lt; 0) {
                             chartDataSeriesList.add(i, series1);
                             break;
                         }
@@ -78,18 +76,18 @@ public class ChartSetter {
         chart.setAnimated(false);
     }
 
-    public static void updateGraph_B(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
+    public static void updateGraph_B(LineChart&lt;Number, Number&gt; chart, Map&lt;String, List&lt;DailyStatistics&gt;&gt; newCountryTrendMap) {
         chart.setAnimated(true);
-        ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
-        Map<String, Boolean> existMap = new HashMap<>();
+        ObservableList&lt;XYChart.Series&lt;Number, Number&gt;&gt; chartDataSeriesList = chart.getData();
+        Map&lt;String, Boolean&gt; existMap = new HashMap&lt;&gt;();
         for (String countryName: newCountryTrendMap.keySet()) {
             existMap.put(countryName, true);
         }
         
         int graphInternalSize = chartDataSeriesList.size();
-        List<XYChart.Series<Number, Number>> toRemoveList = new ArrayList<>();
-        for (int i = 0; i < graphInternalSize; i++) {
-            XYChart.Series<Number, Number> series = chartDataSeriesList.get(i);
+        List&lt;XYChart.Series&lt;Number, Number&gt;&gt; toRemoveList = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; graphInternalSize; i++) {
+            XYChart.Series&lt;Number, Number&gt; series = chartDataSeriesList.get(i);
             if (existMap.getOrDefault(series.getName(), false)) {
                 // exist, update data
                 series.getData().clear();
@@ -109,20 +107,20 @@ public class ChartSetter {
         chartDataSeriesList.removeAll(toRemoveList);
         for (String countryName: existMap.keySet()) {
             if (existMap.get(countryName)) {
-                XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+                XYChart.Series&lt;Number, Number&gt; series1 = new XYChart.Series&lt;&gt;();
                 series1.setName(countryName);
                 for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {
-                    series1.getData().add(new XYChart.Data<>(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));
+                    series1.getData().add(new XYChart.Data&lt;&gt;(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));
                 }
                 if (chartDataSeriesList.size() == 0) {
                     chartDataSeriesList.add(series1);
                 } else {
-                    for (int i = 0; i <= chartDataSeriesList.size(); i++) {
+                    for (int i = 0; i &lt;= chartDataSeriesList.size(); i++) {
                         if (i == chartDataSeriesList.size()) {
                             chartDataSeriesList.add(i, series1);
                             break;
                         }
-                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) < 0) {
+                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) &lt; 0) {
                             chartDataSeriesList.add(i, series1);
                             break;
                         }
@@ -135,28 +133,28 @@ public class ChartSetter {
         chart.setAnimated(false);
     }
     
-    public static void updateGraph_C(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
+    public static void updateGraph_C(LineChart&lt;Number, Number&gt; chart, Map&lt;String, List&lt;DailyStatistics&gt;&gt; newCountryTrendMap) {
         chart.setAnimated(true);
-        ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
-        Map<String, Boolean> existMap = new HashMap<>();
+        ObservableList&lt;XYChart.Series&lt;Number, Number&gt;&gt; chartDataSeriesList = chart.getData();
+        Map&lt;String, Boolean&gt; existMap = new HashMap&lt;&gt;();
         for (String countryName: newCountryTrendMap.keySet()) {
             existMap.put(countryName, true);
         }
         int graphInternalSize = 0;
         int new_graphInternalSize = chartDataSeriesList.size();
-        if(new_graphInternalSize > graphInternalSize) {
+        if(new_graphInternalSize &gt; graphInternalSize) {
         	graphInternalSize = new_graphInternalSize;
         }
-        List<XYChart.Series<Number, Number>> toRemoveList = new ArrayList<>();
-        for (int i = 0; i < graphInternalSize; i++) {
-            XYChart.Series<Number, Number> series = chartDataSeriesList.get(i);
+        List&lt;XYChart.Series&lt;Number, Number&gt;&gt; toRemoveList = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; graphInternalSize; i++) {
+            XYChart.Series&lt;Number, Number&gt; series = chartDataSeriesList.get(i);
             if (existMap.getOrDefault(series.getName(), false)) {
                 // exist, update data
                 series.getData().clear();
 
                     for (DailyStatistics ds : newCountryTrendMap.get(series.getName())
                     ) {
-                    	if( ds.getVaccinationRate() > 0) {
+                    	if( ds.getVaccinationRate() &gt; 0) {
                         series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getVaccinationRate()));
                     	}
                     }                   	
@@ -171,22 +169,22 @@ public class ChartSetter {
         chartDataSeriesList.removeAll(toRemoveList);
         for (String countryName: existMap.keySet()) {
             if (existMap.get(countryName)) {
-                XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+                XYChart.Series&lt;Number, Number&gt; series1 = new XYChart.Series&lt;&gt;();
                 series1.setName(countryName);
                 for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {
-                	if( dailyStatistics.getVaccinationRate() > 0) {
-                    series1.getData().add(new XYChart.Data<>(dailyStatistics.getDate().getTime(), dailyStatistics.getVaccinationRate()));
+                	if( dailyStatistics.getVaccinationRate() &gt; 0) {
+                    series1.getData().add(new XYChart.Data&lt;&gt;(dailyStatistics.getDate().getTime(), dailyStatistics.getVaccinationRate()));
                 	}
                 }
                 if (chartDataSeriesList.size() == 0) {
                     chartDataSeriesList.add(series1);
                 } else {
-                    for (int i = 0; i <= chartDataSeriesList.size(); i++) {
+                    for (int i = 0; i &lt;= chartDataSeriesList.size(); i++) {
                         if (i == chartDataSeriesList.size()) {
                             chartDataSeriesList.add(i, series1);
                             break;
                         }
-                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) < 0) {
+                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) &lt; 0) {
                             chartDataSeriesList.add(i, series1);
                             break;
                         }
@@ -205,55 +203,55 @@ public class ChartSetter {
      * @param chartStartDatePicker start date
      * @param chartEndDatePicker end date
      */
-    public static void setGraphPropeties(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
+    public static void setGraphPropeties(LineChart&lt;Number, Number&gt; chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
         NumberAxis chartX = (NumberAxis) chart.getXAxis();
         NumberAxis chartY = (NumberAxis) chart.getYAxis();
         chartY.setAutoRanging(true);
         chartX.setTickLabelFormatter(
-                new StringConverter<Number>() {
+<span class="nc" id="L211">                new StringConverter&lt;Number&gt;() {</span>
                     @Override
                     public String toString(Number object) {
-                        SimpleDateFormat a = new SimpleDateFormat("yy/MM/dd");
-                        return a.format(new Date(object.longValue()));
+<span class="nc" id="L214">                        SimpleDateFormat a = new SimpleDateFormat(&quot;yy/MM/dd&quot;);</span>
+<span class="nc" id="L215">                        return a.format(new Date(object.longValue()));</span>
                     }
 
                     @Override
                     public Number fromString(String string) {
-                        return 0;
+<span class="nc" id="L220">                        return 0;</span>
                     }
                 }
         );
         chartX.setAutoRanging(false); // manually set X-axis range and tick width
-        SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat a = new SimpleDateFormat(&quot;yyyy/MM/dd&quot;);
         try {
         	chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());
             chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());
-            chartX.setTickUnit(a.parse("1970/02/01").getTime());
+            chartX.setTickUnit(a.parse(&quot;1970/02/01&quot;).getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         chart.setCreateSymbols(true); // show the symbols
     }
 
-    public static void setGraphPropeties_C(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
+    public static void setGraphPropeties_C(LineChart&lt;Number, Number&gt; chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
         NumberAxis chartX = (NumberAxis) chart.getXAxis();
         NumberAxis chartY = (NumberAxis) chart.getYAxis();
         chartX.setTickLabelFormatter(
-                new StringConverter<Number>() {
+<span class="nc" id="L240">                new StringConverter&lt;Number&gt;() {</span>
                     @Override
                     public String toString(Number object) {
-                        SimpleDateFormat a = new SimpleDateFormat("yy/MM/dd");
-                        return a.format(new Date(object.longValue()));
+<span class="nc" id="L243">                        SimpleDateFormat a = new SimpleDateFormat(&quot;yy/MM/dd&quot;);</span>
+<span class="nc" id="L244">                        return a.format(new Date(object.longValue()));</span>
                     }
 
                     @Override
                     public Number fromString(String string) {
-                        return 0;
+<span class="nc" id="L249">                        return 0;</span>
                     }
                 }
         );
         chartX.setAutoRanging(false); // manually set X-axis range and tick width
-        SimpleDateFormat a = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat a = new SimpleDateFormat(&quot;yyyy/MM/dd&quot;);
         try {
         	Calendar c1 = Calendar.getInstance();
             c1.set(2020, 12 - 1, 30);
@@ -265,7 +263,7 @@ public class ChartSetter {
         		chartX.setLowerBound(date.getTime());
         	}
             chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());
-            chartX.setTickUnit(a.parse("1970/02/01").getTime());
+            chartX.setTickUnit(a.parse(&quot;1970/02/01&quot;).getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -275,3 +273,4 @@ public class ChartSetter {
 
 }
 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
