@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DailyStatistics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.core.data</a> &gt; <span class="el_source">DailyStatistics.java</span></div><h1>DailyStatistics.java</h1><pre class="source lang-java linenums">package comp3111.covid.core.data;
+
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+
+import java.math.BigInteger;
+import java.util.Date;
+
+/**
+ * This class is an internal representation of an entry in the Excel sheet.
+ */
+public class DailyStatistics {
+    @CsvBindByName(column = &quot;location&quot;, required = true)
+    private String country;
+
+    @CsvCustomBindByName(column = &quot;date&quot;, required = true, converter= CustomDateConverter.class)
+    private Date date;
+
+    @CsvBindByName(column = &quot;total_deaths_per_million&quot;)
+    private double deathPerMillion;
+
+    @CsvBindByName(column = &quot;total_deaths&quot;)
+    private BigInteger cumulativeDeath;
+
+    @CsvBindByName(column = &quot;total_cases_per_million&quot;)
+    private double infectedPerMillion;
+
+    @CsvBindByName(column = &quot;total_cases&quot;)
+    private BigInteger cumulativeInfected;
+
+    @CsvBindByName(column = &quot;people_fully_vaccinated_per_hundred\n&quot;)
+    private double vaccinationRate;
+
+    @CsvBindByName(column = &quot;people_fully_vaccinated&quot;)
+    private BigInteger cumulativeVaccinated;
+
+    @CsvBindByName(column = &quot;population&quot;)
+    private BigInteger population;
+
+    @CsvBindByName(column = &quot;population_density&quot;)
+    private Double populationDensity;
+
+    @CsvBindByName(column = &quot;median_age&quot;)
+    private Double medianAge;
+
+    @CsvBindByName(column = &quot;gdp_per_capita&quot;)
+    private Double gdp;
+
+<span class="fc" id="L49">    public DailyStatistics() {</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Default constructor
+     *
+     * @param country              country name
+     * @param date                 date
+     * @param deathPerMillion      death per million
+     * @param cumulativeDeath      cumulative death
+     * @param infectedPerMillion   infected per million
+     * @param cumulativeInfected   cumulative infected
+     * @param vaccinationRate      vaccination rate
+     * @param cumulativeVaccinated cumulative vaccinated
+     */
+    public DailyStatistics(String country, Date date, double deathPerMillion, BigInteger cumulativeDeath,
+                           double infectedPerMillion, BigInteger cumulativeInfected, double vaccinationRate,
+<span class="nc" id="L66">                           BigInteger cumulativeVaccinated, BigInteger population, Double populationDensity) {</span>
+<span class="nc" id="L67">        this.country = country;</span>
+<span class="nc" id="L68">        this.date = date;</span>
+<span class="nc" id="L69">        this.deathPerMillion = deathPerMillion;</span>
+<span class="nc" id="L70">        this.cumulativeDeath = cumulativeDeath;</span>
+<span class="nc" id="L71">        this.infectedPerMillion = infectedPerMillion;</span>
+<span class="nc" id="L72">        this.cumulativeInfected = cumulativeInfected;</span>
+<span class="nc" id="L73">        this.vaccinationRate = vaccinationRate;</span>
+<span class="nc" id="L74">        this.cumulativeVaccinated = cumulativeVaccinated;</span>
+<span class="nc" id="L75">        this.population = population;</span>
+<span class="nc" id="L76">        this.populationDensity = populationDensity;</span>
+<span class="nc" id="L77">    }</span>
+
+    public Date getDate() {
+<span class="fc" id="L80">        return date;</span>
+    }
+
+    public double getDeathPerMillion() {
+<span class="fc" id="L84">        return deathPerMillion;</span>
+    }
+
+    public double getInfectedPerMillion() {
+<span class="fc" id="L88">        return infectedPerMillion;</span>
+    }
+
+    public double getVaccinationRate() {
+<span class="fc" id="L92">        return vaccinationRate;</span>
+    }
+
+    public BigInteger getCumulativeDeath() {
+<span class="fc" id="L96">        return cumulativeDeath;</span>
+    }
+
+    public BigInteger getCumulativeInfected() {
+<span class="fc" id="L100">        return cumulativeInfected;</span>
+    }
+
+    public BigInteger getCumulativeVaccinated() {
+<span class="fc" id="L104">        return cumulativeVaccinated;</span>
+    }
+
+    public String getCountry() {
+<span class="fc" id="L108">        return country;</span>
+    }
+
+    public BigInteger getPopulation() {
+<span class="fc" id="L112">        return population;</span>
+    }
+
+    public Double getPopulationDensity() {
+<span class="fc" id="L116">        return populationDensity;</span>
+    }
+
+    public Double getMedianAge() {
+<span class="fc" id="L120">        return medianAge;</span>
+    }
+
+    public Double getGdp() {
+<span class="fc" id="L124">        return gdp;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L129">        return &quot;DailyStatistics{&quot; +</span>
+                &quot;country='&quot; + country + '\'' +
+                &quot;, date=&quot; + date +
+                &quot;, deathPerMillion=&quot; + deathPerMillion +
+                &quot;, cumulativeDeath=&quot; + cumulativeDeath +
+                &quot;, infectedPerMillion=&quot; + infectedPerMillion +
+                &quot;, cumulativeInfected=&quot; + cumulativeInfected +
+                &quot;, vaccinationRate=&quot; + vaccinationRate +
+                &quot;, cumulativeVaccinated=&quot; + cumulativeVaccinated +
+                &quot;, population=&quot; + population +
+                &quot;, populationDensity=&quot; + populationDensity +
+                &quot;, medianAge=&quot; + medianAge +
+                &quot;, gdp=&quot; + gdp +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

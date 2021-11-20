@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TableController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.controller</a> &gt; <span class="el_source">TableController.java</span></div><h1>TableController.java</h1><pre class="source lang-java linenums">package comp3111.covid.controller;
+
+import comp3111.covid.core.*;
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.tabtype.TableType;
+import comp3111.covid.core.uisetters.TableSetter;
+import comp3111.covid.ui.CheckListViewWithList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
+
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * Table Controller class for Table Tabs
+ */
+<span class="fc" id="L22">public class TableController {</span>
+
+    private TableType tableType;
+
+    private CSVFileOperator fileOperator;
+
+    private TableType type;
+
+    @FXML
+    DatePicker datePicker;
+
+    @FXML
+    TextField text;
+
+    @FXML
+    CheckListViewWithList&lt;String&gt; checkListViewWithList;
+
+    @FXML
+    Label tableTitle;
+
+    @FXML
+    TableView&lt;DailyStatistics&gt; table;
+
+    @FXML
+    private TableColumn&lt;DailyStatistics, String&gt; tableCountry;
+
+    @FXML
+    private TableColumn&lt;DailyStatistics, BigInteger&gt; tableStat1;
+
+    @FXML
+    private TableColumn&lt;DailyStatistics, Double&gt; tableStat2;
+
+    @FXML
+    private CheckListViewWithList&lt;String&gt; tableCountryList;
+
+    @FXML
+    private Tab pane;
+
+    @FXML
+    private ChoiceBox&lt;SortPolicy&gt; choiceBox;
+
+    /**
+     * Initialize the table
+     * @param type Table Type
+     * @param fileOperator fileOperator
+     */
+    public void init(TableType type, CSVFileOperator fileOperator) {
+<span class="fc" id="L69">        this.fileOperator = fileOperator;</span>
+<span class="fc" id="L70">        this.type = type;</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">        switch (type) {</span>
+            case A:
+<span class="nc" id="L73">                tableStat1.setText(&quot;Total Cases&quot;);</span>
+<span class="nc" id="L74">                tableStat2.setText(&quot;Total Cases (per 1M)&quot;);</span>
+<span class="nc" id="L75">                pane.setText(&quot;Cases Table&quot;);</span>
+<span class="nc" id="L76">                break;</span>
+            case B:
+<span class="nc" id="L78">                tableStat1.setText(&quot;Total Deaths&quot;);</span>
+<span class="nc" id="L79">                tableStat2.setText(&quot;Total Deaths (per 1M)&quot;);</span>
+<span class="nc" id="L80">                pane.setText(&quot;Deaths Table&quot;);</span>
+<span class="nc" id="L81">                break;</span>
+            case C:
+<span class="nc" id="L83">                tableStat1.setText(&quot;Fully Vaccinated&quot;);</span>
+<span class="nc" id="L84">                tableStat2.setText(&quot;Vaccination Rate&quot;);</span>
+<span class="nc" id="L85">                pane.setText(&quot;Vaccination Table&quot;);</span>
+                break;
+        }
+
+<span class="nc" id="L89">        datePicker.getEditor().setDisable(true);</span>
+<span class="nc" id="L90">        datePicker.getEditor().setOpacity(1);</span>
+
+<span class="nc" id="L92">        tableTitle.setText(&quot;&quot;);</span>
+
+<span class="nc" id="L94">        final Callback&lt;DatePicker, DateCell&gt; tableCellFactory =</span>
+<span class="nc" id="L95">                new Callback&lt;DatePicker, DateCell&gt;() {</span>
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+<span class="nc" id="L98">                        return new DateCell() {</span>
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+<span class="nc" id="L101">                                super.updateItem(item, empty);</span>
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                                if (item.isBefore(</span>
+<span class="nc" id="L104">                                        utils.dateToLocalDate(fileOperator.getMinimumDate()))</span>
+                                ) {
+<span class="nc" id="L106">                                    setDisable(true);</span>
+<span class="nc" id="L107">                                    getStyleClass().add(&quot;disabled-date&quot;);</span>
+                                }
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {</span>
+<span class="nc" id="L110">                                    setDisable((true));</span>
+<span class="nc" id="L111">                                    getStyleClass().add(&quot;disabled-date&quot;);</span>
+                                }
+<span class="nc" id="L113">                            }</span>
+                        };
+                    }
+                };
+<span class="nc" id="L117">        datePicker.setDayCellFactory(tableCellFactory);</span>
+
+<span class="nc" id="L119">        choiceBox.getItems().clear();</span>
+<span class="nc" id="L120">        choiceBox.getItems().add(new SortPolicy(&quot;Country name&quot;, SortPolicyE.NAME));</span>
+<span class="nc" id="L121">        choiceBox.getItems().add(new SortPolicy(&quot;Population&quot;, SortPolicyE.POP));</span>
+<span class="nc" id="L122">        choiceBox.getItems().add(new SortPolicy(&quot;Population density&quot;, SortPolicyE.POP_D));</span>
+<span class="nc" id="L123">        choiceBox.getItems().add(new SortPolicy(&quot;Median age&quot;, SortPolicyE.MED));</span>
+<span class="nc" id="L124">        choiceBox.getItems().add(new SortPolicy(&quot;GDP per capita&quot;, SortPolicyE.GDP));</span>
+<span class="nc" id="L125">        choiceBox.getSelectionModel().select(0);</span>
+<span class="nc" id="L126">        choiceBox.setOnAction((event) -&gt; {</span>
+<span class="nc" id="L127">            SortPolicy selectedItem = choiceBox.getSelectionModel().getSelectedItem();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            if (selectedItem != null) {</span>
+<span class="nc" id="L129">                    List&lt;String&gt; countryNames = fileOperator.searchCountry(text.getText(), selectedItem.policyE);</span>
+<span class="nc" id="L130">                    tableCountryList.update(countryNames);}</span>
+
+
+<span class="nc" id="L133">        });</span>
+
+<span class="nc" id="L135">        text.setText(&quot;&quot;);</span>
+<span class="nc" id="L136">        text.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+            //String countryName = tableAText.getText();
+<span class="nc" id="L138">            List&lt;String&gt; countryNames = fileOperator.searchCountry(newValue, choiceBox.getSelectionModel().getSelectedItem().policyE);</span>
+<span class="nc" id="L139">            tableCountryList.update(countryNames);</span>
+<span class="nc" id="L140">            text.requestFocus();</span>
+<span class="nc" id="L141">        });</span>
+
+<span class="nc" id="L143">        List&lt;String&gt; countryNames = fileOperator.getAllCountries();</span>
+<span class="nc" id="L144">        tableCountryList.init(countryNames);</span>
+<span class="nc" id="L145">        table.getItems().clear();</span>
+
+
+
+<span class="nc" id="L149">    }</span>
+
+    @FXML
+    void doConfirmTable(ActionEvent event) {
+<span class="nc bnc" id="L153" title="All 4 branches missed.">        switch (type) {</span>
+            case A:
+<span class="nc" id="L155">                tableCountry.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, String&gt;(&quot;country&quot;));</span>
+<span class="nc" id="L156">                tableStat1.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, BigInteger&gt;(&quot;cumulativeInfected&quot;));</span>
+<span class="nc" id="L157">                tableStat2.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, Double&gt;(&quot;infectedPerMillion&quot;));</span>
+<span class="nc" id="L158">                break;</span>
+            case B:
+<span class="nc" id="L160">                tableCountry.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, String&gt;(&quot;country&quot;));</span>
+<span class="nc" id="L161">                tableStat1.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, BigInteger&gt;(&quot;cumulativeDeath&quot;));</span>
+<span class="nc" id="L162">                tableStat2.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, Double&gt;(&quot;deathPerMillion&quot;));</span>
+<span class="nc" id="L163">                break;</span>
+            case C:
+<span class="nc" id="L165">                tableCountry.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, String&gt;(&quot;country&quot;));</span>
+<span class="nc" id="L166">                tableStat1.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, BigInteger&gt;(&quot;cumulativeVaccinated&quot;));</span>
+<span class="nc" id="L167">                tableStat2.setCellValueFactory(new PropertyValueFactory&lt;DailyStatistics, Double&gt;(&quot;vaccinationRate&quot;));</span>
+                break;
+        }
+
+<span class="nc" id="L171">        String setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        if (setterRes != &quot;success&quot;) {</span>
+<span class="nc" id="L173">            Alert alert = new Alert(Alert.AlertType.ERROR, setterRes, ButtonType.YES);</span>
+<span class="nc" id="L174">            alert.show();</span>
+<span class="nc" id="L175">            return;</span>
+        }
+<span class="nc" id="L177">        String dateString = utils.localDateToString(datePicker.getValue(), &quot;MMMM dd, uuuu&quot;);</span>
+<span class="nc bnc" id="L178" title="All 4 branches missed.">        switch (type) {</span>
+            case A:
+<span class="nc" id="L180">                tableTitle.setText(&quot;Number of Confirmed COVID-19 Cases as of &quot; + dateString);</span>
+<span class="nc" id="L181">                break;</span>
+            case B:
+<span class="nc" id="L183">                tableTitle.setText(&quot;Number of Confirmed COVID-19 Deaths as of &quot; + dateString);</span>
+<span class="nc" id="L184">                break;</span>
+            case C:
+<span class="nc" id="L186">                tableTitle.setText(&quot;Rate of Vaccination against COVID-19 as of &quot; + dateString);</span>
+                break;
+        }
+
+
+<span class="nc" id="L191">    }</span>
+
+    public void setFileOperator(CSVFileOperator fileOperator) {
+<span class="nc" id="L194">        this.fileOperator = fileOperator;</span>
+<span class="nc" id="L195">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
