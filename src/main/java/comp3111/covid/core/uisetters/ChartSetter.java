@@ -12,7 +12,9 @@ import javafx.util.StringConverter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+/**
+ * set the charts for Task A2, B2, C2
+ */
 public class ChartSetter {
     /**
      * Update a chart

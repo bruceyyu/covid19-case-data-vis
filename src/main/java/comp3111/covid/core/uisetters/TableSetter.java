@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * set the tables for Task A1, B1, C1
+ */
 public class TableSetter {
     /**
      * set the TableView with the specified country list on the date of interest
@@ -43,7 +45,14 @@ public class TableSetter {
 
         return "success";
     }
-
+    /**
+     * set the TableView for Table C specifically with the specified country list on the date of interest
+     * @param fileOperator The instance of CSVFileOperator
+     * @param datePicker The DatePicker instance from the desired tab
+     * @param countryList The CheckListView instance from the desired  tab
+     * @param table The TableView instance from the desired  tab
+     * @return Boolean to indicate whether the table is set successfully
+     */
     static public String updateTableC(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
 
         Date pickedDate = utils.localDateToDate(datePicker.getValue());
@@ -78,7 +87,12 @@ public class TableSetter {
 
         return "success";
     }
-
+    /**
+     * check whether the input date is legal
+     * @param fileOperator The instance of CSVFileOperator
+     * @param date The picked date
+     * @return String to indicate whether it's legal, or its error message
+     */
     public static String legalDateChecker(CSVFileOperator fileOperator, Date date) {
         if (date == null) {
             return "Please select a date of interest";
@@ -90,7 +104,11 @@ public class TableSetter {
         }
         return "success";
     }
-
+    /**
+     * check whether the input countryList is legal
+     * @param countryList The picked country List
+     * @return String to indicate whether it's legal, or its error message
+     */
     public static String legalCountryListChecker(List<String> countryList) {
         if (countryList.size() <= 0) {
             return "Please select at least one country";
