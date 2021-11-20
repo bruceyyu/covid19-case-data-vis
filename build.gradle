@@ -43,11 +43,23 @@ jacocoTestReport {
 		csv.enabled false
 		html.destination file("${buildDir}/jacocoHTML")
 	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"**/controller/**",
+					"**/ChartSetter.class"
+			])
+		}))
+	}
 }
 
 javafx {
 	version = "17.0.1"
 	modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing' ]
+}
+
+jacoco {
+    toolVersion = "0.8.6"
 }
 
 run {

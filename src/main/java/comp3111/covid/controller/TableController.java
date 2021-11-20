@@ -168,8 +168,12 @@ public class TableController {
                 break;
         }
 
-        Boolean setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
-        if (!setterRes) return;
+        String setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
+        if (setterRes != "success") {
+            Alert alert = new Alert(Alert.AlertType.ERROR, setterRes, ButtonType.YES);
+            alert.show();
+            return;
+        }
         String dateString = utils.localDateToString(datePicker.getValue(), "MMMM dd, uuuu");
         switch (type) {
             case A:
