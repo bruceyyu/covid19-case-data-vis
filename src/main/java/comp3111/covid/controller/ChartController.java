@@ -183,8 +183,13 @@ public class ChartController {
 
     @FXML
     void doConfirmChart(ActionEvent event) {
-        ChartSetter.setGraphPropeties(chart, startDatePicker, endDatePicker);
-
+    	if (type == ChartType.A) {
+    		ChartSetter.setGraphPropeties(chart, startDatePicker, endDatePicker);
+    	} else if (type == ChartType.B) {
+    		ChartSetter.setGraphPropeties(chart, startDatePicker, endDatePicker);
+        } else if (type == ChartType.C) {
+        	ChartSetter.setGraphPropeties_C(chart, startDatePicker, endDatePicker);
+        }
         // save state of checked
         chartCountryList.saveState();
         List<String> countryNames = chartCountryList.getCheckedItems();
