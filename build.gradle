@@ -33,10 +33,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 }
 
-jacoco {
-	toolVersion = '0.8.7'
-}
-
 jacocoTestReport {
 	reports {
 		xml.enabled false
