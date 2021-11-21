@@ -43,14 +43,14 @@ jacocoTestReport {
 		csv.enabled false
 		html.destination file("${buildDir}/jacocoHTML")
 	}
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: [
-					"**/controller/**",
-					"**/ChartSetter.class"
-			])
-		}))
-	}
+//	afterEvaluate {
+//		classDirectories.setFrom(files(classDirectories.files.collect {
+//			fileTree(dir: it, exclude: [
+//					"**/controller/**",
+//					"**/ChartSetter.class"
+//			])
+//		}))
+//	}
 }
 
 javafx {
@@ -67,6 +67,12 @@ run {
 		// Temporal fix for Eclipse with JDK 1.8 and Windows
 		systemProperty "java.library.path", "C:\tmp"
 		}
+}
+
+test {
+	minHeapSize = "1000m" // initial heap size
+	maxHeapSize = "2000m" // maximum heap size
+	jvmArgs '-XX:MaxPermSize=4000m' // mem argument for the test JVM
 }
 
 mainClassName = 'comp3111.covid.MyApplication'

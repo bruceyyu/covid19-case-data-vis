@@ -48,7 +48,7 @@ public class ChartController {
     private DatePicker endDatePicker;
 
     @FXML
-    private Tab pane;
+    public Tab pane;
 
     @FXML
     private ChoiceBox<SortPolicy> choiceBox;
@@ -210,8 +210,4 @@ public class ChartController {
 
     }
 
-
-    public void setFileOperator(CSVFileOperator fileOperator) {
-        this.fileOperator = fileOperator;
-    }
 }

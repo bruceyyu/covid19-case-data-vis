@@ -41,22 +41,22 @@ public class Controller {
     TabPane mainTabPane;
 
     @FXML
-    ChartController chartAController;
+    public ChartController chartAController;
 
     @FXML
-    ChartController chartBController;
+    public ChartController chartBController;
 
     @FXML
-    ChartController chartCController;
+    public ChartController chartCController;
 
     @FXML
-    TableController tableAController;
+    public TableController tableAController;
 
     @FXML
-    TableController tableBController;
+    public TableController tableBController;
 
     @FXML
-    TableController tableCController;
+    public TableController tableCController;
 
     @FXML
     VBox masterVB;
@@ -112,7 +112,10 @@ public class Controller {
         fileChooser.setTitle("Open Data Set");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV file (*.csv)", "*.csv"));
         File file = fileChooser.showOpenDialog(mainTabPane.getScene().getWindow());
+        loadFileInternal(file);
+    }
 
+    public void loadFileInternal(File file) {
         if (file != null) {
             System.out.println(file.toString());
 

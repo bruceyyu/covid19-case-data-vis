@@ -1,8 +1,7 @@
-package CoreTests;
+package coretests;
 
 import static org.junit.Assert.*;
 
-import comp3111.covid.core.SortPolicy;
 import comp3111.covid.core.SortPolicyE;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
@@ -12,15 +11,12 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 

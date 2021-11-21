@@ -36,13 +36,13 @@
                         <HBox alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="240.0" spacing="10.0">
                            <children>
                               <Label prefWidth="28.0" text="From" />
-                              <DatePicker id="tableADatePicker" fx:id="startDatePicker" prefHeight="26.0" prefWidth="202.0" promptText="Date of Interest" />
+                              <DatePicker id="datePickerStart" fx:id="startDatePicker" prefHeight="26.0" prefWidth="202.0" promptText="Date of Interest" />
                            </children>
                         </HBox>
                         <HBox alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <Label prefWidth="28.0" text="To" />
-                              <DatePicker id="tableADatePicker" fx:id="endDatePicker" prefHeight="26.0" prefWidth="202.0" promptText="Date of Interest" />
+                              <DatePicker id="datePickerEnd" fx:id="endDatePicker" prefHeight="26.0" prefWidth="202.0" promptText="Date of Interest" />
                            </children>
                         </HBox>
                         <TextField fx:id="chartText" prefHeight="26.0" prefWidth="240.0" promptText="Type to search for a country" />
@@ -56,7 +56,7 @@
                            </opaqueInsets>
                         </HBox>
                         <CheckListViewWithList fx:id="chartCountryList" prefHeight="527.0" prefWidth="240.0" stylesheets="@../css/bootstrap3.css" />
-                        <Button mnemonicParsing="false" onAction="#doConfirmChart" prefHeight="26.0" prefWidth="240.0" styleClass="confirm-btn" text="Confirm" />
+                        <Button id="doConfirmChart" mnemonicParsing="false" onAction="#doConfirmChart" prefHeight="26.0" prefWidth="240.0" styleClass="confirm-btn" text="Confirm" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
