@@ -10,6 +10,8 @@ import comp3111.covid.ui.CheckListViewWithList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import static org.junit.Assert.*;
@@ -19,6 +21,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.testfx.api.FxToolkit;
@@ -196,4 +199,93 @@ public class ExtraFeatureTest extends ApplicationTest {
         assertEquals(BigInteger.valueOf(62063), confirmed);
     }
 
+    @Test
+    public void loadFileNull() {
+        interact(() ->
+                {ctrl.loadFileInternal(null);}
+        );
+        type(KeyCode.ENTER);
+
+        TextField fileName = lookup("#textfieldDataset").query();
+        assertEquals("COVID_Dataset_v1.0.csv",fileName.getText());
+
+        TabPane tabPane = (TabPane) s.lookup("#mainTabPane");
+        tabPane.getSelectionModel().select(1);
+        Node lookUpRoot = tabPane.getTabs().get(1).getContent();
+
+
+        DatePicker datePicker = from(lookUpRoot).lookup("#datePicker").query();
+        datePicker.setValue(LocalDate.of(2021, 5, 10));
+        LocalDate a = datePicker.getValue();
+        clickOn("#datePicker");
+        CheckListViewWithList<String> checkListViewWithList = from(lookUpRoot)
+                .lookup("#tableCountryList").query();
+        checkListViewWithList.getCheckModel().check(0);
+        checkListViewWithList.getCheckModel().check(1);
+
+        clickOn("#doConfirmTable");
+
+        TableView<DailyStatistics> table = from(lookUpRoot).lookup("#table").queryTableView();
+        TableColumn<DailyStatistics, BigInteger> column1 = (TableColumn<DailyStatistics, BigInteger>) table.getColumns().get(1);
+        BigInteger confirmed =  (BigInteger) column1.getCellObservableValue(0).getValue();
+        assertEquals(BigInteger.valueOf(62063), confirmed);
+    }
+
+    @Test
+    public void saveImageInvalid() {
+        clickOn("#fileMenu");
+        clickOn("#saveImg");
+        type(KeyCode.ENTER);
+    }
+
+    @Test
+    public void saveImage1() {
+        TabPane tabPane = (TabPane)this.s.lookup("#mainTabPane");
+        tabPane.getSelectionModel().select(4);
+        Node lookUpRoot = ((Tab)tabPane.getTabs().get(4)).getContent();
+        this.clickOn("#datePickerEnd", new MouseButton[0]);
+        this.clickOn("#datePickerStart", new MouseButton[0]);
+        CheckListViewWithList<String> checkListViewWithList = (CheckListViewWithList)this.from(new Node[]{lookUpRoot}).lookup("#chartCountryList").query();
+        checkListViewWithList.getCheckModel().check(0);
+        checkListViewWithList.getCheckModel().check(1);
+        this.clickOn("#doConfirmChart", new MouseButton[0]);
+
+        clickOn("#fileMenu");
+        clickOn("#saveImg");
+//        sleep(10000); user save the image in this time
+    }
+
+    @Test
+    public void saveImage2() {
+        TabPane tabPane = (TabPane)this.s.lookup("#mainTabPane");
+        tabPane.getSelectionModel().select(5);
+        Node lookUpRoot = ((Tab)tabPane.getTabs().get(5)).getContent();
+        this.clickOn("#datePickerEnd", new MouseButton[0]);
+        this.clickOn("#datePickerStart", new MouseButton[0]);
+        CheckListViewWithList<String> checkListViewWithList = (CheckListViewWithList)this.from(new Node[]{lookUpRoot}).lookup("#chartCountryList").query();
+        checkListViewWithList.getCheckModel().check(0);
+        checkListViewWithList.getCheckModel().check(1);
+        this.clickOn("#doConfirmChart", new MouseButton[0]);
+
+        clickOn("#fileMenu");
+        clickOn("#saveImg");
+//        sleep(10000); user save the image in this time
+    }
+
+    @Test
+    public void saveImage3() {
+        TabPane tabPane = (TabPane)this.s.lookup("#mainTabPane");
+        tabPane.getSelectionModel().select(6);
+        Node lookUpRoot = ((Tab)tabPane.getTabs().get(6)).getContent();
+        this.clickOn("#datePickerEnd", new MouseButton[0]);
+        this.clickOn("#datePickerStart", new MouseButton[0]);
+        CheckListViewWithList<String> checkListViewWithList = (CheckListViewWithList)this.from(new Node[]{lookUpRoot}).lookup("#chartCountryList").query();
+        checkListViewWithList.getCheckModel().check(0);
+        checkListViewWithList.getCheckModel().check(1);
+        this.clickOn("#doConfirmChart", new MouseButton[0]);
+
+        clickOn("#fileMenu");
+        clickOn("#saveImg");
+//        sleep(10000); user save the image in this time
+    }
 }

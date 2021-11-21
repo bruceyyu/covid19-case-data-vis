@@ -43,14 +43,13 @@ jacocoTestReport {
 		csv.enabled false
 		html.destination file("${buildDir}/jacocoHTML")
 	}
-//	afterEvaluate {
-//		classDirectories.setFrom(files(classDirectories.files.collect {
-//			fileTree(dir: it, exclude: [
-//					"**/controller/**",
-//					"**/ChartSetter.class"
-//			])
-//		}))
-//	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"**/MyApplication.class"
+			])
+		}))
+	}
 }
 
 javafx {
