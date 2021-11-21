@@ -1,27 +1,23 @@
-package CoreTests;
+package coretests;
 
 import static org.junit.Assert.*;
 
 import com.sun.javafx.application.PlatformImpl;
 import comp3111.covid.core.data.CSVFileOperator;
-import comp3111.covid.core.data.DailyStatistics;
 import comp3111.covid.core.uisetters.TableSetter;
 import comp3111.covid.core.utils;
 import comp3111.covid.ui.CheckListViewWithList;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
-import org.apache.xpath.operations.Bool;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class TableSetterTester {
     CSVFileOperator csvFileOperator;

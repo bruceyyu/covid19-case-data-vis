@@ -31,10 +31,10 @@ import java.util.Locale;
      * @return the formatted date string
      */
     public static String localDateToString(LocalDate raw, String format) {
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (raw == null) return null;</span>
-<span class="nc" id="L35">        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format, Locale.ENGLISH);</span>
-<span class="nc" id="L36">        String output = dtf.format(raw);</span>
-<span class="nc" id="L37">        return output;</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (raw == null) return null;</span>
+<span class="fc" id="L35">        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format, Locale.ENGLISH);</span>
+<span class="fc" id="L36">        String output = dtf.format(raw);</span>
+<span class="fc" id="L37">        return output;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
