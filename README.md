@@ -3,28 +3,38 @@
 ## Members’ Personal Particulars
 
 ### 1. YU Yue (Bruce)
-> email: yyubv@connect.ust.hk  
+> email: yyubv@connect.ust.hk \
 > github: [Bruceshark](https://github.com/Bruceshark)  
 > task: Task A \
 > branch: [yyubv](https://github.com/Bruceshark/comp3111_proj_T03/tree/yyubv)
 
 ### 2. CHEN Yipu
-> email: ycheniu@connect.ust.hk  
+> email: ycheniu@connect.ust.hk \
 > github: [YC](https://github.com/peterchenyipu)  
 > task: Task B \
 > branch: [ycheniu](https://github.com/Bruceshark/comp3111_proj_T03/tree/ycheniu)
 
 ### 3. XU Mingshi
-> email: mxuax@connect.ust.hk
+> email: mxuax@connect.ust.hk \
 > github: [XU Mingshi](https://github.com/mxuax)  
 > task: Task C \
 > branch: [xms](https://github.com/Bruceshark/comp3111_proj_T03/tree/mxuax)
 
 ## Application Demo
 ### Table-Generating Task
-![table](source_code_material/table_generating.png)
+#### Task A
+![tableA](source_code_material/table_generatingA.png)
+#### Task B
+![tableB](source_code_material/table_generatingB.png)
+#### Task C
+![tableC](source_code_material/table_generatingC.png)
 ### Chart-Generating Task
-![chart](source_code_material/chart_generating.png)
+#### Task A
+![chart](source_code_material/chart_generatingA.png)
+#### Task B
+![chart](source_code_material/chart_generatingB.png)
+#### Task C
+![chart](source_code_material/chart_generatingC.png)
 ### Extra Features (Supplementary)
 #### DIY dataset import 
 Users can import their own datasets downloaded from https://ourworldindata.org/.
