@@ -65,7 +65,13 @@ public class Controller {
 
     }
 
-
+    @FXML
+    public void helpPopup() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "DeCOVID is a software that displays and visualizes COVID Data. It's developed by CHEN Yipu, YU Yue, and XU Mingshi with the power of JavaFX. \nFor more information please visit https://github.com/Bruceshark/comp3111_proj_T03", ButtonType.CLOSE);
+        alert.setTitle("COMP 3111 - Team 03");
+        alert.setHeaderText("Thanks for using our software :)");
+        alert.show();
+    }
 
     @FXML
     public void saveAsPng() {
