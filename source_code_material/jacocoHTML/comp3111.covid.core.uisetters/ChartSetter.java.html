@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChartSetter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.core.uisetters</a> &gt; <span class="el_source">ChartSetter.java</span></div><h1>ChartSetter.java</h1><pre class="source lang-java linenums">package comp3111.covid.core.uisetters;
+
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.utils;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
+import javafx.util.StringConverter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+/**
+ * set the charts for Task A2, B2, C2
+ */
+<span class="nc" id="L18">public class ChartSetter {</span>
+    /**
+     * Update a chart
+     * @param chart chart
+     * @param newCountryTrendMap new data map
+     */
+	public static void updateGraph_A(LineChart&lt;Number, Number&gt; chart, Map&lt;String, List&lt;DailyStatistics&gt;&gt; newCountryTrendMap) {
+<span class="fc" id="L25">        chart.setAnimated(true);</span>
+<span class="fc" id="L26">        ObservableList&lt;XYChart.Series&lt;Number, Number&gt;&gt; chartDataSeriesList = chart.getData();</span>
+<span class="fc" id="L27">        Map&lt;String, Boolean&gt; existMap = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        for (String countryName: newCountryTrendMap.keySet()) {</span>
+<span class="fc" id="L29">            existMap.put(countryName, true);</span>
+<span class="fc" id="L30">        }</span>
+        
+<span class="fc" id="L32">        int graphInternalSize = chartDataSeriesList.size();</span>
+<span class="fc" id="L33">        List&lt;XYChart.Series&lt;Number, Number&gt;&gt; toRemoveList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        for (int i = 0; i &lt; graphInternalSize; i++) {</span>
+<span class="fc" id="L35">            XYChart.Series&lt;Number, Number&gt; series = chartDataSeriesList.get(i);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if (existMap.getOrDefault(series.getName(), false)) {</span>
+                // exist, update data
+<span class="fc" id="L38">                series.getData().clear();</span>
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                    for (DailyStatistics ds : newCountryTrendMap.get(series.getName())</span>
+                    ) {
+<span class="fc" id="L42">                        series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getInfectedPerMillion()));</span>
+<span class="fc" id="L43">                    }</span>
+<span class="fc" id="L44">                    existMap.put(series.getName(), false); // mark as processed</span>
+
+
+            } else {
+<span class="fc" id="L48">                toRemoveList.add(series);</span>
+
+            }
+        }
+<span class="fc" id="L52">        chartDataSeriesList.removeAll(toRemoveList);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (String countryName: existMap.keySet()) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (existMap.get(countryName)) {</span>
+<span class="fc" id="L55">                XYChart.Series&lt;Number, Number&gt; series1 = new XYChart.Series&lt;&gt;();</span>
+<span class="fc" id="L56">                series1.setName(countryName);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">                for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {</span>
+<span class="fc" id="L58">                    series1.getData().add(new XYChart.Data&lt;&gt;(dailyStatistics.getDate().getTime(), dailyStatistics.getInfectedPerMillion()));</span>
+<span class="fc" id="L59">                }</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                if (chartDataSeriesList.size() == 0) {</span>
+<span class="fc" id="L61">                    chartDataSeriesList.add(series1);</span>
+                } else {
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">                    for (int i = 0; i &lt;= chartDataSeriesList.size(); i++) {</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">                        if (i == chartDataSeriesList.size()) {</span>
+<span class="fc" id="L65">                            chartDataSeriesList.add(i, series1);</span>
+<span class="fc" id="L66">                            break;</span>
+                        }
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) &lt; 0) {</span>
+<span class="fc" id="L69">                            chartDataSeriesList.add(i, series1);</span>
+<span class="fc" id="L70">                            break;</span>
+                        }
+
+                    }
+                }
+
+            }
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">        chart.setAnimated(false);</span>
+<span class="fc" id="L79">    }</span>
+
+    public static void updateGraph_B(LineChart&lt;Number, Number&gt; chart, Map&lt;String, List&lt;DailyStatistics&gt;&gt; newCountryTrendMap) {
+<span class="fc" id="L82">        chart.setAnimated(true);</span>
+<span class="fc" id="L83">        ObservableList&lt;XYChart.Series&lt;Number, Number&gt;&gt; chartDataSeriesList = chart.getData();</span>
+<span class="fc" id="L84">        Map&lt;String, Boolean&gt; existMap = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        for (String countryName: newCountryTrendMap.keySet()) {</span>
+<span class="fc" id="L86">            existMap.put(countryName, true);</span>
+<span class="fc" id="L87">        }</span>
+        
+<span class="fc" id="L89">        int graphInternalSize = chartDataSeriesList.size();</span>
+<span class="fc" id="L90">        List&lt;XYChart.Series&lt;Number, Number&gt;&gt; toRemoveList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (int i = 0; i &lt; graphInternalSize; i++) {</span>
+<span class="fc" id="L92">            XYChart.Series&lt;Number, Number&gt; series = chartDataSeriesList.get(i);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (existMap.getOrDefault(series.getName(), false)) {</span>
+                // exist, update data
+<span class="fc" id="L95">                series.getData().clear();</span>
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                    for (DailyStatistics ds : newCountryTrendMap.get(series.getName())</span>
+                    ) {
+<span class="fc" id="L99">                        series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getDeathPerMillion()));</span>
+<span class="fc" id="L100">                    }</span>
+<span class="fc" id="L101">                    existMap.put(series.getName(), false); // mark as processed</span>
+
+
+            } else {
+<span class="fc" id="L105">                toRemoveList.add(series);</span>
+
+            }
+        }
+<span class="fc" id="L109">        chartDataSeriesList.removeAll(toRemoveList);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (String countryName: existMap.keySet()) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (existMap.get(countryName)) {</span>
+<span class="fc" id="L112">                XYChart.Series&lt;Number, Number&gt; series1 = new XYChart.Series&lt;&gt;();</span>
+<span class="fc" id="L113">                series1.setName(countryName);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">                for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {</span>
+<span class="fc" id="L115">                    series1.getData().add(new XYChart.Data&lt;&gt;(dailyStatistics.getDate().getTime(), dailyStatistics.getDeathPerMillion()));</span>
+<span class="fc" id="L116">                }</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">                if (chartDataSeriesList.size() == 0) {</span>
+<span class="fc" id="L118">                    chartDataSeriesList.add(series1);</span>
+                } else {
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">                    for (int i = 0; i &lt;= chartDataSeriesList.size(); i++) {</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                        if (i == chartDataSeriesList.size()) {</span>
+<span class="fc" id="L122">                            chartDataSeriesList.add(i, series1);</span>
+<span class="fc" id="L123">                            break;</span>
+                        }
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) &lt; 0) {</span>
+<span class="fc" id="L126">                            chartDataSeriesList.add(i, series1);</span>
+<span class="fc" id="L127">                            break;</span>
+                        }
+
+                    }
+                }
+
+            }
+<span class="fc" id="L134">        }</span>
+<span class="fc" id="L135">        chart.setAnimated(false);</span>
+<span class="fc" id="L136">    }</span>
+    
+    public static void updateGraph_C(LineChart&lt;Number, Number&gt; chart, Map&lt;String, List&lt;DailyStatistics&gt;&gt; newCountryTrendMap) {
+<span class="fc" id="L139">        chart.setAnimated(true);</span>
+<span class="fc" id="L140">        ObservableList&lt;XYChart.Series&lt;Number, Number&gt;&gt; chartDataSeriesList = chart.getData();</span>
+<span class="fc" id="L141">        Map&lt;String, Boolean&gt; existMap = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        for (String countryName: newCountryTrendMap.keySet()) {</span>
+<span class="fc" id="L143">            existMap.put(countryName, true);</span>
+<span class="fc" id="L144">        }</span>
+<span class="fc" id="L145">        int graphInternalSize = 0;</span>
+<span class="fc" id="L146">        int new_graphInternalSize = chartDataSeriesList.size();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if(new_graphInternalSize &gt; graphInternalSize) {</span>
+<span class="fc" id="L148">        	graphInternalSize = new_graphInternalSize;</span>
+        }
+<span class="fc" id="L150">        List&lt;XYChart.Series&lt;Number, Number&gt;&gt; toRemoveList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (int i = 0; i &lt; graphInternalSize; i++) {</span>
+<span class="fc" id="L152">            XYChart.Series&lt;Number, Number&gt; series = chartDataSeriesList.get(i);</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">            if (existMap.getOrDefault(series.getName(), false)) {</span>
+                // exist, update data
+<span class="fc" id="L155">                series.getData().clear();</span>
+
+<span class="fc bfc" id="L157" title="All 2 branches covered.">                    for (DailyStatistics ds : newCountryTrendMap.get(series.getName())</span>
+                    ) {
+<span class="fc bfc" id="L159" title="All 2 branches covered.">                    	if( ds.getVaccinationRate() &gt; 0) {</span>
+<span class="fc" id="L160">                        series.getData().add(new XYChart.Data(ds.getDate().getTime(), ds.getVaccinationRate()));</span>
+                    	}
+<span class="fc" id="L162">                    }                   	</span>
+<span class="fc" id="L163">                    existMap.put(series.getName(), false); // mark as processed</span>
+
+
+            } else {
+<span class="fc" id="L167">                toRemoveList.add(series);</span>
+
+            }
+        }
+<span class="fc" id="L171">        chartDataSeriesList.removeAll(toRemoveList);</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (String countryName: existMap.keySet()) {</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            if (existMap.get(countryName)) {</span>
+<span class="fc" id="L174">                XYChart.Series&lt;Number, Number&gt; series1 = new XYChart.Series&lt;&gt;();</span>
+<span class="fc" id="L175">                series1.setName(countryName);</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">                for (DailyStatistics dailyStatistics : newCountryTrendMap.get(countryName)) {</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">                	if( dailyStatistics.getVaccinationRate() &gt; 0) {</span>
+<span class="fc" id="L178">                    series1.getData().add(new XYChart.Data&lt;&gt;(dailyStatistics.getDate().getTime(), dailyStatistics.getVaccinationRate()));</span>
+                	}
+<span class="fc" id="L180">                }</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                if (chartDataSeriesList.size() == 0) {</span>
+<span class="fc" id="L182">                    chartDataSeriesList.add(series1);</span>
+                } else {
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">                    for (int i = 0; i &lt;= chartDataSeriesList.size(); i++) {</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">                        if (i == chartDataSeriesList.size()) {</span>
+<span class="fc" id="L186">                            chartDataSeriesList.add(i, series1);</span>
+<span class="fc" id="L187">                            break;</span>
+                        }
+<span class="fc bfc" id="L189" title="All 2 branches covered.">                        if (countryName.compareTo(chartDataSeriesList.get(i).getName()) &lt; 0) {</span>
+<span class="fc" id="L190">                            chartDataSeriesList.add(i, series1);</span>
+<span class="fc" id="L191">                            break;</span>
+                        }
+
+                    }
+                }
+
+            }
+<span class="fc" id="L198">        }</span>
+<span class="fc" id="L199">        chart.setAnimated(false);</span>
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Set some default properties of a line chart
+     * @param chart line chart
+     * @param chartStartDatePicker start date
+     * @param chartEndDatePicker end date
+     */
+    public static void setGraphPropeties(LineChart&lt;Number, Number&gt; chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
+<span class="fc" id="L209">        NumberAxis chartX = (NumberAxis) chart.getXAxis();</span>
+<span class="fc" id="L210">        NumberAxis chartY = (NumberAxis) chart.getYAxis();</span>
+<span class="fc" id="L211">        chartY.setAutoRanging(true);</span>
+<span class="fc" id="L212">        chartX.setTickLabelFormatter(</span>
+<span class="fc" id="L213">                new StringConverter&lt;Number&gt;() {</span>
+                    @Override
+                    public String toString(Number object) {
+<span class="fc" id="L216">                        SimpleDateFormat a = new SimpleDateFormat(&quot;yy/MM/dd&quot;);</span>
+<span class="fc" id="L217">                        return a.format(new Date(object.longValue()));</span>
+                    }
+
+                    @Override
+                    public Number fromString(String string) {
+<span class="nc" id="L222">                        return 0;</span>
+                    }
+                }
+        );
+<span class="fc" id="L226">        chartX.setAutoRanging(false); // manually set X-axis range and tick width</span>
+<span class="fc" id="L227">        SimpleDateFormat a = new SimpleDateFormat(&quot;yyyy/MM/dd&quot;);</span>
+        try {
+<span class="fc" id="L229">        	chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());</span>
+<span class="fc" id="L230">            chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());</span>
+<span class="fc" id="L231">            chartX.setTickUnit(a.parse(&quot;1970/02/01&quot;).getTime());</span>
+<span class="nc" id="L232">        } catch (ParseException e) {</span>
+<span class="nc" id="L233">            e.printStackTrace();</span>
+<span class="fc" id="L234">        }</span>
+<span class="fc" id="L235">        chart.setCreateSymbols(true); // show the symbols</span>
+<span class="fc" id="L236">    }</span>
+
+    public static void setGraphPropeties_C(LineChart&lt;Number, Number&gt; chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
+<span class="fc" id="L239">        NumberAxis chartX = (NumberAxis) chart.getXAxis();</span>
+<span class="fc" id="L240">        NumberAxis chartY = (NumberAxis) chart.getYAxis();</span>
+<span class="fc" id="L241">        chartX.setTickLabelFormatter(</span>
+<span class="fc" id="L242">                new StringConverter&lt;Number&gt;() {</span>
+                    @Override
+                    public String toString(Number object) {
+<span class="fc" id="L245">                        SimpleDateFormat a = new SimpleDateFormat(&quot;yy/MM/dd&quot;);</span>
+<span class="fc" id="L246">                        return a.format(new Date(object.longValue()));</span>
+                    }
+
+                    @Override
+                    public Number fromString(String string) {
+<span class="nc" id="L251">                        return 0;</span>
+                    }
+                }
+        );
+<span class="fc" id="L255">        chartX.setAutoRanging(false); // manually set X-axis range and tick width</span>
+<span class="fc" id="L256">        SimpleDateFormat a = new SimpleDateFormat(&quot;yyyy/MM/dd&quot;);</span>
+        try {
+<span class="fc" id="L258">        	Calendar c1 = Calendar.getInstance();</span>
+<span class="fc" id="L259">            c1.set(2020, 12 - 1, 30);</span>
+<span class="fc" id="L260">            Date date = c1.getTime();</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        	if(date.before(utils.localDateToDate(chartStartDatePicker.getValue()))) {</span>
+<span class="nc" id="L262">        		chartX.setLowerBound(utils.localDateToDate(chartStartDatePicker.getValue()).getTime());</span>
+        	}
+        	else {
+<span class="fc" id="L265">        		chartX.setLowerBound(date.getTime());</span>
+        	}
+<span class="fc" id="L267">            chartX.setUpperBound(utils.localDateToDate(chartEndDatePicker.getValue()).getTime());</span>
+<span class="fc" id="L268">            chartX.setTickUnit(a.parse(&quot;1970/02/01&quot;).getTime());</span>
+<span class="nc" id="L269">        } catch (ParseException e) {</span>
+<span class="nc" id="L270">            e.printStackTrace();</span>
+<span class="fc" id="L271">        }</span>
+<span class="fc" id="L272">        chart.setCreateSymbols(true); // show the symbols</span>
+<span class="fc" id="L273">    }</span>
+
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

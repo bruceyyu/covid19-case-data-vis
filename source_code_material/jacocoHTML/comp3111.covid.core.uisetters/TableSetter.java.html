@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TableSetter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.core.uisetters</a> &gt; <span class="el_source">TableSetter.java</span></div><h1>TableSetter.java</h1><pre class="source lang-java linenums">package comp3111.covid.core.uisetters;
+
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.utils;
+import comp3111.covid.ui.CheckListViewWithList;
+import javafx.collections.FXCollections;
+import org.controlsfx.control.CheckListView;
+
+import javafx.scene.control.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+/**
+ * set the tables for Task A1, B1, C1
+ */
+<span class="nc" id="L18">public class TableSetter {</span>
+    /**
+     * set the TableView with the specified country list on the date of interest
+     * @param fileOperator The instance of CSVFileOperator
+     * @param datePicker The DatePicker instance from the desired tab
+     * @param countryList The CheckListView instance from the desired  tab
+     * @param table The TableView instance from the desired  tab
+     * @return Boolean to indicate whether the table is set successfully
+     */
+
+    static public String update(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
+
+<span class="fc" id="L30">        Date pickedDate = utils.localDateToDate(datePicker.getValue());</span>
+<span class="fc" id="L31">        String legalDateCheckerRes = legalDateChecker(fileOperator, pickedDate);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (legalDateCheckerRes != &quot;success&quot;) {</span>
+<span class="fc" id="L33">            return legalDateCheckerRes;</span>
+        }
+<span class="fc" id="L35">        countryList.saveState();</span>
+
+<span class="fc" id="L37">        List&lt;String&gt; pickedCountryList = countryList.getCheckedItems();</span>
+<span class="fc" id="L38">        String legalCountryListCheckerRes = legalCountryListChecker(pickedCountryList);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (legalCountryListCheckerRes != &quot;success&quot;) {</span>
+<span class="fc" id="L40">            return legalCountryListCheckerRes;</span>
+        }
+
+<span class="fc" id="L43">        ArrayList&lt;DailyStatistics&gt; countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);</span>
+<span class="fc" id="L44">        table.setItems(FXCollections.observableArrayList(countryData));</span>
+
+<span class="fc" id="L46">        return &quot;success&quot;;</span>
+    }
+    /**
+     * set the TableView for Table C specifically with the specified country list on the date of interest
+     * @param fileOperator The instance of CSVFileOperator
+     * @param datePicker The DatePicker instance from the desired tab
+     * @param countryList The CheckListView instance from the desired  tab
+     * @param table The TableView instance from the desired  tab
+     * @return Boolean to indicate whether the table is set successfully
+     */
+    static public String updateTableC(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
+
+<span class="fc" id="L58">        Date pickedDate = utils.localDateToDate(datePicker.getValue());</span>
+<span class="fc" id="L59">        String legalDateCheckerRes = legalDateChecker(fileOperator, pickedDate);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (legalDateCheckerRes != &quot;success&quot;) {</span>
+<span class="nc" id="L61">            return legalDateCheckerRes;</span>
+        }
+<span class="fc" id="L63">        countryList.saveState();</span>
+
+<span class="fc" id="L65">        List&lt;String&gt; pickedCountryList = countryList.getCheckedItems();</span>
+<span class="fc" id="L66">        String legalCountryListCheckerRes = legalCountryListChecker(pickedCountryList);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (legalCountryListCheckerRes != &quot;success&quot;) {</span>
+<span class="nc" id="L68">            return legalCountryListCheckerRes;</span>
+        }
+
+<span class="fc" id="L71">        ArrayList&lt;DailyStatistics&gt; countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);</span>
+<span class="fc" id="L72">        Map&lt;String, List&lt;DailyStatistics&gt;&gt; countryDataTrend = fileOperator.getCountryTrendMap(pickedCountryList, fileOperator.getMinimumDate(), pickedDate);</span>
+//        if the data on that day is empty, need to backtrace the day with valid data
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (int i = 0; i &lt; countryData.size(); i ++) {</span>
+<span class="fc" id="L75">            System.out.println(countryData.get(i).getCumulativeVaccinated());</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if (countryData.get(i).getCumulativeVaccinated() == null) {</span>
+<span class="fc" id="L77">                List&lt;DailyStatistics&gt; historyTrend = countryDataTrend.get(countryData.get(i).getCountry());</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                for (int j = historyTrend.size() - 1; j &gt;= 0; j--) {</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                    if (historyTrend.get(j).getCumulativeVaccinated() != null) {</span>
+<span class="fc" id="L80">                        countryData.set(i, historyTrend.get(j));</span>
+<span class="fc" id="L81">                        break;</span>
+                    }
+                }
+            }
+        }
+<span class="fc" id="L86">        table.setItems(FXCollections.observableArrayList(countryData));</span>
+
+<span class="fc" id="L88">        return &quot;success&quot;;</span>
+    }
+    /**
+     * check whether the input date is legal
+     * @param fileOperator The instance of CSVFileOperator
+     * @param date The picked date
+     * @return String to indicate whether it's legal, or its error message
+     */
+    public static String legalDateChecker(CSVFileOperator fileOperator, Date date) {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (date == null) {</span>
+<span class="fc" id="L98">            return &quot;Please select a date of interest&quot;;</span>
+        }
+<span class="fc" id="L100">        Date maxDate = fileOperator.getMaximumDate();</span>
+<span class="fc" id="L101">        Date minDate = fileOperator.getMinimumDate();</span>
+<span class="fc bfc" id="L102" title="All 4 branches covered.">        if (date.before(minDate) || date.after(maxDate)) {</span>
+<span class="fc" id="L103">            return &quot;The date is beyond the legal range&quot;;</span>
+        }
+<span class="fc" id="L105">        return &quot;success&quot;;</span>
+    }
+    /**
+     * check whether the input countryList is legal
+     * @param countryList The picked country List
+     * @return String to indicate whether it's legal, or its error message
+     */
+    public static String legalCountryListChecker(List&lt;String&gt; countryList) {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (countryList.size() &lt;= 0) {</span>
+<span class="fc" id="L114">            return &quot;Please select at least one country&quot;;</span>
+        }
+<span class="fc" id="L116">        return &quot;success&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

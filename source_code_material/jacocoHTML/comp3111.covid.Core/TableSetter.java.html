@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TableSetter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.Core</a> &gt; <span class="el_source">TableSetter.java</span></div><h1>TableSetter.java</h1><pre class="source lang-java linenums">package comp3111.covid.Core;
+
+import javafx.collections.FXCollections;
+import org.controlsfx.control.CheckListView;
+
+import javafx.scene.control.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+<span class="nc" id="L11">public class TableSetter {</span>
+    /**
+     * set the TableView with the specified country list on the date of interest
+     * @param fileOperator The instance of CSVFileOperator
+     * @param datePicker The DatePicker instance from the desired tab
+     * @param countryList The CheckListView instance from the desired  tab
+     * @param table The TableView instance from the desired  tab
+     * @return Boolean to indicate whether the table is set successfully
+     */
+    static public ArrayList&lt;DailyStatistics&gt; setter(CSVFileOperator fileOperator, DatePicker datePicker, CheckListView countryList, TableView table) {
+
+<span class="nc" id="L22">        Date pickedDate = utils.localDateToDate(datePicker.getValue());</span>
+<span class="nc" id="L23">        String dateCheckRes = legalDateChecker(fileOperator, pickedDate);</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        if (dateCheckRes != &quot;success&quot;) {</span>
+<span class="nc" id="L25">            Alert alert = new Alert(Alert.AlertType.ERROR, dateCheckRes , ButtonType.YES);</span>
+<span class="nc" id="L26">            alert.show();</span>
+<span class="nc" id="L27">            return null;</span>
+        }
+
+<span class="nc" id="L30">        List&lt;String&gt; countryNames = countryList.getItems();</span>
+<span class="nc" id="L31">        ArrayList&lt;String&gt; pickedCountryList = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        for (int i = 0; i &lt; countryNames.size(); i ++) {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (countryList.getItemBooleanProperty(i).get()) {</span>
+<span class="nc" id="L34">                pickedCountryList.add(countryNames.get(i));</span>
+            }
+        }
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (pickedCountryList.size() == 0) {</span>
+<span class="nc" id="L38">            Alert alert = new Alert(Alert.AlertType.ERROR, &quot;Please select at least one country&quot; , ButtonType.YES);</span>
+<span class="nc" id="L39">            alert.show();</span>
+<span class="nc" id="L40">            return null;</span>
+        }
+
+<span class="nc" id="L43">        ArrayList&lt;DailyStatistics&gt; countryData = fileOperator.getCountryDataSetOn(pickedDate, countryList.getCheckModel().getCheckedItems());</span>
+<span class="nc" id="L44">        table.setItems(FXCollections.observableArrayList(countryData));</span>
+
+<span class="nc" id="L46">        return countryData;</span>
+    }
+
+    public static String legalDateChecker(CSVFileOperator fileOperator, Date date) {
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (date == null) {</span>
+<span class="nc" id="L51">            return &quot;Please select a date of interest&quot;;</span>
+        }
+<span class="nc" id="L53">        Date maxDate = fileOperator.getMaximumDate();</span>
+<span class="nc" id="L54">        Date minDate = fileOperator.getMinimumDate();</span>
+<span class="nc bnc" id="L55" title="All 4 branches missed.">        if (date.before(minDate) || date.after(maxDate)) {</span>
+<span class="nc" id="L56">            return &quot;The date is beyond the legal range&quot;;</span>
+        }
+<span class="nc" id="L58">        return &quot;success&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

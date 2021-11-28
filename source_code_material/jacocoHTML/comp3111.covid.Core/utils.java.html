@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>utils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.core</a> &gt; <span class="el_source">utils.java</span></div><h1>utils.java</h1><pre class="source lang-java linenums">package comp3111.covid.core;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+
+<span class="nc" id="L10">public class utils {</span>
+    /**
+     * convert LocalDate type (used by JavaFx's datepicker) to Date type
+     * @param raw The date in LocalDate type
+     * @return the date in Date type
+     */
+    public static Date localDateToDate(LocalDate raw) {
+<span class="fc bfc" id="L17" title="All 2 branches covered.">        if (raw == null) return null;</span>
+<span class="fc" id="L18">        Instant instant = Instant.from(raw.atStartOfDay(ZoneId.systemDefault()));</span>
+<span class="fc" id="L19">        Date date = Date.from(instant);</span>
+<span class="fc" id="L20">        return date;</span>
+    }
+
+    public static LocalDate dateToLocalDate(Date raw) {
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (raw == null) return null;</span>
+<span class="fc" id="L25">        return raw.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();</span>
+    }
+    /**
+     * convert LocalDate type (used by JavaFx's datepicker) to a date string
+     * @param raw The date in LocalDate type
+     * @param format The desired format of the date string
+     * @return the formatted date string
+     */
+    public static String localDateToString(LocalDate raw, String format) {
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (raw == null) return null;</span>
+<span class="fc" id="L35">        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format, Locale.ENGLISH);</span>
+<span class="fc" id="L36">        String output = dtf.format(raw);</span>
+<span class="fc" id="L37">        return output;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

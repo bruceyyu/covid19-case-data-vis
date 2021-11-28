@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CSVFileOperator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.core.data</a> &gt; <span class="el_source">CSVFileOperator.java</span></div><h1>CSVFileOperator.java</h1><pre class="source lang-java linenums">package comp3111.covid.core.data;
+
+import com.opencsv.bean.CsvToBeanBuilder;
+import comp3111.covid.core.data.SortPolicyE;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * CSV File Operator class. An instance parses the CSV and contains
+ * many useful operations related to the CSV.
+ */
+public class CSVFileOperator {
+    /**
+     * A list of all of DailyStatistics parsed form the CSV file.
+     */
+    List&lt;DailyStatistics&gt; dailyStatisticsList;
+    List&lt;String&gt; allCountryList;
+    List&lt;DailyStatistics&gt; lastDayDataSet;
+    private Map&lt;Date, Map&lt;String, DailyStatistics&gt;&gt; dateNameMapMap;
+    private Date maximumDate;
+    private Date minimumDate;
+
+    /**
+     * Constructor, specify file name
+     *
+     * @param fileName fileName
+     * @throws FileNotFoundException if the file cannot be found
+     */
+<span class="fc" id="L32">    public CSVFileOperator(String fileName) throws FileNotFoundException {</span>
+<span class="fc" id="L33">        dailyStatisticsList = new CsvToBeanBuilder(new FileReader(fileName))</span>
+<span class="fc" id="L34">                .withType(DailyStatistics.class).build().parse();</span>
+<span class="fc" id="L35">        dateNameMapMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L36">        maximumDate = new Date(0);</span>
+<span class="fc" id="L37">        minimumDate = new Date();</span>
+<span class="fc" id="L38">        dailyStatisticsList.forEach(dailyStatistics -&gt; {</span>
+<span class="fc" id="L39">            dateNameMapMap.putIfAbsent(dailyStatistics.getDate(), new HashMap&lt;&gt;());</span>
+<span class="fc" id="L40">            dateNameMapMap.get(dailyStatistics.getDate()).putIfAbsent(dailyStatistics.getCountry(), dailyStatistics);</span>
+<span class="fc" id="L41">            Date current = dailyStatistics.getDate();</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (current.before(minimumDate))</span>
+<span class="fc" id="L43">                minimumDate = current;</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (current.after(maximumDate))</span>
+<span class="fc" id="L45">                maximumDate = current;</span>
+<span class="fc" id="L46">        });</span>
+<span class="fc" id="L47">        getAllCountries();</span>
+<span class="fc" id="L48">        lastDayDataSet = new ArrayList&lt;&gt;(this.dateNameMapMap.get(getMaximumDate()).values());</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Get country trend of a country within a specific period
+     *
+     * @param countryName string country name
+     * @param start       start date, inclusive
+     * @param end         end date, not inclusive
+     * @return list of DailyStatistics within a specific period
+     */
+    public List&lt;DailyStatistics&gt; getCountryTrend(String countryName, Date start, Date end) {
+<span class="fc" id="L60">        return dateNameMapMap.keySet().stream()</span>
+<span class="fc bfc" id="L61" title="All 4 branches covered.">                .filter(date -&gt; (date.compareTo(start) &gt;= 0) &amp;&amp; date.before(end))</span>
+<span class="fc" id="L62">                .sorted()</span>
+<span class="fc" id="L63">                .map(date -&gt; dateNameMapMap.get(date).get(countryName))</span>
+<span class="fc" id="L64">                .filter(Objects::nonNull)</span>
+<span class="fc" id="L65">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Get country data on a specific day
+     *
+     * @param date        Date
+     * @param countryName countryName
+     * @return DailyStatistics of a country on that day
+     */
+    public DailyStatistics getCountryDataOn(Date date, String countryName) {
+<span class="fc" id="L76">        return dateNameMapMap.get(date).getOrDefault(countryName, null);</span>
+    }
+
+    /**
+     * get set of country data on a specific day
+     *
+     * @param date         date
+     * @param countryNames list of name of countries
+     * @return set of dailyStatistics
+     */
+    public ArrayList&lt;DailyStatistics&gt; getCountryDataSetOn(Date date, List&lt;String&gt; countryNames) {
+<span class="fc" id="L87">        ArrayList&lt;DailyStatistics&gt; resultSet = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for (String name : countryNames) {</span>
+<span class="fc" id="L89">            DailyStatistics ds = getCountryDataOn(date, name);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (ds != null) {</span>
+<span class="fc" id="L91">                resultSet.add(ds);</span>
+            }
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">        return resultSet;</span>
+    }
+
+    /**
+     * Get the minimum date within the file
+     *
+     * @return the minimum date
+     */
+    public Date getMinimumDate() {
+<span class="fc" id="L103">        return minimumDate;</span>
+    }
+
+    /**
+     * Get the latest date within the file
+     *
+     * @return the maximum date
+     */
+    public Date getMaximumDate() {
+<span class="fc" id="L112">        return maximumDate;</span>
+    }
+
+    /**
+     * Get a map of country list
+     *
+     * @param countryList String list of countries
+     * @param start       start date
+     * @param end         end date
+     * @return map of country trend list
+     */
+    public Map&lt;String, List&lt;DailyStatistics&gt;&gt; getCountryTrendMap(List&lt;String&gt; countryList, Date start, Date end) {
+<span class="fc" id="L124">        HashMap&lt;String, List&lt;DailyStatistics&gt;&gt; result = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for (String countryName : countryList) {</span>
+<span class="fc" id="L126">            result.put(countryName, getCountryTrend(countryName, start, end));</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">        return result;</span>
+    }
+
+    public Map&lt;String, List&lt;DailyStatistics&gt;&gt; getCountryTrendMap_chartC(List&lt;String&gt; countryList, Date start, Date end) {
+<span class="fc" id="L132">        HashMap&lt;String, List&lt;DailyStatistics&gt;&gt; result = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L133">        Calendar c1 = Calendar.getInstance();</span>
+<span class="fc" id="L134">        c1.set(2020, 12 - 1, 30);</span>
+<span class="fc" id="L135">        Date date = c1.getTime();</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (start.before(date)) {</span>
+<span class="fc" id="L137">            start = date;</span>
+        }
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (String countryName : countryList) {</span>
+<span class="fc" id="L140">            result.put(countryName, getCountryTrend(countryName, start, end));</span>
+<span class="fc" id="L141">        }</span>
+<span class="fc" id="L142">        return result;</span>
+    }
+
+
+    /**
+     * Get all the countries available in the current file
+     * @return List of all countries
+     */
+    public List&lt;String&gt; getAllCountries() {
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (allCountryList == null) {</span>
+<span class="fc" id="L152">            HashSet&lt;String&gt; result = new HashSet&lt;&gt;();</span>
+            for (DailyStatistics ds :
+<span class="fc bfc" id="L154" title="All 2 branches covered.">                    dailyStatisticsList) {</span>
+<span class="fc" id="L155">                result.add(ds.getCountry());</span>
+<span class="fc" id="L156">            }</span>
+<span class="fc" id="L157">            allCountryList = result.stream().sorted().collect(Collectors.toList());</span>
+        }
+<span class="fc" id="L159">        return allCountryList;</span>
+    }
+
+    /**
+     * Search for a specific country via name
+     * @param countryName name of the country
+     * @return list of country with the name
+     */
+    public List&lt;String&gt; searchCountry(String countryName) {
+<span class="fc" id="L168">        List&lt;String&gt; allCountries = getAllCountries();</span>
+<span class="fc" id="L169">        return allCountries.stream().filter(name -&gt; name.toLowerCase().startsWith(countryName.toLowerCase().trim())).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Search for a country name with a specific sorting policy. For all policies other than
+     * &quot;Alphabetical,&quot; we sort the available countries on the LAST day of the data file, and
+     * return the result. Countries that do not have the policy data available will be thrown
+     * to the end of the list in alphabetical order.
+     * @param countryName name of country
+     * @param policyE policy
+     * @return list of country names
+     */
+    public List&lt;String&gt; searchCountry(String countryName, SortPolicyE policyE) {
+<span class="pc bpc" id="L182" title="1 of 6 branches missed.">        switch (policyE) {</span>
+            case NAME:
+<span class="fc" id="L184">                return searchCountry(countryName);</span>
+            case POP:
+<span class="fc" id="L186">                return lastDayDataSet.stream()</span>
+<span class="fc" id="L187">                        .filter(ds -&gt; ds.getCountry().toLowerCase().startsWith(countryName.toLowerCase().trim()))</span>
+<span class="fc" id="L188">                        .sorted(Comparator.comparing(DailyStatistics::getCountry))</span>
+<span class="fc" id="L189">                        .sorted((o1, o2) -&gt; {</span>
+<span class="fc bfc" id="L190" title="All 4 branches covered.">                            if (o1.getPopulation() != null &amp;&amp; o2.getPopulation() != null)</span>
+<span class="fc" id="L191">                                return o1.getPopulation().compareTo(o2.getPopulation());</span>
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">                            else if (o1.getPopulation() == null &amp;&amp; o2.getPopulation() == null)</span>
+<span class="nc" id="L193">                                return 0;</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">                            else if (o1.getPopulation() == null)</span>
+<span class="fc" id="L195">                                return 1;</span>
+                            else
+<span class="fc" id="L197">                                return -1;</span>
+<span class="fc" id="L198">                        }).map(DailyStatistics::getCountry)</span>
+<span class="fc" id="L199">                        .collect(Collectors.toList());</span>
+            case POP_D:
+<span class="fc" id="L201">                return lastDayDataSet.stream()</span>
+<span class="fc" id="L202">                        .filter(ds -&gt; ds.getCountry().toLowerCase().startsWith(countryName.toLowerCase().trim()))</span>
+<span class="fc" id="L203">                        .sorted(Comparator.comparing(DailyStatistics::getCountry))</span>
+<span class="fc" id="L204">                        .sorted((o1, o2) -&gt; {</span>
+<span class="fc bfc" id="L205" title="All 4 branches covered.">                            if (o1.getPopulationDensity() != null &amp;&amp; o2.getPopulationDensity() != null)</span>
+<span class="fc" id="L206">                                return o1.getPopulationDensity().compareTo(o2.getPopulationDensity());</span>
+<span class="fc bfc" id="L207" title="All 4 branches covered.">                            else if (o1.getPopulationDensity() == null &amp;&amp; o2.getPopulationDensity() == null)</span>
+<span class="fc" id="L208">                                return 0;</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                            else if (o1.getPopulationDensity() == null)</span>
+<span class="fc" id="L210">                                return 1;</span>
+                            else
+<span class="fc" id="L212">                                return -1;</span>
+<span class="fc" id="L213">                        }).map(DailyStatistics::getCountry)</span>
+<span class="fc" id="L214">                        .collect(Collectors.toList());</span>
+            case MED:
+<span class="fc" id="L216">                return lastDayDataSet.stream()</span>
+<span class="fc" id="L217">                        .filter(ds -&gt; ds.getCountry().toLowerCase().startsWith(countryName.toLowerCase().trim()))</span>
+<span class="fc" id="L218">                        .sorted(Comparator.comparing(DailyStatistics::getCountry))</span>
+<span class="fc" id="L219">                        .sorted((o1, o2) -&gt; {</span>
+<span class="fc bfc" id="L220" title="All 4 branches covered.">                            if (o1.getMedianAge() != null &amp;&amp; o2.getMedianAge() != null)</span>
+<span class="fc" id="L221">                                return o1.getMedianAge().compareTo(o2.getMedianAge());</span>
+<span class="fc bfc" id="L222" title="All 4 branches covered.">                            else if (o1.getMedianAge() == null &amp;&amp; o2.getMedianAge() == null)</span>
+<span class="fc" id="L223">                                return 0;</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                            else if (o1.getMedianAge() == null)</span>
+<span class="fc" id="L225">                                return 1;</span>
+                            else
+<span class="fc" id="L227">                                return -1;</span>
+<span class="fc" id="L228">                        }).map(DailyStatistics::getCountry)</span>
+<span class="fc" id="L229">                        .collect(Collectors.toList());</span>
+            case GDP:
+<span class="fc" id="L231">                return lastDayDataSet.stream()</span>
+<span class="fc" id="L232">                        .filter(ds -&gt; ds.getCountry().toLowerCase().startsWith(countryName.toLowerCase().trim()))</span>
+<span class="fc" id="L233">                        .sorted(Comparator.comparing(DailyStatistics::getCountry))</span>
+<span class="fc" id="L234">                        .sorted((o1, o2) -&gt; {</span>
+<span class="fc bfc" id="L235" title="All 4 branches covered.">                            if (o1.getGdp() != null &amp;&amp; o2.getGdp() != null)</span>
+<span class="fc" id="L236">                                return o1.getGdp().compareTo(o2.getGdp());</span>
+<span class="fc bfc" id="L237" title="All 4 branches covered.">                            else if (o1.getGdp() == null &amp;&amp; o2.getGdp() == null)</span>
+<span class="fc" id="L238">                                return 0;</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">                            else if (o1.getGdp() == null)</span>
+<span class="fc" id="L240">                                return 1;</span>
+                            else
+<span class="fc" id="L242">                                return -1;</span>
+<span class="fc" id="L243">                        }).map(DailyStatistics::getCountry)</span>
+<span class="fc" id="L244">                        .collect(Collectors.toList());</span>
+        }
+<span class="nc" id="L246">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

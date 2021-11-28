@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CheckListViewWithList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.ui</a> &gt; <span class="el_source">CheckListViewWithList.java</span></div><h1>CheckListViewWithList.java</h1><pre class="source lang-java linenums">package comp3111.covid.ui;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.controlsfx.control.CheckListView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * Custom CheckListViewClass, it maintains a map for checking if the items have been checked
+ * @param &lt;String&gt;
+ */
+public class CheckListViewWithList&lt;String&gt; extends CheckListView&lt;String&gt; {
+    private Map&lt;String, Boolean&gt; countryNamesMap;
+
+    /**
+     * constructor
+     */
+    public CheckListViewWithList() {
+<span class="fc" id="L24">        super();</span>
+<span class="fc" id="L25">        countryNamesMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L26">    }</span>
+
+    public void init(List&lt;String&gt; countryNames) {
+<span class="fc" id="L29">        this.countryNamesMap.clear();</span>
+<span class="fc" id="L30">        this.update(countryNames);</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Update the CheckListView, remembering the old state as well as displaying a new list
+     * @param newCountryNames a list of new country names
+     */
+    public void update(List&lt;String&gt; newCountryNames) {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (countryNamesMap.size() == 0) { // initialization case</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            for (String name: newCountryNames</span>
+                 ) {
+<span class="fc" id="L41">                countryNamesMap.put(name, false);</span>
+<span class="fc" id="L42">            }</span>
+<span class="fc" id="L43">            this.setItems(FXCollections.observableArrayList(newCountryNames));</span>
+<span class="fc" id="L44">            return;</span>
+        }
+
+<span class="fc" id="L47">        saveState();</span>
+        // set new items
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (newCountryNames.size() == 0) {</span>
+<span class="nc" id="L50">            List&lt;String&gt; a = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L51">            a.add((String) &quot;No Results&quot;);</span>
+<span class="nc" id="L52">            setItems(FXCollections.observableArrayList(a));</span>
+<span class="nc" id="L53">            setDisabled(true);</span>
+<span class="nc" id="L54">        } else {</span>
+<span class="fc" id="L55">            setDisabled(false);</span>
+<span class="fc" id="L56">            setItems(FXCollections.observableArrayList(newCountryNames));</span>
+        }
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (String countryName: getItems()</span>
+        ) { // set property of new items
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if (!countryName.equals(&quot;No Results&quot;))</span>
+<span class="fc" id="L62">                getItemBooleanProperty(countryName).set(countryNamesMap.get(countryName));</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * save the current state of the list
+     */
+    public void saveState() {
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (getItems() == null) {</span>
+<span class="nc" id="L71">            return;</span>
+        }
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (String countryName: getItems()</span>
+        ) { // save checked state of old items
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (getItemBooleanProperty(countryName).get()) {</span>
+<span class="fc" id="L76">                countryNamesMap.put(countryName, true);</span>
+            } else {
+<span class="fc" id="L78">                countryNamesMap.put(countryName, false);</span>
+            }
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Clear the map.
+     */
+    public void clear() {
+<span class="fc" id="L87">        countryNamesMap.clear();</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * return all checked items
+     * @return list of checked items
+     */
+    public List&lt;String&gt; getCheckedItems() {
+<span class="fc" id="L95">        ArrayList&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (String key: countryNamesMap.keySet()</span>
+             ) {
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (countryNamesMap.get(key))</span>
+<span class="fc" id="L99">                result.add(key);</span>
+<span class="fc" id="L100">        }</span>
+<span class="fc" id="L101">        return result.stream().sorted().collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

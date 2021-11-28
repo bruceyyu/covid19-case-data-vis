@@ -59,4 +59,8 @@ In chart generating tasks, users can save the generated chart as an image file t
 ![jacoco](source_code_material/junit.png)
 
 ## Java Doc
+<<<<<<< HEAD
 #### [Java Doc](source_code_material/javadoc/index.html)
+=======
+#### [Java Doc](source_code_material/javadoc/index.html)
+>>>>>>> refs/remotes/origin/main

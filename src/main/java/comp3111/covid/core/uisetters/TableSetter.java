@@ -11,7 +11,10 @@ import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Map;
+/**
+ * Setter classes the tables for Task A1, B1, C1
+ */
 public class TableSetter {
     /**
      * set the TableView with the specified country list on the date of interest
@@ -21,64 +24,96 @@ public class TableSetter {
      * @param table The TableView instance from the desired  tab
      * @return Boolean to indicate whether the table is set successfully
      */
-    static public Boolean setter(CSVFileOperator fileOperator, DatePicker datePicker, CheckListView countryList, TableView table) {
+    static public String update(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
 
         Date pickedDate = utils.localDateToDate(datePicker.getValue());
-        if (!legalDateChecker(fileOperator, pickedDate)) return false;
-
-        List<String> countryNames = countryList.getItems();
-        ArrayList<String> pickedCountryList = new ArrayList<String>();
-        for (int i = 0; i < countryNames.size(); i ++) {
-            if (countryList.getItemBooleanProperty(i).get()) {
-                pickedCountryList.add(countryNames.get(i));
-            }
+        String legalDateCheckerRes = legalDateChecker(fileOperator, pickedDate);
+        if (legalDateCheckerRes != "success") {
+            return legalDateCheckerRes;
         }
-        if (!legalCountryListChecker(pickedCountryList)) return false;
-
-        ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
-        table.setItems(FXCollections.observableArrayList(countryData));
-
-        return true;
-    }
-
-    static public Boolean update(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
-
-        Date pickedDate = utils.localDateToDate(datePicker.getValue());
-        if (!legalDateChecker(fileOperator, pickedDate)) return false;
         countryList.saveState();
 
         List<String> pickedCountryList = countryList.getCheckedItems();
-        if (!legalCountryListChecker(pickedCountryList)) return false;
+        String legalCountryListCheckerRes = legalCountryListChecker(pickedCountryList);
+        if (legalCountryListCheckerRes != "success") {
+            return legalCountryListCheckerRes;
+        }
 
         ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
         table.setItems(FXCollections.observableArrayList(countryData));
 
-        return true;
+        return "success";
     }
 
-    private static Boolean legalDateChecker(CSVFileOperator fileOperator, Date date) {
+    /**
+     * set the TableView for Table C specifically with the specified country list on the date of interest
+     * @param fileOperator The instance of CSVFileOperator
+     * @param datePicker The DatePicker instance from the desired tab
+     * @param countryList The CheckListView instance from the desired  tab
+     * @param table The TableView instance from the desired  tab
+     * @return Boolean to indicate whether the table is set successfully
+     */
+    static public String updateTableC(CSVFileOperator fileOperator, DatePicker datePicker, CheckListViewWithList countryList, TableView table) {
+
+        Date pickedDate = utils.localDateToDate(datePicker.getValue());
+        String legalDateCheckerRes = legalDateChecker(fileOperator, pickedDate);
+        if (legalDateCheckerRes != "success") {
+            return legalDateCheckerRes;
+        }
+        countryList.saveState();
+
+        List<String> pickedCountryList = countryList.getCheckedItems();
+        String legalCountryListCheckerRes = legalCountryListChecker(pickedCountryList);
+        if (legalCountryListCheckerRes != "success") {
+            return legalCountryListCheckerRes;
+        }
+
+        ArrayList<DailyStatistics> countryData = fileOperator.getCountryDataSetOn(pickedDate, pickedCountryList);
+        Map<String, List<DailyStatistics>> countryDataTrend = fileOperator.getCountryTrendMap(pickedCountryList, fileOperator.getMinimumDate(), pickedDate);
+//        if the data on that day is empty, need to backtrace the day with valid data
+        for (int i = 0; i < countryData.size(); i ++) {
+            System.out.println(countryData.get(i).getCumulativeVaccinated());
+            if (countryData.get(i).getCumulativeVaccinated() == null) {
+                List<DailyStatistics> historyTrend = countryDataTrend.get(countryData.get(i).getCountry());
+                for (int j = historyTrend.size() - 1; j >= 0; j--) {
+                    if (historyTrend.get(j).getCumulativeVaccinated() != null) {
+                        countryData.set(i, historyTrend.get(j));
+                        break;
+                    }
+                }
+            }
+        }
+        table.setItems(FXCollections.observableArrayList(countryData));
+
+        return "success";
+    }
+
+    /**
+     * check whether the input date is legal
+     * @param fileOperator The instance of CSVFileOperator
+     * @param date The picked date
+     * @return String to indicate whether it's legal, or its error message
+     */
+    public static String legalDateChecker(CSVFileOperator fileOperator, Date date) {
         if (date == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Please select a date of interest", ButtonType.YES);
-            alert.show();
-            return false;
+            return "Please select a date of interest";
         }
         Date maxDate = fileOperator.getMaximumDate();
         Date minDate = fileOperator.getMinimumDate();
         if (date.before(minDate) || date.after(maxDate)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"The date is beyond the legal range", ButtonType.YES);
-            alert.show();
-            return false;
+            return "The date is beyond the legal range";
         }
-        return true;
+        return "success";
     }
-
-    private static Boolean legalCountryListChecker(List<String> countryList) {
-        System.out.println(countryList);
+    /**
+     * check whether the input countryList is legal
+     * @param countryList The picked country List
+     * @return String to indicate whether it's legal, or its error message
+     */
+    public static String legalCountryListChecker(List<String> countryList) {
         if (countryList.size() <= 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Please select at least one country", ButtonType.YES);
-            alert.show();
-            return false;
+            return "Please select at least one country";
         }
-        return true;
+        return "success";
     }
 }

@@ -3,6 +3,8 @@ package comp3111.covid.controller;
 import comp3111.covid.core.*;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.data.SortPolicy;
+import comp3111.covid.core.data.SortPolicyE;
 import comp3111.covid.core.tabtype.ChartType;
 import comp3111.covid.core.uisetters.ChartSetter;
 import comp3111.covid.ui.CheckListViewWithList;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Chart Controller Class for a Chart tab
+ * Chart Controller Class for chart tabs
  */
 public class ChartController {
 
@@ -26,6 +28,9 @@ public class ChartController {
 
     private CSVFileOperator fileOperator;
 
+    /**
+     * The line chart. Made public for testing purposes.
+     */
     @FXML
     public LineChart<Number, Number> chart;
 
@@ -47,8 +52,11 @@ public class ChartController {
     @FXML
     private DatePicker endDatePicker;
 
+    /**
+     * The current tab. Made public for testing purposes.
+     */
     @FXML
-    private Tab pane;
+    public Tab pane;
 
     @FXML
     private ChoiceBox<SortPolicy> choiceBox;
@@ -210,8 +218,4 @@ public class ChartController {
 
     }
 
-
-    public void setFileOperator(CSVFileOperator fileOperator) {
-        this.fileOperator = fileOperator;
-    }
 }

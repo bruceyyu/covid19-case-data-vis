@@ -3,6 +3,8 @@ package comp3111.covid.controller;
 import comp3111.covid.core.*;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.data.SortPolicy;
+import comp3111.covid.core.data.SortPolicyE;
 import comp3111.covid.core.tabtype.TableType;
 import comp3111.covid.core.uisetters.TableSetter;
 import comp3111.covid.ui.CheckListViewWithList;
@@ -17,11 +19,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Table Controller class for Table Tabs
+ * Table Controller class for table tabs
  */
 public class TableController {
-
-    private TableType tableType;
 
     private CSVFileOperator fileOperator;
 
@@ -61,7 +61,8 @@ public class TableController {
     private ChoiceBox<SortPolicy> choiceBox;
 
     /**
-     * Initialize the table
+     * Initialize the table, set the table type as well as the fileOperator used for
+     * data lookup. This will also set some properties of the UI.
      * @param type Table Type
      * @param fileOperator fileOperator
      */
@@ -150,26 +151,48 @@ public class TableController {
 
     @FXML
     void doConfirmTable(ActionEvent event) {
+        String setterRes = "";
         switch (type) {
             case A:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
                 tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeInfected"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("infectedPerMillion"));
+                setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
                 break;
             case B:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
                 tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeDeath"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("deathPerMillion"));
+                setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
                 break;
             case C:
                 tableCountry.setCellValueFactory(new PropertyValueFactory<DailyStatistics, String>("country"));
                 tableStat1.setCellValueFactory(new PropertyValueFactory<DailyStatistics, BigInteger>("cumulativeVaccinated"));
                 tableStat2.setCellValueFactory(new PropertyValueFactory<DailyStatistics, Double>("vaccinationRate"));
+                setterRes = TableSetter.updateTableC(fileOperator, datePicker, tableCountryList, table);
+//                override: double to percentage
+                tableStat2.setCellFactory((tableColumn) -> {
+                    TableCell<DailyStatistics, Double> tableCell = new TableCell<>() {
+                        @Override
+                        protected void updateItem(Double item, boolean empty) {
+                            System.out.println(item);
+                            super.updateItem(item, empty);
+                            if(!empty){
+                                this.setText(item.toString() + "%");
+                            }
+                        }
+                    };
+
+                    return tableCell;
+                });
                 break;
         }
 
-        Boolean setterRes = TableSetter.update(fileOperator, datePicker, tableCountryList, table);
-        if (!setterRes) return;
+        if (setterRes != "success") {
+            Alert alert = new Alert(Alert.AlertType.ERROR, setterRes, ButtonType.YES);
+            alert.show();
+            return;
+        }
         String dateString = utils.localDateToString(datePicker.getValue(), "MMMM dd, uuuu");
         switch (type) {
             case A:
@@ -186,7 +209,4 @@ public class TableController {
 
     }
 
-    public void setFileOperator(CSVFileOperator fileOperator) {
-        this.fileOperator = fileOperator;
-    }
 }

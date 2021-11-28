@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This is a custom date converter class for parsing dates with mixed format in the CSV.
+ */
 public class CustomDateConverter extends AbstractBeanField {
     @Override
     protected Object convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {

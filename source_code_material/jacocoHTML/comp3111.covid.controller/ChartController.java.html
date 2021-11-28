@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChartController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.controller</a> &gt; <span class="el_source">ChartController.java</span></div><h1>ChartController.java</h1><pre class="source lang-java linenums">package comp3111.covid.controller;
+
+import comp3111.covid.core.*;
+import comp3111.covid.core.data.CSVFileOperator;
+import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.tabtype.ChartType;
+import comp3111.covid.core.uisetters.ChartSetter;
+import comp3111.covid.ui.CheckListViewWithList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.*;
+import javafx.util.Callback;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Chart Controller Class for a Chart tab
+ */
+public class ChartController {
+
+    private ChartType type;
+
+    private CSVFileOperator fileOperator;
+
+    @FXML
+    public LineChart&lt;Number, Number&gt; chart;
+
+    @FXML
+    private NumberAxis chartX;
+
+    @FXML
+    private NumberAxis chartY;
+
+    @FXML
+    private TextField chartText;
+
+    @FXML
+    private CheckListViewWithList&lt;String&gt; chartCountryList;
+
+    @FXML
+    private DatePicker startDatePicker;
+
+    @FXML
+    private DatePicker endDatePicker;
+
+    @FXML
+    public Tab pane;
+
+    @FXML
+    private ChoiceBox&lt;SortPolicy&gt; choiceBox;
+
+<span class="fc" id="L56">    public ChartController() {</span>
+
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Initialize some properties of a chart tab
+     * @param type Chart Type
+     * @param fileOperator csv file operator
+     */
+    public void initData(ChartType type, CSVFileOperator fileOperator) {
+<span class="fc" id="L66">        this.type = type;</span>
+<span class="fc" id="L67">        this.fileOperator = fileOperator;</span>
+
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">        switch (type) {</span>
+            case A:
+<span class="fc" id="L71">                chart.setTitle(&quot;Cumulative Confirmed COVID-19 Cases (per 1M)&quot;);</span>
+<span class="fc" id="L72">                chartY.setLabel(&quot;Confirmed Cases Per Million&quot;);</span>
+<span class="fc" id="L73">                pane.setText(&quot;Cases Chart&quot;);</span>
+<span class="fc" id="L74">                break;</span>
+            case B:
+<span class="fc" id="L76">                chart.setTitle(&quot;Cumulative Confirmed COVID-19 Deaths (per 1M)&quot;);</span>
+<span class="fc" id="L77">                chartY.setLabel(&quot;Confirmed Deaths Per Million&quot;);</span>
+<span class="fc" id="L78">                pane.setText(&quot;Death Chart&quot;);</span>
+<span class="fc" id="L79">                break;</span>
+            case C:
+<span class="fc" id="L81">                chart.setTitle(&quot;Vaccination Rate on Certain Day&quot;);</span>
+<span class="fc" id="L82">                chartY.setLabel(&quot;Vaccination Rate&quot;);</span>
+<span class="fc" id="L83">                pane.setText(&quot;Vaccination Rate Chart&quot;);</span>
+                break;
+        }
+
+<span class="fc" id="L87">        startDatePicker.getEditor().setDisable(true);</span>
+<span class="fc" id="L88">        startDatePicker.getEditor().setOpacity(1);</span>
+<span class="fc" id="L89">        startDatePicker.setValue(utils.dateToLocalDate(fileOperator.getMinimumDate()));</span>
+<span class="fc" id="L90">        endDatePicker.getEditor().setDisable(true);</span>
+<span class="fc" id="L91">        endDatePicker.getEditor().setOpacity(1);</span>
+<span class="fc" id="L92">        endDatePicker.setValue(utils.dateToLocalDate(fileOperator.getMaximumDate()));</span>
+
+<span class="fc" id="L94">        final Callback&lt;DatePicker, DateCell&gt; cellFactoryEnd =</span>
+<span class="fc" id="L95">                new Callback&lt;DatePicker, DateCell&gt;() {</span>
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+<span class="fc" id="L98">                        return new DateCell() {</span>
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+<span class="fc" id="L101">                                super.updateItem(item, empty);</span>
+
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                                if (item.isBefore(</span>
+<span class="fc" id="L104">                                        startDatePicker.getValue().plusDays(1))</span>
+                                ) {
+<span class="nc" id="L106">                                    setDisable(true);</span>
+<span class="nc" id="L107">                                    getStyleClass().add(&quot;disabled-date&quot;);</span>
+                                }
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()))) {</span>
+<span class="fc" id="L110">                                    setDisable((true));</span>
+<span class="fc" id="L111">                                    getStyleClass().add(&quot;disabled-date&quot;);</span>
+                                }
+<span class="fc" id="L113">                            }</span>
+                        };
+                    }
+                };
+<span class="fc" id="L117">        final Callback&lt;DatePicker, DateCell&gt; cellFactoryStart =</span>
+<span class="fc" id="L118">                new Callback&lt;DatePicker, DateCell&gt;() {</span>
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+<span class="fc" id="L121">                        return new DateCell() {</span>
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+<span class="fc" id="L124">                                super.updateItem(item, empty);</span>
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                                if (item.isBefore(</span>
+<span class="fc" id="L127">                                        utils.dateToLocalDate(fileOperator.getMinimumDate()))</span>
+                                ) {
+<span class="fc" id="L129">                                    setDisable(true);</span>
+<span class="fc" id="L130">                                    getStyleClass().add(&quot;disabled-date&quot;);</span>
+                                }
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">                                if (item.isAfter(utils.dateToLocalDate(fileOperator.getMaximumDate()).minusDays(1))) {</span>
+<span class="nc" id="L133">                                    setDisable((true));</span>
+<span class="nc" id="L134">                                    getStyleClass().add(&quot;disabled-date&quot;);</span>
+                                }
+<span class="fc" id="L136">                            }</span>
+                        };
+                    }
+                };
+
+<span class="fc" id="L141">        startDatePicker.setDayCellFactory(cellFactoryStart);</span>
+<span class="fc" id="L142">        endDatePicker.setDayCellFactory(cellFactoryEnd);</span>
+
+<span class="fc" id="L144">        startDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc bnc" id="L145" title="All 4 branches missed.">            if (newValue.isAfter(endDatePicker.getValue()) || newValue.isEqual(endDatePicker.getValue()))</span>
+<span class="nc" id="L146">                endDatePicker.setValue(startDatePicker.getValue().plusDays(1));</span>
+<span class="nc" id="L147">        }));</span>
+
+<span class="fc" id="L149">        choiceBox.getItems().clear();</span>
+<span class="fc" id="L150">        choiceBox.getItems().add(new SortPolicy(&quot;Country name&quot;, SortPolicyE.NAME));</span>
+<span class="fc" id="L151">        choiceBox.getItems().add(new SortPolicy(&quot;Population&quot;, SortPolicyE.POP));</span>
+<span class="fc" id="L152">        choiceBox.getItems().add(new SortPolicy(&quot;Population density&quot;, SortPolicyE.POP_D));</span>
+<span class="fc" id="L153">        choiceBox.getItems().add(new SortPolicy(&quot;Median age&quot;, SortPolicyE.MED));</span>
+<span class="fc" id="L154">        choiceBox.getItems().add(new SortPolicy(&quot;GDP per capita&quot;, SortPolicyE.GDP));</span>
+<span class="fc" id="L155">        choiceBox.getSelectionModel().select(0);</span>
+<span class="fc" id="L156">        choiceBox.setOnAction((event) -&gt; {</span>
+<span class="fc" id="L157">            SortPolicy selectedItem = choiceBox.getSelectionModel().getSelectedItem();</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if (selectedItem != null) {</span>
+<span class="fc" id="L159">                List&lt;String&gt; countryNames = fileOperator.searchCountry(chartText.getText(), selectedItem.policyE);</span>
+<span class="fc" id="L160">                chartCountryList.update(countryNames);}</span>
+
+
+<span class="fc" id="L163">        });</span>
+
+<span class="fc" id="L165">        chartText.setText(&quot;&quot;);</span>
+<span class="fc" id="L166">        chartText.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+            //String countryName = tableAText.getText();
+<span class="fc" id="L168">            List&lt;String&gt; countryNamesAdd = fileOperator.searchCountry(newValue,</span>
+<span class="fc" id="L169">                    choiceBox.getSelectionModel().getSelectedItem().policyE);</span>
+<span class="fc" id="L170">            chartCountryList.update(countryNamesAdd);</span>
+<span class="fc" id="L171">            chartText.requestFocus();</span>
+<span class="fc" id="L172">        });</span>
+
+<span class="fc" id="L174">        List&lt;String&gt; countryNames = fileOperator.getAllCountries();</span>
+
+<span class="fc" id="L176">        chartCountryList.init(countryNames);</span>
+<span class="fc" id="L177">        chart.getData().clear();</span>
+<span class="fc" id="L178">    }</span>
+
+    public void initialize() {
+
+<span class="fc" id="L182">    }</span>
+
+    @FXML
+    void doConfirmChart(ActionEvent event) {
+<span class="fc bfc" id="L186" title="All 2 branches covered.">    	if (type == ChartType.A) {</span>
+<span class="fc" id="L187">    		ChartSetter.setGraphPropeties(chart, startDatePicker, endDatePicker);</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">    	} else if (type == ChartType.B) {</span>
+<span class="fc" id="L189">    		ChartSetter.setGraphPropeties(chart, startDatePicker, endDatePicker);</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        } else if (type == ChartType.C) {</span>
+<span class="fc" id="L191">        	ChartSetter.setGraphPropeties_C(chart, startDatePicker, endDatePicker);</span>
+        }
+        // save state of checked
+<span class="fc" id="L194">        chartCountryList.saveState();</span>
+<span class="fc" id="L195">        List&lt;String&gt; countryNames = chartCountryList.getCheckedItems();</span>
+<span class="fc" id="L196">        Map&lt;String, List&lt;DailyStatistics&gt;&gt; countryTrendMap = fileOperator.getCountryTrendMap(countryNames,</span>
+<span class="fc" id="L197">                utils.localDateToDate(startDatePicker.getValue()), utils.localDateToDate(endDatePicker.getValue()));</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (countryTrendMap.size() &lt;= 0) {</span>
+<span class="fc" id="L199">            Alert alert = new Alert(Alert.AlertType.ERROR, &quot;Please select at least one country&quot;, ButtonType.YES);</span>
+<span class="fc" id="L200">            alert.show();</span>
+<span class="fc" id="L201">            return;</span>
+        }
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (type == ChartType.A) {</span>
+<span class="fc" id="L204">            ChartSetter.updateGraph_A(chart, countryTrendMap);</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        } else if (type == ChartType.B) {</span>
+<span class="fc" id="L206">            ChartSetter.updateGraph_B(chart, countryTrendMap);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        } else if (type == ChartType.C) {</span>
+<span class="fc" id="L208">            ChartSetter.updateGraph_C(chart, countryTrendMap);</span>
+        }
+
+<span class="fc" id="L211">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
