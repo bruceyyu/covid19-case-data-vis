@@ -1,7 +1,7 @@
 import comp3111.covid.Controller;
 import comp3111.covid.controller.ChartController;
 import comp3111.covid.controller.TableController;
-import comp3111.covid.core.SortPolicy;
+import comp3111.covid.core.data.SortPolicy;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
 import comp3111.covid.core.tabtype.ChartType;
@@ -10,8 +10,6 @@ import comp3111.covid.ui.CheckListViewWithList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import static org.junit.Assert.*;
@@ -20,11 +18,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
 
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;

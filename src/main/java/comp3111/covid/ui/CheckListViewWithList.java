@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Custom CheckListViewClass, it maintains a map for checking if the items have been checked
- * @param <String>
+ * @param <String> Default generic to String
  */
 public class CheckListViewWithList<String> extends CheckListView<String> {
     private Map<String, Boolean> countryNamesMap;
@@ -25,6 +25,10 @@ public class CheckListViewWithList<String> extends CheckListView<String> {
         countryNamesMap = new HashMap<>();
     }
 
+    /**
+     * Initialize function
+     * @param countryNames list of country names
+     */
     public void init(List<String> countryNames) {
         this.countryNamesMap.clear();
         this.update(countryNames);
@@ -88,7 +92,7 @@ public class CheckListViewWithList<String> extends CheckListView<String> {
     }
 
     /**
-     * return all checked items
+     * Return all checked items
      * @return list of checked items
      */
     public List<String> getCheckedItems() {

@@ -3,6 +3,8 @@ package comp3111.covid.controller;
 import comp3111.covid.core.*;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
+import comp3111.covid.core.data.SortPolicy;
+import comp3111.covid.core.data.SortPolicyE;
 import comp3111.covid.core.tabtype.TableType;
 import comp3111.covid.core.uisetters.TableSetter;
 import comp3111.covid.ui.CheckListViewWithList;
@@ -13,16 +15,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.math.BigInteger;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Table Controller class for Table Tabs
+ * Table Controller class for table tabs
  */
 public class TableController {
-
-    private TableType tableType;
 
     private CSVFileOperator fileOperator;
 
@@ -62,7 +61,8 @@ public class TableController {
     private ChoiceBox<SortPolicy> choiceBox;
 
     /**
-     * Initialize the table
+     * Initialize the table, set the table type as well as the fileOperator used for
+     * data lookup. This will also set some properties of the UI.
      * @param type Table Type
      * @param fileOperator fileOperator
      */

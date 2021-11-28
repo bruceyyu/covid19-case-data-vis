@@ -2,7 +2,7 @@ package coretests;
 
 import static org.junit.Assert.*;
 
-import comp3111.covid.core.SortPolicyE;
+import comp3111.covid.core.data.SortPolicyE;
 import comp3111.covid.core.data.CSVFileOperator;
 import comp3111.covid.core.data.DailyStatistics;
 
