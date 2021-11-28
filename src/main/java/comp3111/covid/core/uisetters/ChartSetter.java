@@ -13,7 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 /**
- * set the charts for Task A2, B2, C2
+ * Setter class for the charts for Task A2, B2, C2
  */
 public class ChartSetter {
     /**
@@ -78,6 +78,11 @@ public class ChartSetter {
         chart.setAnimated(false);
     }
 
+    /**
+     * Specialized update for chart B
+     * @param chart LineChart
+     * @param newCountryTrendMap the new country-trend pair map.
+     */
     public static void updateGraph_B(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
         chart.setAnimated(true);
         ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
@@ -134,7 +139,12 @@ public class ChartSetter {
         }
         chart.setAnimated(false);
     }
-    
+
+    /**
+     * Specialized update method for chart C.
+     * @param chart LineChart.
+     * @param newCountryTrendMap New country-trend pair map.
+     */
     public static void updateGraph_C(LineChart<Number, Number> chart, Map<String, List<DailyStatistics>> newCountryTrendMap) {
         chart.setAnimated(true);
         ObservableList<XYChart.Series<Number, Number>> chartDataSeriesList = chart.getData();
@@ -235,6 +245,12 @@ public class ChartSetter {
         chart.setCreateSymbols(true); // show the symbols
     }
 
+    /**
+     * Specialized chart property setter for chart C
+     * @param chart Line chart
+     * @param chartStartDatePicker start date picker
+     * @param chartEndDatePicker end date picker
+     */
     public static void setGraphPropeties_C(LineChart<Number, Number> chart, DatePicker chartStartDatePicker, DatePicker chartEndDatePicker) {
         NumberAxis chartX = (NumberAxis) chart.getXAxis();
         NumberAxis chartY = (NumberAxis) chart.getYAxis();

@@ -7,6 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * This class contains some methods for converting between different Date object types.
+ */
 public class utils {
     /**
      * convert LocalDate type (used by JavaFx's datepicker) to Date type
@@ -20,6 +23,11 @@ public class utils {
         return date;
     }
 
+    /**
+     * Convert date to localDate.
+     * @param raw raw Date object
+     * @return a localDate object
+     */
     public static LocalDate dateToLocalDate(Date raw) {
         if (raw == null) return null;
         return raw.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

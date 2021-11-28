@@ -60,6 +60,8 @@ public class DailyStatistics {
      * @param cumulativeInfected   cumulative infected
      * @param vaccinationRate      vaccination rate
      * @param cumulativeVaccinated cumulative vaccinated
+     * @param population population
+     * @param populationDensity population density
      */
     public DailyStatistics(String country, Date date, double deathPerMillion, BigInteger cumulativeDeath,
                            double infectedPerMillion, BigInteger cumulativeInfected, double vaccinationRate,

@@ -1,7 +1,6 @@
 package comp3111.covid.core.data;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import comp3111.covid.core.SortPolicyE;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -128,6 +127,13 @@ public class CSVFileOperator {
         return result;
     }
 
+    /**
+     * Specialized get Country TrendMap for chart C
+     * @param countryList String out country names
+     * @param start start date, inclusive
+     * @param end end date exclusive
+     * @return Map for country name, country trend pairs
+     */
     public Map<String, List<DailyStatistics>> getCountryTrendMap_chartC(List<String> countryList, Date start, Date end) {
         HashMap<String, List<DailyStatistics>> result = new HashMap<>();
         Calendar c1 = Calendar.getInstance();
