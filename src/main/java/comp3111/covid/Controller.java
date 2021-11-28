@@ -79,13 +79,10 @@ public class Controller {
     @FXML
     VBox masterVB;
 
-<<<<<<< Updated upstream
     public void initialize() {
 
     }
 
-
-=======
     /**
      * Help popup to show help info to the user.
      */
@@ -96,7 +93,6 @@ public class Controller {
         alert.setHeaderText("Thanks for using our software :)");
         alert.show();
     }
->>>>>>> Stashed changes
 
     /**
      * Save as image callback to save a chart into an image.
