@@ -1,4 +1,4 @@
-# comp3111_proj_T03
+# covid19-case-data-vis
 
 ## Members’ Personal Particulars
 
